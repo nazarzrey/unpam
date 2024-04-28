@@ -44,7 +44,7 @@ cls
 
     echo.
     echo.
-    echo. loop ke %1 sd 10000
+    echo. loop ke %1 sd 100000
     echo.
     echo.
     echo.
