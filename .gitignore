@@ -19,6 +19,6 @@ application/logs/*
 
 #file php#
 #database.php
-absen_ci3_backend/application/config/database.php
+# absen_ci3_backend/application/config/database.php
 g.bat
 gi.bat
