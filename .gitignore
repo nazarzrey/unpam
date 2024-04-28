@@ -18,7 +18,7 @@ application/logs/*
 /vendor/
 
 #file php#
-#database.php
+database.php
 # absen_ci3_backend/application/config/database.php
 g.bat
 gi.bat
