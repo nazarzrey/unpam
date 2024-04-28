@@ -1,3 +1,7 @@
+programing language
+
+(HTML.CSS,JS,Jquery,Ajax,Json,PHP,Mysql,)
+
 first config 
 
 masuk folder absen_ci3_backend\application\config
