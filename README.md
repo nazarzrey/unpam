@@ -1,8 +1,17 @@
-programing language
+bahasa program yang di gunakan
+(HTML.CSS,JS,Jquery,Ajax,Json,PHP framework Ci3 ,Mysql)
 
-(HTML.CSS,JS,Jquery,Ajax,Json,PHP,Mysql,)
+tools yang di gunakan
 
-first config 
+- Xampp(web server) = https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/7.4.33/xampp-windows-x64-7.4.33-0-VC15-installer.exe/download
+- visual studio code (code editor) = https://code.visualstudio.com/docs/?dv=win64user
+- Sqlyog (query editror for mysql) = ada di folder tools
+  
+# install xampp pastiken mysqlnya juga di install, include di dalem xampp
+# buat belajar php native silahkan pelajari di folder php_native
+
+
+first config project absen
 
 masuk folder absen_ci3_backend\application\config
 
