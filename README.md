@@ -9,7 +9,7 @@ tools yang di gunakan
   
 # install xampp pastiken mysqlnya juga di install, include di dalem xampp
 # buat belajar php native silahkan pelajari di folder php_native
-
+# buat belajar php & lain2 bisa cek di youtube, (WPU=web programing unpas)
 
 first config project absen
 
