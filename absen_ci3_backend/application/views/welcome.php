@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Versoview</title>
+	<title>Absensi Unpam</title>
 	<link rel="shortcut icon" href="https://panel.versoview.com/assets/images/fav_ico.gif" type="image/gif">	
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <style>
