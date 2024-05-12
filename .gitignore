@@ -16,7 +16,7 @@ application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
 /vendor/
-
+.tmp*
 #file php#
 database.php
 # absen_ci3_backend/application/config/database.php
