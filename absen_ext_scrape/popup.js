@@ -38,7 +38,6 @@ https://e-learning.unpam.id/mod/forum/
     }else{
         var msg1 = "Data kelas tidak ada..!!!"
         var msg2 = "Aplikasi tidak bisa jalan  "
-        alert(msg1+" "+msg2);
         h1.innerHTML = msg1;
         h2.innerHTML = msg2;
     }

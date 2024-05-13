@@ -22,4 +22,6 @@ application/logs/*
 # absen_ci3_backend/application/config/database.php
 g.bat
 gigi.bat
+*.zip
+*.rar
 #

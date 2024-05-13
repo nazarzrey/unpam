@@ -1,15 +1,24 @@
 function lg(val){
   console.log(val)
 }
-console.log("Bg running")
+console.log("Bg running cusy")
+var  linkedInListViewURL = "Abc";
+// URL untuk mengambil data JSON
+const GET_URL = "http://localhost/web/unpam_project/absen_ci3_backend/api_link";
+fetch(GET_URL)
+  .then(response => response.json()) // Mengubah respon menjadi objek JSON
+  .then(data => {
+    // Menetapkan linkedInListViewURL dengan hasil balikan JSON
+    linkedInListViewURL = data.url; // Ubah 'url' menjadi kunci yang sesuai dengan hasil JSON yang Anda terima
+    // Sekarang Anda dapat menggunakan linkedInListViewURL di dalam skrip Anda sesuai kebutuhan
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error); // Tangani kesalahan jika terjadi
+  });
 
-// const linkedInListViewURL = "http://localhost/web/absenunpam"; 
-//const linkedInListViewURL = "http://localhost/web/unpam_project/contoh/"; 
-const linkedInListViewURL = "https://e-learning.unpam.id/mod/forum/"; 
-
-// const linkedInListViewURL = "https://e-learning.unpam.id/mod/forum/"; //konsepnya ambil dari api aja dah storej susah benerr
 
 function getJobDescriptionClassName(url) {
+  lg(linkedInListViewURL);
   return url.startsWith(linkedInListViewURL)
     ? "forum-post-container"
     : "forumpost";
@@ -29,8 +38,8 @@ function grabJobDescription(className) {
     const timeText = timeElement ? timeElement.textContent.trim() : null; // Ambil teks dari elemen <time>, jika ada
 
     const result = {
-      nama: aText,
-      waktu: timeText
+      aText: aText,
+      timeText: timeText
     };
 
     results.push(result); // Tambahkan hasil ke dalam array
@@ -53,40 +62,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
         })
         .then((queryResult) => {
           lg(queryResult[0].result);
-          var url = tab.url
-          
-    // var currentURL = tabs[0].url;
-    // console.log('Current URL:', currentURL);
-          send_data(queryResult[0].result,url)
         });
     }
   }
 });
-
-function send_data(obj_data,url){
-  if (Object.keys(obj_data).length === 0 && obj_data.constructor === Object) {
-      console.log("Data is empty, skipping the send request.");
-      return;
-  }
-  fetch('http://localhost/web/unpam_project/absen_ci3_backend/receive_data', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      // body: JSON.stringify(data)
-      
-      body: JSON.stringify({
-        url: url, // Menyertakan URL saat ini bersama data
-        data: obj_data
-    })
-  })
-  .then(response => {
-      if (!response.ok) {
-          throw new Error('Failed to send data to server.');
-      }
-      console.log('Data sent successfully.');
-  })
-  .catch(error => {
-      console.error('Error:', error);
-  });
-}

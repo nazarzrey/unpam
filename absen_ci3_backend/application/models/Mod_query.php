@@ -8,6 +8,11 @@ class Mod_query extends CI_Model
 		$this->db->where("recid", "1");
 		return $this->db->get('new_produk')->result();
 	}
+	public function get_setting($value = '')
+	{
+		$sintak = "select konten from unpam_setting where jenis='$value'";
+		return each_query($this->db->query($sintak));
+	}
 	public function proyek_ttl($value = '')
 	{
 		$sintak = "

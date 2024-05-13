@@ -51,6 +51,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller']     = 'welcome';
+$route['api_link']         = 'xhr/get/link';
+$route['push_absen']         = 'xhr/post/absen';
+$route['read_absen']         = 'xhr/get/absen';
+$route['receive_data']         = 'xhr/post/reciveabsen';
+$route['cek_absen']         = 'xhr/get/cekabsen';
 
 $route['create']         = 'backend/generate_dyn';
 $route['dyrect']         = 'backend/directly';
