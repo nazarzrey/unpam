@@ -2,6 +2,16 @@
 
 error_reporting(0);
 defined('BASEPATH') or exit('No direct script access allowed');
+/*
+header("Access-Control-Allow-Origin: *");   
+header("Content-Type: application/json; charset=UTF-8");    
+header("Access-Control-Allow-Methods: POST, DELETE, OPTIONS");    
+header("Access-Control-Max-Age: 3600");    
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");    
+*/
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST');
+header("Access-Control-Allow-Headers: X-Requested-With");
 
 require_once(APPPATH . 'controllers/Settings.php');
 // require_once(APPPATH . 'vendor/autoload.php');
@@ -95,21 +105,21 @@ class Xhr extends Settings
         }
     
         $obj_data = isset($data['data']) ? $data['data'] : null;
-        $url = isset($data['url']) ? $data['url'] : null;
+        $obj_url = isset($data['url']) ? $data['url'] : null;
         
-        if (empty($obj_data) || empty($url)) {
+        if (empty($obj_data) || empty($obj_url)) {
             http_response_code(400);
             echo json_encode(array("message" => "Incomplete data received."));
             return;
         }
-    
+        $url = explode("#",$obj_url)[0];
         // Cek apakah data sudah ada dalam database
         $existing_data = $this->db->get_where('unpam_absen_log', array('obj_data' => json_encode($obj_data), 'obj_url' => $url))->row();
     
         if ($existing_data) {
             // Jika data sudah ada, beri respons bahwa data sudah ada
             http_response_code(409); // Konflik
-            echo json_encode(array("message" => "Data already exists."));
+            echo json_encode(array("message" => "data log sudah pernah masuk"));
             return;
         }
     
@@ -119,14 +129,11 @@ class Xhr extends Settings
             'obj_url' => $url
         );
         $this->db->insert('unpam_absen_log', $data_to_insert);
-        // Jika data belum ada, lakukan penyisipan data ke dalam database dengan menggunakan INSERT IGNORE
-        
-
-        // Proses backdoor untuk membaca dan memproses data
+        $arr[] = "Sukses simpan data";
         foreach ($obj_data as $item) {
-            $nama = $item['nama'];
-            $nim = substr($nama, -20);
-            $nama = substr($nama, 0, -20);
+            $mnama = $item['nama'];
+            $nim = substr($mnama, -20);
+            $nama = substr($mnama, 0, -20);
             $absen_time = date("Y-m-d H:i:s", strtotime($item['waktu']));
             $url_matkul = $url;
 
@@ -137,16 +144,52 @@ class Xhr extends Settings
             //     'nim' => $nim,
             //     'absen_time' => $absen_time
             // );
-            $sql = "INSERT IGNORE INTO unpam_absensi (url_matkul, nama, nim, absen_time) VALUES ('$url', '$nama', '$nim', '$absen_time');";
-            //"INSERT IGNORE INTO unpam_absensi (url_matkul, nama, nim, absen_time) VALUES (?, ?, ?, ?)", array($url, $nama, $nim, $absen_time)
-            $this->db->query($sql);
+            // $query = "INSERT into unpam_absensi (url_matkul, nama, nim, absen_time) select '$url', '$nama', '$nim', '$absen_time' ";
+            // $query .= "where not exists (SELECT 1 FROM unpam_absensi WHERE url_matkul='$url' AND nama='$nama' AND  nim='$nim' AND absen_time='$absen_time')";
+            // $this->db->query($query);
+            // if(strrpos(strtolower($mnama),"dosen")===false){
+            // echo strrpos("I love php, I love php too!","php");
+                $sql = "SELECT count(1) as ttl FROM unpam_absensi WHERE url_matkul='$url' AND nama='$nama' AND  nim='$nim' AND absen_time='$absen_time'";
+                if(single_query($this->db->query($sql))->ttl == 0){
+                    $sql = "INSERT into unpam_absensi (url_matkul, nama, nim, absen_time) values ('$url', '$nama', '$nim', '$absen_time');";
+                    if($this->db->query($sql)){
+                        $arr[] = "<br/>sukses simpan $nama";
+                    }else{
+                        $arr[] = "gagal $nama";
+                    }
+                };
+            // }
             // $this->db->insert('unpam_absensi', $data_absensi);
         }
-
-        echo json_encode(array("message" => "Data received and saved successfully."));
+        echo json_encode(array("message" => $arr));
     }
     
-
+    function getNamaTanpaDosen($nama) {
+        // Hapus tanda kutip ganda dari awal dan akhir string
+        $nama = trim($nama, '"');
+    
+        // Pisahkan kata-kata menjadi array
+        $namaPecah = explode(' ', $nama);
+    
+        $adaDosen = false;
+        $namaTanpaDosen = "";
+    
+        foreach ($namaPecah as $kata) {
+            if (strtolower($kata) === "dosen") {
+                $adaDosen = true;
+                break;
+            } else {
+                $namaTanpaDosen .= $kata . " ";
+            }
+        }
+        
+        if (!$adaDosen) {
+            return $nama.PHP_EOL;
+        } else {
+            return trim($namaTanpaDosen) . PHP_EOL;
+        }
+    }
+    
 
     public function index($value = "", $value2 = "")
     {

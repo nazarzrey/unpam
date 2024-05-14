@@ -68,7 +68,9 @@ function send_data(obj_data,url){
       console.log("Data is empty, skipping the send request.");
       return;
   }
-  fetch('http://localhost/web/unpam_project/absen_ci3_backend/receive_data', {
+  var UriServer = 'http://localhost/web/unpam_project/absen_ci3_backend/receive_data'
+  //var UriServer = "https://nazrey.com/project/unpam/absen_ci3_backend/receive_data"
+  fetch(UriServer, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'

@@ -1,0 +1,58 @@
+
+<html>
+    <body>
+        <h1>Test send absen</h1>
+        <div id="result">hasil</div>
+    </body>
+</html>
+<script>
+    var url = window.location.href
+    var objek = [{"nama":"SRI WAHYUNI S.Pd.I., M.Pd.I Dosen-01870","waktu":"Monday, 22 April 2024, 3:49 PM"},{"nama":"MANARUL HIDAYAH 231011450126-55201-E","waktu":"Monday, 22 April 2024, 8:30 PM"},{"nama":"MANARUL HIDAYAH 231011450126-55201-E","waktu":"Monday, 22 April 2024, 8:34 PM"},{"nama":"MAULANA ROYYAN TSUBAISA 231011450122-55201-E","waktu":"Monday, 22 April 2024, 8:53 PM"},{"nama":"ILHAM FAUZI 231011450300-55201-E","waktu":"Monday, 22 April 2024, 9:19 PM"},{"nama":"MUHAMAD FIKRI FERDIANSYAH 231011450293-55201-E","waktu":"Monday, 22 April 2024, 10:14 PM"},{"nama":"MUHAMMAD ILHAM ARDIANSYAH 231011450716-55201-E","waktu":"Monday, 22 April 2024, 10:35 PM"},{"nama":"MOCH SANDI 231011450111-55201-E","waktu":"Tuesday, 23 April 2024, 8:03 AM"},{"nama":"DESI RAHMAWATI 231011450252-55201-E","waktu":"Tuesday, 23 April 2024, 10:12 PM"},{"nama":"AFIQ NUR IZZA ADDAKHIL 231011450119-55201-E","waktu":"Wednesday, 24 April 2024, 12:28 AM"},{"nama":"MAESTRO ARJUNA SAKTI 231011450113-55201-E","waktu":"Wednesday, 24 April 2024, 8:00 PM"},{"nama":"NAZA RUDIN 231011450485-55201-E","waktu":"Thursday, 25 April 2024, 6:19 AM"},{"nama":"NAZA RUDIN 231011450485-55201-E","waktu":"Thursday, 25 April 2024, 6:22 AM"},{"nama":"SHEVCENKO RADJARTHA 231011450438-55201-E","waktu":"Monday, 22 April 2024, 9:04 PM"},{"nama":"SHEVCENKO RADJARTHA 231011450438-55201-E","waktu":"Monday, 22 April 2024, 9:05 PM"},{"nama":"AHMAD PAISAL 231011450105-55201-E","waktu":"Tuesday, 23 April 2024, 10:35 PM"},{"nama":"AHMAD PAISAL 231011450105-55201-E","waktu":"Tuesday, 23 April 2024, 10:41 PM"},{"nama":"MAULANA ROYYAN TSUBAISA 231011450122-55201-E","waktu":"Monday, 22 April 2024, 9:19 PM"},{"nama":"MAULANA ROYYAN TSUBAISA 231011450122-55201-E","waktu":"Monday, 22 April 2024, 9:23 PM"},{"nama":"ILHAM FAUZI 231011450300-55201-E","waktu":"Monday, 22 April 2024, 9:27 PM"},{"nama":"MUHAMAD FIKRI FERDIANSYAH 231011450293-55201-E","waktu":"Monday, 22 April 2024, 10:12 PM"},{"nama":"MUHAMMAD ILHAM ARDIANSYAH 231011450716-55201-E","waktu":"Monday, 22 April 2024, 10:31 PM"},{"nama":"ILAN ALFIAN FAZA 231011450686-55201-E","waktu":"Tuesday, 23 April 2024, 4:00 AM"},{"nama":"ILAN ALFIAN FAZA 231011450686-55201-E","waktu":"Tuesday, 23 April 2024, 4:01 AM"},{"nama":"MOCH SANDI 231011450111-55201-E","waktu":"Tuesday, 23 April 2024, 8:06 AM"},{"nama":"MOCH SANDI 231011450111-55201-E","waktu":"Tuesday, 23 April 2024, 8:07 AM"},{"nama":"MUHAMMAD ZAHAVY AL ZENITA 231011450125-55201-E","waktu":"Tuesday, 23 April 2024, 12:36 PM"},{"nama":"ARDIANSYAH 231011450107-55201-E","waktu":"Tuesday, 23 April 2024, 4:27 PM"},{"nama":"ARDIANSYAH 231011450107-55201-E","waktu":"Tuesday, 23 April 2024, 4:35 PM"},{"nama":"SALMA CAHYANI AULIA PUTRI 231011450116-55201-E","waktu":"Tuesday, 23 April 2024, 7:08 PM"},{"nama":"SALMA CAHYANI AULIA PUTRI 231011450116-55201-E","waktu":"Tuesday, 23 April 2024, 7:10 PM"},{"nama":"DESI RAHMAWATI 231011450252-55201-E","waktu":"Tuesday, 23 April 2024, 10:09 PM"},{"nama":"AFIQ NUR IZZA ADDAKHIL 231011450119-55201-E","waktu":"Wednesday, 24 April 2024, 12:25 AM"},{"nama":"DALPA KHOIRUN NISA 231011450736-55201-E","waktu":"Wednesday, 24 April 2024, 7:48 AM"},{"nama":"DALPA KHOIRUN NISA 231011450736-55201-E","waktu":"Wednesday, 24 April 2024, 7:49 AM"},{"nama":"VICKY PRIYADI 231011450110-55201-E","waktu":"Wednesday, 24 April 2024, 2:53 PM"},{"nama":"VICKY PRIYADI 231011450110-55201-E","waktu":"Wednesday, 24 April 2024, 2:56 PM"},{"nama":"MUHAMMAD RIDWAN 231011450611-55201-E","waktu":"Wednesday, 24 April 2024, 6:47 PM"},{"nama":"MUHAMMAD RIDWAN 231011450611-55201-E","waktu":"Wednesday, 24 April 2024, 6:52 PM"},{"nama":"MUHAMAD WAHYU HIDAYAT 231011450568-55201-E","waktu":"Wednesday, 24 April 2024, 7:19 PM"},{"nama":"MAESTRO ARJUNA SAKTI 231011450113-55201-E","waktu":"Wednesday, 24 April 2024, 7:52 PM"},{"nama":"MAESTRO ARJUNA SAKTI 231011450113-55201-E","waktu":"Wednesday, 24 April 2024, 7:53 PM"},{"nama":"MUHAMAD ABDUL YAZKY ZAELANI 231011450456-55201-E","waktu":"Wednesday, 24 April 2024, 9:53 PM"},{"nama":"MUHAMAD ABDUL YAZKY ZAELANI 231011450456-55201-E","waktu":"Wednesday, 24 April 2024, 9:56 PM"},{"nama":"ROYAN ALFA REZZA 231011450102-55201-E","waktu":"Wednesday, 24 April 2024, 10:35 PM"},{"nama":"ROYAN ALFA REZZA 231011450102-55201-E","waktu":"Wednesday, 24 April 2024, 10:36 PM"},{"nama":"ROYAN ALFA REZZA 231011450102-55201-E","waktu":"Wednesday, 24 April 2024, 10:37 PM"},{"nama":"PRADEWA MUSTOFA 231011450727-55201-E","waktu":"Wednesday, 24 April 2024, 10:45 PM"},{"nama":"PRADEWA MUSTOFA 231011450727-55201-E","waktu":"Wednesday, 24 April 2024, 10:46 PM"}]
+    send_data(objek,url)
+    function send_data(obj_data, url) {
+        if (Object.keys(obj_data).length === 0 && obj_data.constructor === Object) {
+            console.log("Data is empty, skipping the send request.");
+            return;
+        }
+        var UriServer = 'http://localhost/web/unpam_project/absen_ci3_backend/receive_data';
+        //var UriServer = "https://nazrey.com/project/unpam/absen_ci3_backend/receive_data";
+        fetch(UriServer, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                url: url, // Menyertakan URL saat ini bersama data
+                data: obj_data
+            })
+        })
+        /*.then(data => {
+            console.log(data);
+            console.log('Data sent successfully.');
+            console.log('Response from server:', data); // Menampilkan respons dari server
+        })*/
+        // fetch('https://api.example.com/data')
+        .then(response => response.json())
+        .then(data => {
+            const message = data.message;
+            console.log(message); // Output: "Data sudah ada."
+            const element = document.getElementById("result");
+            element.innerHTML = message;
+        })
+        // .catch(error => console.error('Error:', error));
+        // .then(response => {            
+        //     const element = document.getElementById("result");
+        //     // element.innerHTML = response.text();
+        //     // console.log(response.text());
+        //     if (!response.ok) {
+        //         throw new Error('Failed to send data to server.');
+        //     }
+        //     console.log(response.text());
+        //     return response.text(); // Mengubah respons menjadi teks
+        // })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+</script>
