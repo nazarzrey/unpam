@@ -15,7 +15,12 @@ first config project absen
 
 masuk folder absen_ci3_backend\application\config
 
-file database.bak di copy jadi database.php
+file database.bak di copy jadi database.php dan sesuaikan confignya dengan local masing2 pada bagian di bawah ini
+
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => 'toor',
+	'database' => 'unpam',
 
 nge push ke server pakai log, lognya save di local storej aja 
 (spya ga selalu kirim data ke server miniimal waktu nya 60 detik  /per menit aja)
