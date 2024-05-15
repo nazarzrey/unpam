@@ -56,6 +56,8 @@ $route['push_absen']         = 'xhr/post/absen';
 $route['read_absen']         = 'xhr/get/absen';
 $route['receive_data']         = 'xhr/post/reciveabsen';
 $route['cek_absen']         = 'xhr/get/cekabsen';
+$route['nama']         = 'xhr/get/nama';
+$route['nama/(:any)']         = 'xhr/get/nama/$1';
 
 $route['create']         = 'backend/generate_dyn';
 $route['dyrect']         = 'backend/directly';

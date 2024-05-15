@@ -51,6 +51,13 @@ class Xhr extends Settings
                 echo "<tr><td>".ucwords(strtolower($has->nama))."</td><td> &nbsp;".ucwords(strtolower($has->absen))."</td><td>".ucwords(strtolower($has->hasil))."</td></tr>";
             }
             echo "</table>";
+        }elseif($value=="nama"){
+            $this->load->view("ceknama");
+            if($value2==""){
+                echo "nama harus di isi..!! tambahkan di ujung url dengan nama/nazar";
+            }
+        }else{
+            echo "variabel belum di pasang..!!";
         }
     }
     public function post($value = "", $value2 = "")
@@ -115,9 +122,9 @@ class Xhr extends Settings
         $url = explode("#",$obj_url)[0];
         // Cek apakah data sudah ada dalam database
         $existing_data = $this->db->get_where('unpam_absen_log', array('obj_data' => json_encode($obj_data), 'obj_url' => $url))->row();
-    
+        
+        //jagaan supaya ga di terusin 
         if ($existing_data) {
-            // Jika data sudah ada, beri respons bahwa data sudah ada
             http_response_code(409); // Konflik
             echo json_encode(array("message" => "data log sudah pernah masuk"));
             return;
@@ -130,10 +137,17 @@ class Xhr extends Settings
         );
         $this->db->insert('unpam_absen_log', $data_to_insert);
         $arr[] = "Sukses simpan data";
+        $dosen = "zre";
         foreach ($obj_data as $item) {
             $mnama = $item['nama'];
-            $nim = substr($mnama, -20);
-            $nama = substr($mnama, 0, -20);
+            if(is_numeric(left(substr($mnama, -20),10))){
+                $nim = substr($mnama, -20);
+                $nama = substr($mnama, 0, -20);
+            }else{
+                $nim = "Dosen";
+                $nama = getNamaTanpaDosen($mnama);
+                $dosen = $nama;
+            };
             $absen_time = date("Y-m-d H:i:s", strtotime($item['waktu']));
             $url_matkul = $url;
 
@@ -161,34 +175,15 @@ class Xhr extends Settings
             // }
             // $this->db->insert('unpam_absensi', $data_absensi);
         }
+        echo $sql = "select count(1) as ttl from unpam_absen_log where obj_url='$url_matkul' and obj_dosen is not null";
+        echo $dosen;
+        if(single_query($this->db->query($sql))->ttl > 0){
+            echo $upd = "update unpam_absen_log set obj_dosen='$dosen' where obj_url='$url_matkul'";
+            $this->db->query($upd);
+        }
         echo json_encode(array("message" => $arr));
     }
     
-    function getNamaTanpaDosen($nama) {
-        // Hapus tanda kutip ganda dari awal dan akhir string
-        $nama = trim($nama, '"');
-    
-        // Pisahkan kata-kata menjadi array
-        $namaPecah = explode(' ', $nama);
-    
-        $adaDosen = false;
-        $namaTanpaDosen = "";
-    
-        foreach ($namaPecah as $kata) {
-            if (strtolower($kata) === "dosen") {
-                $adaDosen = true;
-                break;
-            } else {
-                $namaTanpaDosen .= $kata . " ";
-            }
-        }
-        
-        if (!$adaDosen) {
-            return $nama.PHP_EOL;
-        } else {
-            return trim($namaTanpaDosen) . PHP_EOL;
-        }
-    }
     
 
     public function index($value = "", $value2 = "")

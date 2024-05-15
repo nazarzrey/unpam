@@ -1207,3 +1207,25 @@ if (!function_exists('nolnul')) {
 		return $val;
 	}
 }
+
+if (!function_exists('getNamaTanpaDosen')) {
+	function getNamaTanpaDosen($nama) {
+		$nama = trim($nama, '"');
+		$namaPecah = explode(' ', $nama);
+		$adaDosen = false;
+		$namaTanpaDosen = "";
+		foreach ($namaPecah as $kata) {
+			if (strrpos(strtolower($kata),"dosen") !== false) {
+				$adaDosen = true;
+				break;
+			} else {
+				$namaTanpaDosen .= $kata . " ";
+			}
+		}		
+		if (!$adaDosen) {
+			return $nama.PHP_EOL;
+		} else {
+			return trim($namaTanpaDosen) . PHP_EOL;
+		}
+	}
+}

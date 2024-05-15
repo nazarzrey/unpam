@@ -5,7 +5,8 @@ console.log("Bg running")
 
 // const linkedInListViewURL = "http://localhost/web/absenunpam"; 
 //const linkedInListViewURL = "http://localhost/web/unpam_project/contoh/"; 
-const linkedInListViewURL = "https://e-learning.unpam.id/mod/forum/"; 
+//const linkedInListViewURL = "https://e-learning.unpam.id/mod/forum/"; 
+const linkedInListViewURL = "https://e-learning.unpam.ac.id/mod/forum/"; 
 
 // const linkedInListViewURL = "https://e-learning.unpam.id/mod/forum/"; //konsepnya ambil dari api aja dah storej susah benerr
 
