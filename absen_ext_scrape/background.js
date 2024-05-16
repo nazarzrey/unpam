@@ -60,13 +60,16 @@ function grabJobDescription(className) {
   jobDetailsElements.forEach(jobDetailsElement => {
     const aElement = jobDetailsElement.querySelector('a'); // Ambil elemen <a> di dalam elemen forumpost
     const timeElement = jobDetailsElement.querySelector('time'); // Ambil elemen <time> di dalam elemen forumpost
+    const postId = jobDetailsElement.getAttribute('data-post-id');
 
     const aText = aElement ? aElement.textContent.trim() : null; // Ambil teks dari elemen <a>, jika ada
     const timeText = timeElement ? timeElement.textContent.trim() : null; // Ambil teks dari elemen <time>, jika ada
-
+    const IDPost = postId ? postId.trim() : null; // Ambil teks dari elemen <time>, jika ada
+    
     const result = {
       nama: aText,
-      waktu: timeText
+      waktu: timeText,
+      postid:IDPost
     };
 
     results.push(result); // Tambahkan hasil ke dalam array

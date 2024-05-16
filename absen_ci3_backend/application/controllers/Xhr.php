@@ -52,13 +52,34 @@ class Xhr extends Settings
             }
             echo "</table>";
         }elseif($value=="nama"){
-            $this->load->view("ceknama");
-            if($value2==""){
-                echo "nama harus di isi..!! tambahkan di ujung url dengan nama/nazar";
+            if(empty($value2)){;
+                $this->load->view("ceknama");
+                // if($value2==""){
+                //     echo "nama harus di isi..!! tambahkan di ujung url dengan nama/nazar";
+                // }
+            }else{
+                $sql = "select * from absen_mahasiswa where nama like '%$value2%' or nim like '%$value2%'";
+                $hasil = each_query($this->db->query($sql));
+                echo "<table style='border-collapse:collapse' border='1' width='100%'> ";
+                echo "<tr style='font-weight:bold'><td>No</td><td>Nama</td><td>Matkul</td><td>Fordis</td><td>Judul Fordis</td><td>Dosen</td><td>Absen</td></tr>";
+                // dbg($hasil);
+                foreach($hasil as $key => $value){
+                    $dsn = UW($value->matkul_dosen);                    
+                    $frd = UW($value->matkul_fordis);
+                    $frt = UW($value->matkul_fordis_title);
+                    $nma = $value->nama=="NAZA RUDIN"?"Nazarudin":UW($value->nama);
+                    $nim = $value->nim;
+                    $abs = $value->absen;
+                    echo "<tr><td>".($key+1)."</td><td>".$nma."</td><td>&nbsp;</td><td>".$frd."</td><td>".$frt."</td><td>".$dsn."</td><td>".$abs."</td></tr>";
+                }
+                echo "</table> ";
             }
         }else{
             echo "variabel belum di pasang..!!";
         }
+    }
+    public function UW($value){
+        return ucfirst(strtolower($value));
     }
     public function post($value = "", $value2 = "")
     {
@@ -164,17 +185,22 @@ class Xhr extends Settings
                 $dosen = $nama;
             };
             $absen_time = date("Y-m-d H:i:s", strtotime($item['waktu']));
+            $postId     = $item["postid"];
             $url_matkul = $url;
             $kelas = $obj_kelas;
+            if(empty($postId)){
                 $sql = "SELECT count(1) as ttl FROM unpam_absensi WHERE url_matkul='$url' AND nama='$nama' AND  nim='$nim' and kelas='$kelas' AND absen_time='$absen_time'";
-                if(single_query($this->db->query($sql))->ttl == 0){
-                    $sql = "INSERT ignore into unpam_absensi (url_matkul, nama, nim,kelas, absen_time,updrec_by) values ('$url', '$nama', '$nim','$kelas', '$absen_time','$admin');";
-                    if($this->db->query($sql)){
-                        $arr[] = "<br/>sukses simpan $nama";
-                    }else{
-                        $arr[] = "gagal $nama";
-                    }
-                };
+            }else{
+                $sql = "SELECT count(1) as ttl FROM unpam_absensi WHERE id_post='$postId'";
+            }
+            if(single_query($this->db->query($sql))->ttl == 0){
+                $sql = "INSERT ignore into unpam_absensi (id_post,url_matkul, nama, nim,kelas, absen_time,updrec_by) values ('$postId','$url', '$nama', '$nim','$kelas', '$absen_time','$admin');";
+                if($this->db->query($sql)){
+                    $arr[] = "<br/>sukses simpan $nama";
+                }else{
+                    $arr[] = "gagal $nama";
+                }
+            };
         }
         $sql = "select count(1) as ttl from unpam_absen_log where obj_url='$url_matkul' and obj_dosen is null";
         if(single_query($this->db->query($sql))->ttl > 0){
