@@ -65,7 +65,7 @@ function grabJobDescription(className) {
     const aText = aElement ? aElement.textContent.trim() : null; // Ambil teks dari elemen <a>, jika ada
     const timeText = timeElement ? timeElement.textContent.trim() : null; // Ambil teks dari elemen <time>, jika ada
     const IDPost = postId ? postId.trim() : null; // Ambil teks dari elemen <time>, jika ada
-    
+
     const result = {
       nama: aText,
       waktu: timeText,
@@ -118,7 +118,8 @@ function send_data(obj_data,url,kls,adm){
       console.log("Data is empty, skipping the send request.");
       return;
   }
-  var UriServer = 'http://localhost/web/unpam_project/absen_ci3_backend/receive_data'
+  //var UriServer = 'http://localhost/web/unpam_project/absen_ci3_backend/receive_data';
+  var UriServer = 'https://nazrey.com/project/unpam/absen_ci3_backend/receive_data';
   fetch(UriServer, {
       method: 'POST',
       headers: {
