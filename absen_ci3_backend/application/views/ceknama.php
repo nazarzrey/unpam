@@ -1,5 +1,5 @@
 <form name="cekdosen" action="" method="GET">
-    Input namanya
+    Input nama / nim
 </br>
     <input type="text" name="ceknama">
     <input type="submit" value="test">
