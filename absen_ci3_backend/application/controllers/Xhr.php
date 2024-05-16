@@ -110,18 +110,29 @@ class Xhr extends Settings
             echo json_encode(array("message" => "No data received."));
             return;
         }
-    
         $obj_data = isset($data['data']) ? $data['data'] : null;
         $obj_url = isset($data['url']) ? $data['url'] : null;
+        $obj_kelas = isset($data['kelas']) ? $data['kelas'] : null;
+        $obj_fordis = isset($data['fordis']) ? $data['fordis'] : null;
+        $admin = isset($data['admin']) ? $data['admin'] : null;
         
-        if (empty($obj_data) || empty($obj_url)) {
+        if (empty($obj_data) || empty($obj_url) || empty($obj_kelas) || empty($obj_kelas)) {
             http_response_code(400);
-            echo json_encode(array("message" => "Incomplete data received."));
+            echo json_encode(array("message" => "data masih ada yang kosong, silahkan refresh lagi"));
             return;
         }
         $url = explode("#",$obj_url)[0];
+        $fordis = $obj_fordis;
+        if(is_array($fordis)){
+            $ftitle = addslashes($fordis[0]["fordistitle"]);
+            $fflow  = $fordis[1]["fordiske"];
+        }else{            
+            $ftitle = "x";
+            $fflow  = "x";
+        };
+        // echo $ftitle[0]["fordistitle"];
         // Cek apakah data sudah ada dalam database
-        $existing_data = $this->db->get_where('unpam_absen_log', array('obj_data' => json_encode($obj_data), 'obj_url' => $url))->row();
+        $existing_data = $this->db->get_where('unpam_absen_log', array('obj_data' => json_encode($obj_data), 'obj_url' => $url, 'obj_kelas' => $obj_kelas))->row();
         
         //jagaan supaya ga di terusin 
         if ($existing_data) {
@@ -133,13 +144,17 @@ class Xhr extends Settings
         // Jika data belum ada, lakukan penyisipan data ke dalam database
         $data_to_insert = array(
             'obj_data' => json_encode($obj_data),
-            'obj_url' => $url
+            'obj_url' => $url,
+            'obj_kelas' => $obj_kelas,
+            'obj_fordis' => $fflow,
+            'obj_fordis_title' => $ftitle,
+            'updrec_by' => $admin
         );
         $this->db->insert('unpam_absen_log', $data_to_insert);
         $arr[] = "Sukses simpan data";
         $dosen = "zre";
         foreach ($obj_data as $item) {
-            $mnama = $item['nama'];
+            $mnama = addslashes($item['nama']);
             if(is_numeric(left(substr($mnama, -20),10))){
                 $nim = substr($mnama, -20);
                 $nama = substr($mnama, 0, -20);
@@ -150,40 +165,29 @@ class Xhr extends Settings
             };
             $absen_time = date("Y-m-d H:i:s", strtotime($item['waktu']));
             $url_matkul = $url;
-
-            // Masukkan data yang telah diproses ke dalam tabel unpam_absensi
-            // $data_absensi = array(
-            //     'url_matkul' => $url_matkul,
-            //     'nama' => $nama,
-            //     'nim' => $nim,
-            //     'absen_time' => $absen_time
-            // );
-            // $query = "INSERT into unpam_absensi (url_matkul, nama, nim, absen_time) select '$url', '$nama', '$nim', '$absen_time' ";
-            // $query .= "where not exists (SELECT 1 FROM unpam_absensi WHERE url_matkul='$url' AND nama='$nama' AND  nim='$nim' AND absen_time='$absen_time')";
-            // $this->db->query($query);
-            // if(strrpos(strtolower($mnama),"dosen")===false){
-            // echo strrpos("I love php, I love php too!","php");
-                $sql = "SELECT count(1) as ttl FROM unpam_absensi WHERE url_matkul='$url' AND nama='$nama' AND  nim='$nim' AND absen_time='$absen_time'";
+            $kelas = $obj_kelas;
+                $sql = "SELECT count(1) as ttl FROM unpam_absensi WHERE url_matkul='$url' AND nama='$nama' AND  nim='$nim' and kelas='$kelas' AND absen_time='$absen_time'";
                 if(single_query($this->db->query($sql))->ttl == 0){
-                    $sql = "INSERT into unpam_absensi (url_matkul, nama, nim, absen_time) values ('$url', '$nama', '$nim', '$absen_time');";
+                    $sql = "INSERT ignore into unpam_absensi (url_matkul, nama, nim,kelas, absen_time,updrec_by) values ('$url', '$nama', '$nim','$kelas', '$absen_time','$admin');";
                     if($this->db->query($sql)){
                         $arr[] = "<br/>sukses simpan $nama";
                     }else{
                         $arr[] = "gagal $nama";
                     }
                 };
-            // }
-            // $this->db->insert('unpam_absensi', $data_absensi);
         }
-        echo $sql = "select count(1) as ttl from unpam_absen_log where obj_url='$url_matkul' and obj_dosen is not null";
-        echo $dosen;
+        $sql = "select count(1) as ttl from unpam_absen_log where obj_url='$url_matkul' and obj_dosen is null";
         if(single_query($this->db->query($sql))->ttl > 0){
-            echo $upd = "update unpam_absen_log set obj_dosen='$dosen' where obj_url='$url_matkul'";
+            $upd = "update unpam_absen_log set obj_dosen='$dosen' where obj_url='$url_matkul'";
+            $this->db->query($upd);
+        }
+        $sql = "select count(1) as ttl from unpam_dosen_matkul where matkul_dosen='$dosen' and matkul_url='$url_matkul' and matkul_kelas='$obj_kelas' and matkul_fordis='$fflow' and matkul_fordis_title='$ftitle'";
+        if(single_query($this->db->query($sql))->ttl == 0){
+            $upd = "insert into unpam_dosen_matkul (matkul_dosen,matkul_url,matkul_kelas,matkul_fordis,matkul_fordis_title,updrec_date,updrec_by) values ('$dosen','$url_matkul','$obj_kelas','$fflow','$ftitle',now(),'$admin');";
             $this->db->query($upd);
         }
         echo json_encode(array("message" => $arr));
-    }
-    
+    }   
     
 
     public function index($value = "", $value2 = "")

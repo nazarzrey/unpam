@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <!-- <link rel="icon" href="%PUBLIC_URL%/favicon.ico" /> -->
+    <link rel="icon" href="favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
@@ -13,28 +14,41 @@
       body{border: solid 1px #000;border-radius:5px;padding:10px;background-color: #f1f1f1;}
       .h-screen{width:370px;}
       input{width: 300px;margin-bottom: 10px;}
-      h2{color:red}
-      h1,h2{padding: 0;margin: 0;}
+      h2,.h3{color:red}
+      #balikan2{color:blue;font-size: 20px;}
+      h1,h2,h3{padding: 0;margin: 0;}
+      .brd{border: solid 1px;}
+      .fl{float:left}
     </style>
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
     <title>React App</title>
   </head>
   <body class="h-screen">
     <title>ABSEN FORDIS UNPAM</title>
-    <script src="popup.js"></script> <!-- Menambahkan skrip JavaScript -->
-    
-    <h3>ABSEN FORDIS UNPAM</h3>
-    <label for="kls">KELAS:</label><br>
-    <input type="text" id="kls" style="width: 100px;" disabled><br>
-    <label for="inputField">Input URL nya:</label><br>
-    <input type="text" id="inputField"><button id="saveButton">Save</button><br>
-    contohnya : <br>
-    <a href='https://e-learning.unpam.id/mod/forum/'>https://e-learning.unpam.id/mod/forum/</a>
-    <br>    
+    <!-- <form id="frmInput"> -->
+      <h3 style="text-align: center;">ABSEN FORDIS UNPAM</h3><br/>
+      <div style="float:left;width:100%"  class="">
+        <div style="width: 49%;"  class="fl">
+          <label for="inputAdmin">Admin:</label><br>
+          <input type="text" id="inputAdmin" style="width: 100px;" value="" disabled>
+        </div>
+        <div style="width: 50%;" class="fl">
+          <label for="inputKLS">KELAS:</label><br>
+          <input type="text" id="inputKLS" style="width: 100px;">
+        </div>
+      </div>
+      <label for="inputMatKul">Input URL nya:</label><br>
+      <input type="text" id="inputMatKul" value=""><button id="saveButton">Save</button><br>
+      ex : <a href='https://e-learning.unpam.id/mod/forum/'>https://e-learning.unpam.id/mod/forum/</a>
+      <br>    
+    <!-- </form> -->
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root" class="h-full"></div>
     <br>
-    <h2 id="h1"></h2>
-    <h2 id="h2"></h2>
+    <h3 id="h1" class="h3"></h3>
+    <h3 id="h2" class="h3"></h3>
+    <div id="balikan1"></div>
+    <div id="balikan2"></div>
   </body>
+  <script src="popup.js"></script> <!-- Menambahkan skrip JavaScript -->
 </html>

@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Absensi Unpam",
   "version": "1.0.0",
-  "description": "A Chrome extension to generate cover letters for Your Linkedin jobs using the power fo AI and ChatGPT.",
+  "description": "Buat Ambil Absensi Unpam (scraping)",
   "permissions": ["activeTab", "storage", "scripting"],
   "icons": {
     "16": "icon.png",
