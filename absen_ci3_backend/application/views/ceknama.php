@@ -1,3 +1,14 @@
+<body>
+        <style>
+        tr:hover {
+                background-color: #ccc;
+            }
+
+            tr:hover td {
+                background-color: transparent; /* or #000 */
+            }
+            td{padding:2px 5px}
+        </style>
 <form name="cekdosen" action="" method="GET">
     Input nama / nim
 </br>
@@ -14,7 +25,7 @@
         }
         $hasil = each_query($this->db->query($sql));
         echo "<table style='border-collapse:collapse' border='1' width='100%'> ";
-        echo "<tr style='font-weight:bold'><td>No</td><td>Nama</td><td>Matkul</td><td>Fordis</td><td>Judul Fordis</td><td>Dosen</td><td>Absen</td></tr>";
+        echo "<tr style='font-weight:bold' class='tr'><td>No</td><td>Nama</td><td>Matkul</td><td>Fordis</td><td>Judul Fordis</td><td>Dosen</td><td>Absen</td></tr>";
         // dbg($hasil);
         foreach($hasil as $key => $value){
             $dsn = UW($value->matkul_dosen);                    
@@ -28,3 +39,4 @@
         echo "</table> ";
     }
 ?>
+</body>
