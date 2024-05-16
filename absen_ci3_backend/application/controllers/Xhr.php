@@ -207,7 +207,8 @@ class Xhr extends Settings
             $upd = "update unpam_absen_log set obj_dosen='$dosen' where obj_url='$url_matkul'";
             $this->db->query($upd);
         }
-        $sql = "select count(1) as ttl from unpam_dosen_matkul where matkul_dosen='$dosen' and matkul_url='$url_matkul' and matkul_kelas='$obj_kelas' and matkul_fordis='$fflow' and matkul_fordis_title='$ftitle'";
+        //$sql = "select count(1) as ttl from unpam_dosen_matkul where matkul_dosen='$dosen' and matkul_url='$url_matkul' and matkul_kelas='$obj_kelas' and matkul_fordis='$fflow' and matkul_fordis_title='$ftitle'";
+        $sql = "select count(1) as ttl from unpam_dosen_matkul where matkul_dosen='$dosen' and matkul_url='$url_matkul' ";
         if(single_query($this->db->query($sql))->ttl == 0){
             $upd = "insert into unpam_dosen_matkul (matkul_dosen,matkul_url,matkul_kelas,matkul_fordis,matkul_fordis_title,updrec_date,updrec_by) values ('$dosen','$url_matkul','$obj_kelas','$fflow','$ftitle',now(),'$admin');";
             $this->db->query($upd);
