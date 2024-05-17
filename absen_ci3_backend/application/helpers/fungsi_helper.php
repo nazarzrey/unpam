@@ -53,9 +53,9 @@ if (!function_exists('debug')) {
 	function debug($sintak, $posisi)
 	{
 		if ($posisi == "") {
-			$pos = "left:0";
+			$pos = "left:0;top:5px";
 		} else {
-			$pos = "right:0";
+			$pos = "right:10px;top:5px";
 		}
 		#echo "<pre>".print_r($sintak,true)."</pre>";
 		echo "<pre style='position:fixed;z-index:999999999999;background:#ffffffc9;$pos'>" . print_r($sintak, true) . "</pre>";

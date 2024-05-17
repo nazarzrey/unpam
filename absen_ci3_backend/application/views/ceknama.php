@@ -24,6 +24,7 @@
             $sql = "select * from absen_mahasiswa where nama like '%$nm%' or nim like '%$nm%'";
         }
         $hasil = each_query($this->db->query($sql));
+        debug("<p>Total Data input : ".count($hasil)."</p>","r");
         echo "<table style='border-collapse:collapse' border='1' width='100%'> ";
         echo "<tr style='font-weight:bold' class='tr'><td>No</td><td>Nama</td><td>Matkul</td><td>Fordis</td><td>Judul Fordis</td><td>Dosen</td><td>Absen</td></tr>";
         // dbg($hasil);
