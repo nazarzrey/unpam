@@ -11,6 +11,7 @@
             .w1{width:180px;}
             .fl{float:left}
             .post{margin-top:17px}
+            .red{background:#efc9ae}
         </style>
 <form name="cekdosen" action="" method="GET">
     <div class="fl w1">
@@ -37,7 +38,7 @@
         }else{       
             $sql = "select * from absen_mahasiswa ";
             $whr = "where";
-            $sql2 =  " (nama like '%$nm%' or nim like '%$nm%')";
+            $sql2 =  " (nama like '%$nm%' or nim like '%$nm%') order by nama,matkul_fordis";
         }
         $sql3 = "";
         if(!empty($ds)){
@@ -47,7 +48,7 @@
                 $sql3 = " matkul_dosen like '%$ds%' ";
             }
         }
-        $ssql = $sql.$whr.$sql3.$sql2;
+        echo $ssql = $sql.$whr.$sql3.$sql2;
         $hasil = each_query($this->db->query($ssql));
         if(!isset($hasil)){
             echo "Data ga ketemu..!!";
@@ -63,7 +64,12 @@
                 $nma = $value->nama=="NAZA RUDIN"?"Nazarudin":UW($value->nama);
                 $nim = $value->nim;
                 $abs = $value->absen;
-                echo "<tr><td>".($key+1)."</td><td>".$nma."</td><td>&nbsp;</td><td>".$frd."</td><td>".$frt."</td><td>".$dsn."</td><td>".$abs."</td></tr>";
+                if($abs==1){
+                    $cls="class='red'";
+                }else{
+                    $cls="";
+                }
+                echo "<tr $cls><td>".($key+1)."</td><td>".$nma."</td><td>&nbsp;</td><td>".$frd."</td><td>".$frt."</td><td>".$dsn."</td><td>".$abs."</td></tr>";
             }
             echo "</table> ";
         }
