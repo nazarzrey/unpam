@@ -27,6 +27,7 @@ class Xhr extends Settings
         parent::__construct();
         $this->load->model(array('Mod_query'));
         #$this->load->helper('fungsi');
+        
     }
     public function get($value = "", $value2 = "")
     {
@@ -74,6 +75,12 @@ class Xhr extends Settings
                 }
                 echo "</table> ";
             }
+        }elseif($value=="url"){
+            if(empty($value2)){
+                echo "<h3>Tambahkan kelas di ujung url contoh /url/TPLE004<h3>";
+            }else{
+                $this->load->view("cekurl");
+            }
         }else{
             echo "variabel belum di pasang..!!";
         }
@@ -98,29 +105,6 @@ class Xhr extends Settings
 
         
     }
-    // public function receive_data() {
-    //     // Mendapatkan data JSON dari ekstensi Chrome
-    //     $json_data = file_get_contents('php://input');
-    //     // Konversi data JSON menjadi array asosiatif
-    //     $data = json_decode($json_data, TRUE);
-        
-    //     $obj_data = isset($data['data']) ? $data['data'] : null;
-    //     $url = isset($data['url']) ? $data['url'] : null;
-    //     // Lakukan validasi data jika diperlukan
-
-    //     // Simpan data ke dalam database atau lakukan operasi lainnya sesuai kebutuhan
-    //     // Misalnya, Anda ingin menyimpan data ke dalam tabel 'your_table_name'
-    //     // Ganti 'your_table_name' dengan nama tabel yang sesuai
-    //     $data_to_save = array(
-    //         'obj_data' => $obj_data,
-    //         'obj_url' => $url
-    //     );
-    //     $this->db->insert('unpam_absen_log', $data_to_save);
-
-    //     // Beri respons ke ekstensi Chrome bahwa data telah diterima dan disimpan
-    //     header('Content-Type: application/json');
-    //     echo json_encode(array('status' => 'success', 'message' => 'Data received and saved successfully.'));
-    // }
     public function receive_data()
     {
         $json_data = file_get_contents('php://input');

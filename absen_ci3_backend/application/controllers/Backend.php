@@ -20,55 +20,56 @@ class Backend extends Settings
     }
     public function index($value = "", $value2 = "")
     {
-        $data[] = "";
-        $uri = $this->uri->segments;
-        if (count($uri)) {
-            $ua      = $this->getBrowser();
-            $kondisi = "and link_url_dynamic='$uri[1]'";
-            $table   = "link_data";
-            $kolom   = "link_id,link_url_target";
-            $url     = $this->Mod_query->Query($table, $kolom, $kondisi);
-            $data["lnk_id"] = is_array($uri)?count($uri)==1?$uri[1]:"":"";
-            $data["ip"]     = $_SERVER['REMOTE_ADDR'];
-            $data["bname"]  = $ua['name'];
-            $data["bversi"] = $ua['version'];
-            $data["os"]     = $ua['platform'];
-            $data["sesi"]   = "x";
-            $target         = "https://rotator.sinarlink.com";
-            if ($url) {
-                $tujuan = $url[0]->link_url_target;
-                if (!empty($tujuan)) {
-                    $target = $tujuan;
-                    $data["lnk_id"] = $url[0]->link_id;
-                }
-            };
-            $data["target"] = $target;
-            $this->load->view("visit", $data);
-            #redirect($target);
-        } else {
-            #$this->load->view("welcome", $data);
+        $this->load->view("welcome");
+    //     $data[] = "";
+    //     $uri = $this->uri->segments;
+    //     if (count($uri)) {
+    //         $ua      = $this->getBrowser();
+    //         $kondisi = "and link_url_dynamic='$uri[1]'";
+    //         $table   = "link_data";
+    //         $kolom   = "link_id,link_url_target";
+    //         $url     = $this->Mod_query->Query($table, $kolom, $kondisi);
+    //         $data["lnk_id"] = is_array($uri)?count($uri)==1?$uri[1]:"":"";
+    //         $data["ip"]     = $_SERVER['REMOTE_ADDR'];
+    //         $data["bname"]  = $ua['name'];
+    //         $data["bversi"] = $ua['version'];
+    //         $data["os"]     = $ua['platform'];
+    //         $data["sesi"]   = "x";
+    //         $target         = "https://rotator.sinarlink.com";
+    //         if ($url) {
+    //             $tujuan = $url[0]->link_url_target;
+    //             if (!empty($tujuan)) {
+    //                 $target = $tujuan;
+    //                 $data["lnk_id"] = $url[0]->link_id;
+    //             }
+    //         };
+    //         $data["target"] = $target;
+    //         $this->load->view("visit", $data);
+    //         #redirect($target);
+    //     } else {
+    //         #$this->load->view("welcome", $data);
             
-            $ua      = $this->getBrowser();
+    //         $ua      = $this->getBrowser();
             
-            $url     = $this->Mod_query->sinarlink();
-            $data["ip"]     = $_SERVER['REMOTE_ADDR'];
-            $data["bname"]  = $ua['name'];
-            $data["bversi"] = $ua['version'];
-            $data["os"]     = $ua['platform'];
-            $data["sesi"]   = "x";
-            $data["lnk_id"] = "";
-            if ($url) {
-                $target = $url->link_url_target;
-                $linkid = $url->link_id;
-                $data["target"] = $target;
-                $data["lnk_id"] = $linkid;
-                if (!empty($target)) {
-                    $this->load->view("visit", $data);
-                }else{
-                    $this->load->view("rotator", $data);
-                }
-            };
-        };
+    //         $url     = $this->Mod_query->sinarlink();
+    //         $data["ip"]     = $_SERVER['REMOTE_ADDR'];
+    //         $data["bname"]  = $ua['name'];
+    //         $data["bversi"] = $ua['version'];
+    //         $data["os"]     = $ua['platform'];
+    //         $data["sesi"]   = "x";
+    //         $data["lnk_id"] = "";
+    //         if ($url) {
+    //             $target = $url->link_url_target;
+    //             $linkid = $url->link_id;
+    //             $data["target"] = $target;
+    //             $data["lnk_id"] = $linkid;
+    //             if (!empty($target)) {
+    //                 $this->load->view("visit", $data);
+    //             }else{
+    //                 $this->load->view("rotator", $data);
+    //             }
+    //         };
+    //     };
     }
     public function visit($vdata = null)
     {
