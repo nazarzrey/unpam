@@ -142,6 +142,11 @@ class Xhr extends Settings
             echo json_encode(array("message" => "data masih ada yang kosong, silahkan refresh lagi"));
             return;
         }
+        if(strpos($obj_url,"discuss.php")===false){
+            http_response_code(400);
+            echo json_encode(array("message" => "URL sepertinya salah harus mengandung discuss.php ya"));
+            return;
+        }
         $url = explode("#",$obj_url)[0];
         $fordis = $obj_fordis;
         if(is_array($fordis)){
