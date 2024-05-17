@@ -48,7 +48,7 @@
                 $sql3 = " matkul_dosen like '%$ds%' ";
             }
         }
-        echo $ssql = $sql.$whr.$sql3.$sql2;
+        $ssql = $sql.$whr.$sql3.$sql2;
         $hasil = each_query($this->db->query($ssql));
         if(!isset($hasil)){
             echo "Data ga ketemu..!!";
