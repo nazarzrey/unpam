@@ -60,6 +60,7 @@ $route['nama']         = 'xhr/get/nama';
 $route['nama/(:any)']         = 'xhr/get/nama/$1';
 $route['url']         = 'xhr/get/url';
 $route['url/(:any)']         = 'xhr/get/url/$1';
+$route['absenlog']         = 'xhr/get/loging';
 
 $route['absen/(:any)']         = 'xhr/absen/$1';
 

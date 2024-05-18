@@ -81,6 +81,17 @@ class Xhr extends Settings
             }else{
                 $this->load->view("cekurl");
             }
+        }elseif($value=="loging"){
+            
+            $data[] = "";
+            $sql    = "SELECT a.obj_dosen, a.obj_fordis, a.obj_fordis_title, a.obj_url, a.updrec_by, COUNT(b.url_matkul) AS total_url_matkul 
+                        FROM unpam_absen_log a 
+                        LEFT JOIN unpam_absensi b ON a.obj_url = b.url_matkul 
+                        GROUP BY a.obj_dosen, a.obj_fordis, a.obj_fordis_title, a.obj_url, a.updrec_by 
+                        ORDER BY MAX(a.updrec_date) DESC;
+                        ";
+            $data["hasilnya"] = each_query($this->db->query($sql));
+            $this->load->view("logabsen",$data);
         }else{
             echo "variabel belum di pasang..!!";
         }

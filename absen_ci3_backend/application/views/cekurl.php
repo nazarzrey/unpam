@@ -102,9 +102,6 @@ function cekopt($val, $kls) {
     }
     if ($val == "matkul") {
         if (isset($_POST["matkul"])) {
-            $sql = "select select matkul_url, matkul_fordis from unpam_dosen_matkul where trim(matkul_url) ='".$_POST["matkul"]."'";
-            $has = single_query($this->db->query($sql));
-            dbg($has);
             $balikan = "<option value='" . $_POST["matkul"] . "'>" . Uw($_POST["matkul"]) . "</option>";
         } else {
             $balikan = "<option value='x'>Pilih Fordis</option>";
