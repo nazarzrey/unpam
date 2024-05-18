@@ -161,6 +161,7 @@ class Xhr extends Settings
             echo json_encode(array("message" => "data log sudah pernah masuk"));
             return;
         }
+        
     
         // Jika data belum ada, lakukan penyisipan data ke dalam database
         $data_to_insert = array(
