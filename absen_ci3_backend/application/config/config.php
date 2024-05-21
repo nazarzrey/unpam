@@ -37,7 +37,7 @@ if ($sv == "localhost" || $sv == "127.0.0.1" || substr_count($sv, "192.168") == 
 	$config["lokal"]       = "yes";
 	$config["mstpath"]     = "pageturner";
 } else {
-	$config['base_url']    = "https://link.versoview.com" . $newurl;
+	$config['base_url']    = "https://nazrey.com" . $newurl;
 	$config["lokal"]       = "no";
 	$config["mstpath"]     = "openview";
 }
