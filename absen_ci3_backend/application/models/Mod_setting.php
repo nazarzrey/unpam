@@ -20,19 +20,6 @@ class Mod_setting extends CI_Model
                 GROUP BY a.`produk_id` ORDER BY 4 DESC,produk_id ASC " . $order;
         return each_query($this->db->query($sintak));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function katalog($value = '')
     {
         $sintak = "

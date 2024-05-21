@@ -1229,3 +1229,25 @@ if (!function_exists('getNamaTanpaDosen')) {
 		}
 	}
 }
+
+if (!function_exists('rating')) {
+	function rating($min, $val) {
+		if ($val == 0) {
+			return $val;
+		} elseif ($val < $min) {
+			return "Masih Kurang";
+		} elseif ($val == $min) {
+			return "Standar";
+		} elseif ($val > $min && $val <= $min + 2) {
+			return "Semangat";
+		} elseif ($val > $min + 2 && $val <= $min + 4) {
+			return "Oke Juga";
+		} elseif ($val > $min + 4 && $val <= $min + 6) {
+			return "Mantap";
+		} elseif ($val > $min + 6 && $val <= $min + 8) {
+			return "Luar Biasa";
+		} else {
+			return "Diluar Nalar";
+		}
+	}
+}

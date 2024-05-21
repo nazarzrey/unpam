@@ -29,7 +29,7 @@
         foreach($hasilnya as $key => $value){
             $nam = UW($value->nama);                    
             $abs = UW($value->absen);
-            $has = UW($value->hasil);
+            $has = rating($master->matkul_min_absen,$abs);
             if($abs==1){
                 $cls="class='red'";
             }elseif($abs==0){
