@@ -118,8 +118,25 @@ function send_data(obj_data,url,kls,adm){
       console.log("Data is empty, skipping the send request.");
       return;
   }
+  var get7an = 'https://nazrey.com/project/unpam/absen_ci3_backend/receive_data'
+  chrome.storage.local.get(['UrlTarget'], function(result) {
+    if (chrome.runtime.lastError) {
+      console.error("Error retrieving URL from local storage:", chrome.runtime.lastError.message);
+      // Handle error (e.g., use a default URL)
+      UriServer = get7an; // Or alternative URL
+    } else {
+      if (result.UrlTarget) {
+        UriServer = result.UrlTarget;
+      } else {
+        UriServer = get7an; // Use default URL if not set
+      }
+    }
+  });
+  if(!UriServer){
+    console.log("uriserver blum di definiskan");
+    return;
+  }
   //var UriServer = 'http://localhost/web/unpam_project/absen_ci3_backend/receive_data';
-  var UriServer = 'https://nazrey.com/project/unpam/absen_ci3_backend/receive_data';
   fetch(UriServer, {
       method: 'POST',
       headers: {

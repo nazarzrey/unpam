@@ -5,11 +5,39 @@ document.addEventListener('DOMContentLoaded', function () {
     var inputMatKul = document.getElementById('inputMatKul');
     var inputAdmin = document.getElementById('inputAdmin');
     var saveButton = document.getElementById('saveButton');
-
+    var targetUrlSH = document.getElementById('targetUrl');
+    var Urltujuan = document.getElementById('urlTarget');
+    const currentURL = window.location.href;
+    const isLocalhost = currentURL.includes('localhost');
+    if (isLocalhost) {
+        targetUrlSH.style.display = 'block'; // Tampilkan elemen
+    } else {
+        targetUrlSH.style.display = 'none'; // Tampilkan elemen
+    }
+    var cekHost = "Z";
+    chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+        if (tab.active) {
+        const activeTabUrl = tab.url;
+            if (activeTabUrl.includes('localhost')) {
+                document.getElementById('targetUrl').style.display = 'block';
+                cekHost = "Y"
+            } else {
+                document.getElementById('targetUrl').style.display = 'none';
+                cekHost = "N";
+            }
+        }
+        console.log(cekHost);
+    });
+    if(cekHost=="Z"){
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.reload(tabs[0].id);
+        });
+    }
     saveButton.addEventListener('click', function () {
         var inputKLSValue = inputKLS.value.trim();
         var inputMatKulValue = inputMatKul.value.trim();
         var inputAdminValue = inputAdmin.value.trim();
+        var UrltujuanValue = Urltujuan.value.trim();
 
         if (inputMatKulValue === "") {
             h1.innerHTML = "Inputan MatKul tidak boleh kosong!";
@@ -31,6 +59,10 @@ document.addEventListener('DOMContentLoaded', function () {
             chrome.storage.local.set({UrlAdmin: inputAdminValue}, function() {
                 console.log('Admin : ' + inputAdminValue);
             });
+            localStorage.setItem("UrlTarget", UrltujuanValue);   
+            chrome.storage.local.set({UrlTarget: UrltujuanValue}, function() {
+                console.log('UrlTarget : ' + UrltujuanValue);
+            });
         } 
     });
 
@@ -38,11 +70,15 @@ document.addEventListener('DOMContentLoaded', function () {
     var storedMatkulURL = localStorage.getItem("UrlMatKul");
     var storedDataKLS = localStorage.getItem("urlKLS");
     var storedDataAdmin = localStorage.getItem("UrlAdmin");
+    var storedData7an = localStorage.getItem("UrlTarget");
     if (storedDataAdmin) {
         inputAdmin.value = storedDataAdmin;
     }
     if (storedMatkulURL) {
         inputMatKul.value = storedMatkulURL;
+    }
+    if (storedData7an) {
+        Urltujuan.value = storedData7an;
     }
     if (storedDataKLS) {
         inputKLS.value = storedDataKLS;
@@ -58,13 +94,8 @@ document.addEventListener('DOMContentLoaded', function () {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     var balikan = request.message
     if (balikan) {
-        if(balikan.length>50){
-            document.getElementById('balikan1').innerHTML = request.message;
-        }else{
-            document.getElementById('balikan2').innerHTML = request.message;
-        }
+        document.getElementById('balikan1').innerHTML = request.message;
     }else{
-        document.getElementById('balikan2').innerHTML = "";
         document.getElementById('balikan1').innerHTML = "";
     }
 });

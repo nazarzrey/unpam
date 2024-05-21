@@ -84,12 +84,46 @@ class Xhr extends Settings
         }elseif($value=="loging"){
             
             $data[] = "";
-            $sql    = "SELECT a.obj_dosen, a.obj_fordis, a.obj_fordis_title, a.obj_url, a.updrec_by, COUNT(b.url_matkul) AS total_url_matkul 
-                        FROM unpam_absen_log a 
-                        LEFT JOIN unpam_absensi b ON a.obj_url = b.url_matkul 
-                        GROUP BY a.obj_dosen, a.obj_fordis, a.obj_fordis_title, a.obj_url, a.updrec_by 
-                        ORDER BY MAX(a.updrec_date) DESC;
-                        ";
+            // $sql    = "SELECT a.obj_dosen, a.obj_fordis, a.obj_fordis_title, a.obj_url, a.updrec_by, COUNT(b.url_matkul) AS total_url_matkul 
+            //             FROM unpam_absen_log a 
+            //             LEFT JOIN unpam_absensi b ON a.obj_url = b.url_matkul 
+            //             GROUP BY a.obj_dosen, a.obj_fordis, a.obj_fordis_title, a.obj_url, a.updrec_by 
+            //             ORDER BY MAX(a.updrec_date) DESC;
+            // $sql    = "SELECT a.`matkul_dosen`, a.matkul_fordis, a.matkul_fordis_title, a.matkul_url,COUNT(b.url_matkul) AS total_url_matkul 
+            // FROM unpam_dosen_matkul a LEFT JOIN unpam_absensi b ON a.matkul_url = b.url_matkul 
+            // GROUP BY a.matkul_dosen, a.matkul_fordis, a.matkul_fordis_title, a.matkul_url ORDER BY MAX(a.updrec_date) DESC;";
+            $sql = "SELECT 
+            latest_log.obj_dosen, 
+            latest_log.obj_fordis, 
+            latest_log.obj_fordis_title, 
+            latest_log.obj_url, 
+            latest_log.updrec_by, 
+            COUNT(b.url_matkul) AS total_url_matkul
+        FROM (
+            SELECT 
+                obj_dosen, 
+                obj_fordis, 
+                obj_fordis_title, 
+                obj_url, 
+                updrec_by, 
+                MAX(updrec_date) AS max_updrec_date
+            FROM 
+                unpam_absen_log
+            GROUP BY 
+                obj_url
+        ) AS latest_log
+        LEFT JOIN 
+            unpam_absensi b 
+        ON 
+            latest_log.obj_url = b.url_matkul
+        GROUP BY 
+            latest_log.obj_dosen, 
+            latest_log.obj_fordis, 
+            latest_log.obj_fordis_title, 
+            latest_log.obj_url, 
+            latest_log.updrec_by
+        ORDER BY 
+            latest_log.max_updrec_date DESC;";
             $data["hasilnya"] = each_query($this->db->query($sql));
             $this->load->view("logabsen",$data);
         }else{
@@ -138,9 +172,11 @@ class Xhr extends Settings
             return;
         }
         if(strpos($obj_url,"discuss.php")===false){
-            http_response_code(400);
-            echo json_encode(array("message" => "URL sepertinya salah harus mengandung discuss.php ya"));
-            return;
+            if(strpos($obj_url,"localhost")===false){
+                http_response_code(400);
+                echo json_encode(array("message" => "URL sepertinya salah harus mengandung discuss.php ya"));
+                return;
+            }
         }
         $url = explode("#",$obj_url)[0];
         $fordis = $obj_fordis;

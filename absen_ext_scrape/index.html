@@ -12,13 +12,13 @@
     />
     <style>
       body{border: solid 1px #000;border-radius:5px;padding:10px;background-color: #f1f1f1;}
-      .h-screen{width:370px;}
-      input{width: 300px;margin-bottom: 10px;}
+      .h-screen{width:410px;}
+      input{width: 100%;margin-bottom: 10px;}
       h2,.h3{color:red}
-      #balikan2{color:blue;font-size: 20px;}
       h1,h2,h3{padding: 0;margin: 0;}
       .brd{border: solid 1px;}
       .fl{float:left}
+      .targetUrl{display: none;}
     </style>
     <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
     <title>React App</title>
@@ -38,17 +38,19 @@
         </div>
       </div>
       <label for="inputMatKul">Input URL nya:</label><br>
-      <input type="text" id="inputMatKul" value="https://e-learning.unpam.id/mod/forum/"><button id="saveButton">Save</button><br>
+      <input type="text" id="inputMatKul" value="https://e-learning.unpam.id/mod/forum/" style="width:60%"> <button id="saveButton">Save</button><br>
+      <div id="targetUrl">
+        <label for="urlTarget">Url Target:</label><br>
+        <input type="text" id="urlTarget" value="https://nazrey.com/project/unpam/absen_ci3_backend/receive_data"  style="width:98%"><br>
+      </div>
       ex : <a href='https://e-learning.unpam.id/mod/forum/'>https://e-learning.unpam.id/mod/forum/</a>
-      <br>    
+      <br>  <br>  
     <!-- </form> -->
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root" class="h-full"></div>
-    <br>
     <h3 id="h1" class="h3"></h3>
     <h3 id="h2" class="h3"></h3>
     <div id="balikan1"></div>
-    <div id="balikan2"></div>
   </body>
-  <script src="popup.js"></script> <!-- Menambahkan skrip JavaScript -->
+  <script src="popup.js?v1"></script> <!-- Menambahkan skrip JavaScript -->
 </html>
