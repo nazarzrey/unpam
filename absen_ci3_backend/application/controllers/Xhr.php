@@ -299,7 +299,7 @@ class Xhr extends Settings
                 }else{
                     $ssql = $sql." and matkul_desk='$matkul'";
                     if(single_query($this->db->query($ssql))->ttl == 0){
-                        echo $upd = "update unpam_dosen_matkul set matkul_desk='$matkul' where matkul_url='$url_matkul';";
+                        $upd = "update unpam_dosen_matkul set matkul_desk='$matkul' where matkul_url='$url_matkul';";
                         $this->db->query($upd);
                         $arr[] = "sukses update dosen matkul";
                     }                    
