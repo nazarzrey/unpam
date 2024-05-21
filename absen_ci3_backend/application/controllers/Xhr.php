@@ -237,11 +237,11 @@ class Xhr extends Settings
         $existing_data = $this->db->get_where('unpam_absen_log', array('obj_data' => json_encode($obj_data), 'obj_url' => $url, 'obj_kelas' => $obj_kelas))->row();
         
         //jagaan supaya ga di terusin 
-        // if ($existing_data) {
-        //     http_response_code(409); // Konflik
-        //     echo json_encode(array("message" => "data log sudah pernah masuk"));
-        //     return;
-        // }
+        if ($existing_data) {
+            http_response_code(409); // Konflik
+            echo json_encode(array("message" => "data log sudah pernah masuk"));
+            return;
+        }
         
     
         // Jika data belum ada, lakukan penyisipan data ke dalam database
