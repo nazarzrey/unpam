@@ -93,37 +93,40 @@ class Xhr extends Settings
             // FROM unpam_dosen_matkul a LEFT JOIN unpam_absensi b ON a.matkul_url = b.url_matkul 
             // GROUP BY a.matkul_dosen, a.matkul_fordis, a.matkul_fordis_title, a.matkul_url ORDER BY MAX(a.updrec_date) DESC;";
             $sql = "SELECT 
-            latest_log.obj_dosen, 
-            latest_log.obj_fordis, 
-            latest_log.obj_fordis_title, 
-            latest_log.obj_url, 
-            latest_log.updrec_by, 
-            COUNT(b.url_matkul) AS total_url_matkul
-        FROM (
-            SELECT 
-                obj_dosen, 
-                obj_fordis, 
-                obj_fordis_title, 
-                obj_url, 
-                updrec_by, 
-                MAX(updrec_date) AS max_updrec_date
-            FROM 
-                unpam_absen_log
-            GROUP BY 
-                obj_url
-        ) AS latest_log
-        LEFT JOIN 
-            unpam_absensi b 
+            ual.obj_dosen, 
+            ual.obj_fordis, 
+            ual.obj_fordis_title, 
+            ual.obj_url, 
+            ual.updrec_by, 
+            COUNT(ua.url_matkul) AS total_url_matkul
+        FROM 
+            unpam_absen_log ual
+        JOIN 
+            (SELECT 
+                 obj_url, 
+                 MAX(updrec_date) AS max_updrec_date
+             FROM 
+                 unpam_absen_log
+             GROUP BY 
+                 obj_url
+            ) latest 
         ON 
-            latest_log.obj_url = b.url_matkul
+            ual.obj_url = latest.obj_url 
+            AND ual.updrec_date = latest.max_updrec_date
+        LEFT JOIN 
+            unpam_absensi ua 
+        ON 
+            ual.obj_url = ua.url_matkul
         GROUP BY 
-            latest_log.obj_dosen, 
-            latest_log.obj_fordis, 
-            latest_log.obj_fordis_title, 
-            latest_log.obj_url, 
-            latest_log.updrec_by
+            ual.obj_dosen, 
+            ual.obj_fordis, 
+            ual.obj_fordis_title, 
+            ual.obj_url, 
+            ual.updrec_by,
+            ual.updrec_date
         ORDER BY 
-            latest_log.max_updrec_date DESC;";
+            ual.updrec_date DESC;
+        ";
             $data["hasilnya"] = each_query($this->db->query($sql));
             $this->load->view("logabsen",$data);
         }else{
