@@ -122,7 +122,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
       }else{
         let msg = "Url pada browser tidak sama dengan inputan URL...!!!"
         console.log(msg);
-        chrome.runtime.sendMessage({message: msg});
+        // chrome.runtime.sendMessage({message: msg});
       }
     }
   }
