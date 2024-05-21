@@ -11,14 +11,15 @@
       content="Web site created using create-react-app"
     />
     <style>
-      body{border: solid 1px #000;border-radius:5px;padding:10px;background-color: #f1f1f1;}
-      .h-screen{width:410px;}
+      body{border-radius:5px;padding:10px;background-color: #d7e671;}
+      .h-screen{width:350px;}
       input{width: 100%;margin-bottom: 10px;}
       h2,.h3{color:red}
       h1,h2,h3{padding: 0;margin: 0;}
       .brd{border: solid 1px;}
       .fl{float:left}
       .targetUrl{display: none;}
+      #balikan1{font-style: italic;font-size: 16px;}
     </style>
     <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
     <title>React App</title>
@@ -33,12 +34,12 @@
           <input type="text" id="inputAdmin" style="width: 100px;" value="Nazar" disabled>
         </div>
         <div style="width: 50%;" class="fl">
-          <label for="inputKLS">KELAS:</label><br>
+          <label for="inputKLS">Kelas:</label><br>
           <input type="text" id="inputKLS" style="width: 100px;" value="TPLE004">
         </div>
       </div>
       <label for="inputMatKul">Input URL nya:</label><br>
-      <input type="text" id="inputMatKul" value="https://e-learning.unpam.id/mod/forum/" style="width:60%"> <button id="saveButton">Save</button><br>
+      <input type="text" id="inputMatKul" value="https://e-learning.unpam.id/mod/forum/" style="width:83%"> <button id="saveButton">Save</button><br>
       <div id="targetUrl">
         <label for="urlTarget">Url Target:</label><br>
         <input type="text" id="urlTarget" value="https://nazrey.com/project/unpam/absen_ci3_backend/receive_data"  style="width:98%"><br>
@@ -46,6 +47,7 @@
       ex : <a href='https://e-learning.unpam.id/mod/forum/'>https://e-learning.unpam.id/mod/forum/</a>
       <br>  <br>  
     <!-- </form> -->
+    <!-- http://localhost/web/unpam_project/absen_ci3_backend/receive_data -->
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root" class="h-full"></div>
     <h3 id="h1" class="h3"></h3>

@@ -1235,7 +1235,7 @@ if (!function_exists('rating')) {
 		if ($val == 0) {
 			return $val;
 		} elseif ($val < $min) {
-			return "Masih Kurang";
+			return "Kurang";
 		} elseif ($val == $min) {
 			return "Standar";
 		} elseif ($val > $min && $val <= $min + 2) {

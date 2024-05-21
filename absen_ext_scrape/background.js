@@ -52,32 +52,44 @@ function getJobDescriptionClassName(url) {
 }
 
 function grabJobDescription(className) {
- const forumPostContainer = document.body.querySelector(`.${className}`); // Ambil elemen forum-post-container
-  const jobDetailsElements = forumPostContainer.querySelectorAll('.forumpost'); // Ambil semua elemen forumpost di dalam forum-post-container
+  const forumPostContainer = document.body.querySelector(`.${className}`); // Ambil elemen forum-post-container
+  const elementDataFordis = forumPostContainer.querySelectorAll('.forumpost'); // Ambil semua elemen forumpost di dalam forum-post-container
 
   const results = []; // Array untuk menyimpan hasil
   const title = [];
-  jobDetailsElements.forEach(jobDetailsElement => {
-    const aElement = jobDetailsElement.querySelector('a'); // Ambil elemen <a> di dalam elemen forumpost
-    const timeElement = jobDetailsElement.querySelector('time'); // Ambil elemen <time> di dalam elemen forumpost
-    const postId = jobDetailsElement.getAttribute('data-post-id');
+  const header = [];
+  elementDataFordis.forEach(FordisDetailsElement => {
+    const aElement = FordisDetailsElement.querySelector('a');
+    const timeElement = FordisDetailsElement.querySelector('time');
+    const postId = FordisDetailsElement.getAttribute('data-post-id');
 
-    const aText = aElement ? aElement.textContent.trim() : null; // Ambil teks dari elemen <a>, jika ada
-    const timeText = timeElement ? timeElement.textContent.trim() : null; // Ambil teks dari elemen <time>, jika ada
-    const IDPost = postId ? postId.trim() : null; // Ambil teks dari elemen <time>, jika ada
+    const aText = aElement ? aElement.textContent.trim() : null;
+    const timeText = timeElement ? timeElement.textContent.trim() : null;
+    const IDPost = postId ? postId.trim() : null;
 
     const result = {
       nama: aText,
       waktu: timeText,
       postid:IDPost
     };
-
-    results.push(result); // Tambahkan hasil ke dalam array
+    results.push(result);
   });
 
-  // Get values from your specified elements
   const pageContentValue = document.querySelector("#page-content .discussionname")?.textContent?.trim();
   const pageHeaderValue = document.querySelector("#page-header .h2")?.textContent?.trim();
+
+  const elementDataKelas = forumPostContainer.querySelectorAll('#page-navbar'); // Ambil semua elemen forumpost di dalam forum-post-container  
+  elementDataKelas.forEach(KelasDetailsElement => {    
+    const aKlsElement = KelasDetailsElement.querySelector('a');
+    const aKlsData = aKlsElement ? aKlsElement.textContent.trim() : null;    
+    const result = {
+      header: aKlsData
+    };
+    header.push({satu: aKlsElement});
+    header.push({satu: aKlsData});
+    header.push(result);
+    header.push("zre");
+  })
   // Add them to the results if they exist
   if (pageContentValue) {
     title.push({ fordistitle: pageContentValue });
@@ -86,29 +98,29 @@ function grabJobDescription(className) {
     title.push({ fordiske: pageHeaderValue });
   }
 
-  return [results,title];
+  return [results,title,header];
 }
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     console.log("Event Triggered")
   if (changeInfo.status === "complete" && tab.active) {
-    // console.log("cek url "+UrlCrawl("url")+" -> "+tab.url);
     var Kls   = UrlCrawl("kelas");
     var Admin = UrlCrawl("admin");
-    if (
-      tab.url?.startsWith(UrlCrawl("url")) 
-    ) {
-      chrome.scripting
-        .executeScript({
-          target: { tabId: tabId },
-          func: grabJobDescription,
-          args: [getJobDescriptionClassName(tab.url)],
-        })
-        .then((queryResult) => {
-          lg(queryResult[0].result);
-          var url = tab.url
-          send_data(queryResult[0].result,url,Kls,Admin)
-        });
+    if (typeof tab.url !== 'undefined'){
+      var tabUrl = tab.url.replace(".ac.id",".id");
+        if(tabUrl?.startsWith(UrlCrawl("url"))) {
+        chrome.scripting
+          .executeScript({
+            target: { tabId: tabId },
+            func: grabJobDescription,
+            args: [getJobDescriptionClassName(tabUrl)],
+          })
+          .then((queryResult) => {
+            lg(queryResult[0].result);
+            var url = tabUrl
+            send_data(queryResult[0].result,url,Kls,Admin)
+          });
+      }
     }
   }
 });
@@ -132,8 +144,10 @@ function send_data(obj_data,url,kls,adm){
       }
     }
   });
-  if(!UriServer){
-    console.log("uriserver blum di definiskan");
+  
+  if (typeof UriServer === 'undefined'){
+    console.log("URL server blum di definiskan, silahkan refresh");    
+    chrome.runtime.sendMessage({message: "URL server blum di definiskan, silahkan refresh"});
     return;
   }
   //var UriServer = 'http://localhost/web/unpam_project/absen_ci3_backend/receive_data';
