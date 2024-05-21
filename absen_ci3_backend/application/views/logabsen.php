@@ -16,7 +16,7 @@
 <?php
 
     echo "<table style='border-collapse:collapse' border='1' width='1500px'> ";
-    echo "<tr style='font-weight:bold' class='tr'><td>Dosen</td><td>Fordis</td><td>Judul Fordis</td><td>Admin</td><td>Total Data</td><td>Url</td></tr>";
+    echo "<tr style='font-weight:bold' class='tr'><td>Dosen</td><td>Fordis</td><td>Judul Fordis</td><td>Last upd by</td><td>Total Data</td><td>Url</td></tr>";
     // dbg($hasil);
     foreach($hasilnya as $key => $value){
         $dsn = UW($value->obj_dosen);                    
