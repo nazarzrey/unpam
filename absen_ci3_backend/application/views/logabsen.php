@@ -14,9 +14,11 @@
             .red{background:#efc9ae}
         </style>
 <?php
+        
     echo "<table style='border-collapse:collapse' border='1' width='1600px'> ";
     echo "<tr style='font-weight:bold' class='tr'><td>Dosen</td><td>Fordis</td><td>Judul Fordis</td><td>Last upd by</td><td>Total Data</td><td>Url</td><td>Detail</td></tr>";
     // dbg($hasil);
+    $urii = base_url("absenlog/");
     foreach($hasilnya as $key => $value){
         $dsn = UW($value->obj_dosen);                    
         $frd = UW($value->obj_fordis);
@@ -30,7 +32,7 @@
         }else{
             $cls="";
         }
-        echo "<tr $cls><td>".$dsn."</td><td>".$frd."</td><td>".$frt."</td><td>".$adm."</td><td>".$abs."</td><td><a href='".$url."'>".$url."</a></td><td><a href='absenlog/".$dtl."'>Open</a></td></tr>";
+        echo "<tr $cls><td>".$dsn."</td><td>".$frd."</td><td>".$frt."</td><td>".$adm."</td><td>".$abs."</td><td><a href='".$url."'>".$url."</a></td><td><a href='".$urii.$dtl."'>Open</a></td></tr>";
     }
     echo "</table> ";
 ?>
