@@ -30,7 +30,7 @@
             $nam = UW($value->nama);                    
             $abs = UW($value->absen);
             $has = rating($master->matkul_min_absen,$abs);
-            if($abs==1){
+            if($abs>0 && $abs<$master->matkul_min_absen){
                 $cls="class='red'";
             }elseif($abs==0){
                 $cls="class='blk'";
