@@ -122,6 +122,7 @@ class Xhr extends Settings
                 ual.updrec_by,
                 ual.updrec_date
             ORDER BY 
+                ual.obj_dosen,
                 ual.updrec_date DESC;
             ";
                 $data["hasilnya"] = each_query($this->db->query($sql));
