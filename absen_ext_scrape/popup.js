@@ -58,10 +58,16 @@ document.addEventListener('DOMContentLoaded', function () {
             chrome.storage.local.set({UrlTarget: UrltujuanValue}, function() {
                 console.log('UrlTarget : ' + UrltujuanValue);
             });
+            setTimeout(() => {
+                chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                    chrome.tabs.reload(tabs[0].id);
+                });
+            }, 2000);
         } 
         setTimeout(() => {
             h1.innerHTML = "";
-        }, 3000);
+            h2.innerHTML = "";
+        }, 5000);
     });
 
     // Cek apakah ada data di localStorage saat halaman dimuat
@@ -102,7 +108,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         cetakBalikan.innerHTML= request.message;
         setTimeout(() => {
             cetakBalikan.innerHTML = "";
-        }, 3000);
+        }, 5000);
     }else{
         cetakBalikan.innerHTML = "";
     }

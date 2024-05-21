@@ -62,6 +62,7 @@ $route['url']         = 'xhr/get/url';
 $route['url/(:any)']         = 'xhr/get/url/$1';
 $route['absenlog']         = 'xhr/get/loging';
 $route['absenlog/(:num)']         = 'xhr/get/loging/$1';
+$route['sync']         = 'xhr/get/sync';
 
 $route['absen/(:any)']         = 'xhr/absen/$1';
 

@@ -57,7 +57,7 @@ function grabJobDescription(className) {
 
   const results = []; // Array untuk menyimpan hasil
   const title = [];
-  const matkul = [];
+  const utama = [];
   elementDataFordis.forEach(FordisDetailsElement => {
     const aElement = FordisDetailsElement.querySelector('a');
     const timeElement = FordisDetailsElement.querySelector('time');
@@ -78,17 +78,17 @@ function grabJobDescription(className) {
   const pageContentValue = document.querySelector("#page-content .discussionname")?.textContent?.trim();
   const pageHeaderValue = document.querySelector("#page-header .h2")?.textContent?.trim();
 
-  const elementDataKelas = document.querySelectorAll('#page-navbar');
-  if(elementDataKelas){
-    elementDataKelas.forEach(KelasDetailsElement => {    
-      const aKlsElement = KelasDetailsElement.querySelector('a');
-      const aKlsData = aKlsElement ? aKlsElement.textContent.trim() : null;    
-      const Klshasil = {
-        pelajaran: aKlsData
-      };
-      matkul.push(Klshasil);
-    })
-  }
+  const elementDataKelas = document.querySelectorAll('#page-navbar'); // Ambil semua elemen forumpost di dalam forum-post-container  
+  console.log(elementDataFordis);
+  console.log(elementDataKelas);
+  elementDataKelas.forEach(KelasDetailsElement => {    
+    const aKlsElement = KelasDetailsElement.querySelector('a');
+    const aKlsData = aKlsElement ? aKlsElement.textContent.trim() : null;    
+    const hasil = {
+      kepalas: aKlsData
+    };
+    utama.push(hasil);
+  })
   // Add them to the results if they exist
   if (pageContentValue) {
     title.push({ fordistitle: pageContentValue });
@@ -97,7 +97,7 @@ function grabJobDescription(className) {
     title.push({ fordiske: pageHeaderValue });
   }
 
-  return [results,title,matkul];
+  return [results,title,utama];
 }
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
@@ -119,10 +119,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
             var url = tabUrl
             send_data(queryResult[0].result,url,Kls,Admin)
           });
-      }else{
-        let msg = "Url pada browser tidak sama dengan inputan URL...!!!"
-        console.log(msg);
-        chrome.runtime.sendMessage({message: msg});
       }
     }
   }
@@ -163,7 +159,6 @@ function send_data(obj_data,url,kls,adm){
         url: url,
         data: obj_data[0],
         fordis: obj_data[1],
-        matkul: obj_data[2],
         kelas:kls,
         admin:adm
     })
