@@ -212,7 +212,6 @@ class Xhr extends Settings
             }
         };
         if($testing){
-            dbg($testing);
             if (empty($obj_data) || empty($obj_url) || empty($obj_kelas)) {
                 http_response_code(400);
                 echo json_encode(array("message" => "data masih ada yang kosong, silahkan refresh lagi"));
