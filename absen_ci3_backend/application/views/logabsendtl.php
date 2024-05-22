@@ -23,9 +23,12 @@
     echo "<tr style='font-weight:bold' class='tr'><td>Nama</td><td>Absen</td><td>Rating</td></tr>";
     // dbg($hasil);
     if(isset($master)){
+        echo "<div style='position:relative;'>";
         echo "<h4>DOSEN : ".$master->matkul_dosen." ( ABSEN  : ".$master->matkul_min_absen." )</h4>";
         echo "<h4>FORDIS : ".$master->matkul_fordis."</h4>";
         echo "<h4>JUDUL FORDIS : ".$master->matkul_fordis_title."</h4>";
+        echo "<h5 style='position:absolute;right:10px;bottom:-15px'>Last Sync : ".$master->updrec_date."</h5>";        
+        echo "</div>";
         foreach($hasilnya as $key => $value){
             $nam = UW($value->nama);                    
             $abs = UW($value->absen);

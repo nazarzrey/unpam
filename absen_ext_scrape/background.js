@@ -134,6 +134,7 @@ function send_data(obj_data,url,kls,adm){
       return;
   }
   var get7an = 'https://nazrey.com/project/unpam/absen_ci3_backend/receive_data'
+  //var UriServer = 'http://localhost/web/unpam_project/absen_ci3_backend/receive_data';
   chrome.storage.local.get(['UrlTarget'], function(result) {
     if (chrome.runtime.lastError) {
       console.error("Error retrieving URL from local storage:", chrome.runtime.lastError.message);
@@ -153,7 +154,6 @@ function send_data(obj_data,url,kls,adm){
     chrome.runtime.sendMessage({message: "URL server blum di definiskan, silahkan refresh"});
     return;
   }
-  //var UriServer = 'http://localhost/web/unpam_project/absen_ci3_backend/receive_data';
   fetch(UriServer, {
       method: 'POST',
       headers: {

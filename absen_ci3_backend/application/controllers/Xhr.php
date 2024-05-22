@@ -128,11 +128,16 @@ class Xhr extends Settings
                 $data["hasilnya"] = each_query($this->db->query($sql));
                 $this->load->view("logabsen",$data);
             }else{
-                $sql = "SELECT matkul_url,trim(matkul_dosen) as matkul_dosen,matkul_fordis,matkul_fordis_title,IFNULL(matkul_min_absen,'2') AS  matkul_min_absen FROM unpam_dosen_matkul WHERE dm_id='$value2'";                
+                $sql = "SELECT matkul_url,trim(matkul_dosen) as matkul_dosen,matkul_fordis,matkul_fordis_title,IFNULL(matkul_min_absen,'2') AS  matkul_min_absen,
+                        IFNULL(MAX(b.`updrec_date`),'') AS updrec_date
+                        FROM unpam_dosen_matkul a
+                        LEFT JOIN url_log b ON a.`matkul_url`=b.`url`
+                        WHERE dm_id='$value2'";                
                 $result = single_query($this->db->query($sql));
                 $data["master"] = $result;
                 $msUrl =$result->matkul_url;
                 $msMin= $result->matkul_min_absen;
+                $mssyn= $result->updrec_date;
                 $sql = "
                 SELECT a.nama,a.nim,IFNULL(b.absen,0) AS absen,IFNULL(b.hasil,0) AS hasil FROM unpam_mahasiswa a LEFT JOIN (
                 SELECT a.nama,COUNT(1) AS absen,IF(COUNT(1)<$msMin,COUNT(1)-$msMin,IF(COUNT(1)>$msMin,IF(COUNT(1)<6,'Semangat','Luar Biasa'),'standar')) hasil FROM unpam_mahasiswa a
@@ -225,7 +230,7 @@ class Xhr extends Settings
                 return;
             }else{        
                 $sv = $_SERVER['SERVER_NAME'];
-                if ($sv == "localhost" || $sv == "127.0.0.1" || substr_count($sv, "192.168") == 1) {                    
+                if ($sv != "localhost" && $sv != "127.0.0.1" && substr_count($sv, "192.168") != 1) {                    
                     http_response_code(400);
                     echo json_encode(array("message" => "lemparan data localhost, ditolak di server live"));
                     return;
@@ -265,11 +270,10 @@ class Xhr extends Settings
         $log_insert = array(
             'url' => $url,
             'jenis' => "auto",
-            'updrec_date' => 'now()',
+            'updrec_date' => date("Y-m-d H:i:s"),
             'updrec_by' => $admin
         );
         $this->db->insert('unpam_absen_log', $data_to_insert);
-        $this->db->insert('log_url', $log_insert);
         $arr[] = "Sukses simpan data";
         $dosen = "";
         foreach ($obj_data as $item) {
@@ -336,6 +340,7 @@ class Xhr extends Settings
                 $this->db->query($upd);
             }
         }
+        $this->db->insert('url_log', $log_insert);
         echo json_encode(array("message" => $arr));
     }   
     
