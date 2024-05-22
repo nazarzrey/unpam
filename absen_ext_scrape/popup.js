@@ -92,11 +92,12 @@ document.addEventListener('DOMContentLoaded', function () {
         h1.innerHTML = msg1;
         h2.innerHTML = msg2;
     }
-    
-    if (storedDataAdmin.toLowerCase()=="nazar") {
-        targetUrlSH.style.display = 'block'; // Tampilkan elemen
-    } else {
-        targetUrlSH.style.display = 'none'; // Tampilkan elemen
+    if (storedDataAdmin != null) {
+        if (storedDataAdmin.toLowerCase()=="nazar") {
+            targetUrlSH.style.display = 'block'; // Tampilkan elemen
+        } else {
+            targetUrlSH.style.display = 'none'; // Tampilkan elemen
+        }
     }
 });
 
