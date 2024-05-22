@@ -198,6 +198,7 @@ class Xhr extends Settings
         $obj_fordis = isset($data['fordis']) ? $data['fordis'] : null;
         $admin      = isset($data['admin']) ? $data['admin'] : null;
         $matkul     = isset($data['matkul']) ? $data['matkul'] : null;
+        $testing    = isset($data['testing']) ? $data['testing'] : true;
         $sks        = "";
         if(is_array($matkul)){
             $mtkul  = str_replace(array("[","]"),"",$matkul[0]["pelajaran"]);
@@ -210,18 +211,26 @@ class Xhr extends Settings
                 }
             }
         };
-        //echo $sks.$matkul.$obj_kelas;
-        // dbg($matkul);
-        if (empty($obj_data) || empty($obj_url) || empty($obj_kelas)) {
-            http_response_code(400);
-            echo json_encode(array("message" => "data masih ada yang kosong, silahkan refresh lagi"));
-            return;
+        if($testing){
+            dbg($testing);
+            if (empty($obj_data) || empty($obj_url) || empty($obj_kelas)) {
+                http_response_code(400);
+                echo json_encode(array("message" => "data masih ada yang kosong, silahkan refresh lagi"));
+                return;
+            }
         }
         if(strpos($obj_url,"discuss.php")===false){
             if(strpos($obj_url,"localhost")===false){
                 http_response_code(400);
                 echo json_encode(array("message" => "URL sepertinya salah harus mengandung discuss.php ya"));
                 return;
+            }else{        
+                $sv = $_SERVER['SERVER_NAME'];
+                if ($sv != "localhost" || $sv != "127.0.0.1" || substr_count($sv, "192.168") != 1) {                    
+                    http_response_code(400);
+                    echo json_encode(array("message" => "lemparan data localhost, ditolak di server live"));
+                    return;
+                }
             }
         }
         $url = explode("#",$obj_url)[0];
@@ -254,7 +263,14 @@ class Xhr extends Settings
             'obj_fordis_title' => $ftitle,
             'updrec_by' => $admin
         );
+        $log_insert = array(
+            'url' => $url,
+            'jenis' => "auto",
+            'updrec_date' => 'now()',
+            'updrec_by' => $admin
+        );
         $this->db->insert('unpam_absen_log', $data_to_insert);
+        $this->db->insert('log_url', $log_insert);
         $arr[] = "Sukses simpan data";
         $dosen = "";
         foreach ($obj_data as $item) {
