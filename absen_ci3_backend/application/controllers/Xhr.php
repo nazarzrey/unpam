@@ -225,7 +225,7 @@ class Xhr extends Settings
                 return;
             }else{        
                 $sv = $_SERVER['SERVER_NAME'];
-                if ($sv != "localhost" || $sv != "127.0.0.1" || substr_count($sv, "192.168") != 1) {                    
+                if ($sv == "localhost" || $sv == "127.0.0.1" || substr_count($sv, "192.168") == 1) {                    
                     http_response_code(400);
                     echo json_encode(array("message" => "lemparan data localhost, ditolak di server live"));
                     return;
