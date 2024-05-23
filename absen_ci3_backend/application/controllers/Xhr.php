@@ -214,10 +214,75 @@ class Xhr extends Settings
         }elseif($value=="menu"){
             echo $value;
             $this->load->view("menu");
+        }elseif($value=="grup"){
+            $this->detail_week();
         }else{
             echo "variabel belum di pasang..!!";
         }
     }
+
+
+
+    public function detail_week(){
+        
+        $this->load->model('Absensi_model');
+        // Dapatkan nomor minggu saat ini
+        $week_number = date('W') - 1;
+
+        // Ambil data absensi, mahasiswa, matkul, dan dosen matkul
+        $absensi_data = $this->Absensi_model->get_absensi_by_week($week_number);
+        $mahasiswa_data = $this->Absensi_model->get_all_mahasiswa();
+        $matkul_data = $this->Absensi_model->get_all_matkul();
+        $dosen_matkul_data = $this->Absensi_model->get_all_dosen_matkul();
+
+        // Buat rekap absensi
+        $rekap_absensi = [];
+        foreach ($mahasiswa_data as $mahasiswa) {
+            $rekap_absensi[$mahasiswa['nim']] = [
+                'nim' => substr($mahasiswa['nim'], 0, 12),
+                'nama' => trim($mahasiswa['nama']),
+            ];
+
+            foreach ($matkul_data as $matkul) {
+                $rekap_absensi[$mahasiswa['nim']][$matkul['id_matkul']] = 0;
+            }
+        }
+
+        // Populate attendance data
+        foreach ($absensi_data as $absensi) {
+            $nnim = substr($absensi['nim'], 0, 12);
+            if (isset($rekap_absensi[$nnim][$absensi['id_matkul']])) {
+                $rekap_absensi[$nnim][$absensi['id_matkul']]++;
+            }
+        }
+
+        // Mark subjects with no attendance as offline
+        foreach ($matkul_data as $matkul) {
+            $id_matkul = $matkul['id_matkul'];
+            $all_zero = true;
+
+            foreach ($rekap_absensi as $rekap) {
+                if ($rekap[$id_matkul] > 0) {
+                    $all_zero = false;
+                    break;
+                }
+            }
+
+            if ($all_zero) {
+                foreach ($rekap_absensi as &$rekap) {
+                    $rekap[$id_matkul] = 'Offline';
+                }
+            }
+        }
+
+        $data["week"] = $week_number;
+        $data['rekap_absensi'] = $rekap_absensi;
+        $data['matkul_data'] = $matkul_data;
+        $this->load->view('rekap_absensi_view', $data);
+    }
+
+
+
     public function UW($value){
         return ucfirst(strtolower($value));
     }
