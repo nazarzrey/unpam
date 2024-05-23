@@ -1251,3 +1251,43 @@ if (!function_exists('rating')) {
 		}
 	}
 }
+if (!function_exists('getLastDateOfCurrentWeek')) {
+	function getLastDateOfCurrentWeek($weeksFromStart = 0, $startDay = 1, $endDay = 7) {
+		// Get the current year
+		$currentYear = date('Y');
+
+		// Create a date object for January 1st of the current year
+		$startOfYear = new DateTime("{$currentYear}-01-01");
+
+		// Adjust the start date to the previous or same start day of the week
+		$dayOfWeek = $startOfYear->format('N');
+		$adjustment = $startDay - $dayOfWeek;
+		if ($adjustment > 0) {
+			$adjustment -= 7;
+		}
+		$startOfYear->modify("{$adjustment} days");
+
+		// Clone the start date to calculate the end of the specified week
+		$endOfWeek = clone $startOfYear;
+
+		// Add the specified number of weeks to the start of the year
+		$endOfWeek->modify("+{$weeksFromStart} weeks");
+
+		// Find the end day of the week
+		$dayOfWeek = $endOfWeek->format('N');
+		$adjustment = $endDay - $dayOfWeek;
+		if ($adjustment < 0) {
+			$adjustment += 7;
+		}
+		$endOfWeek->modify("{$adjustment} days");
+
+		// Format the date and the day
+		$date = $endOfWeek->format('d-m');
+		$day = $endOfWeek->format('D'); // Full textual representation of the day (e.g., Saturday)
+
+		return [
+			'date' => $date,
+			'day' => $day
+		];
+	}
+}

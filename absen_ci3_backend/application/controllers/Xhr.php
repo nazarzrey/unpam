@@ -1,6 +1,9 @@
 <?php
 
-error_reporting(0);
+$sv = $_SERVER['SERVER_NAME'];
+if ($sv != "localhost" && $sv != "127.0.0.1" && substr_count($sv, "192.168") != 1) {    
+ error_reporting(0);
+}
 defined('BASEPATH') or exit('No direct script access allowed');
 /*
 header("Access-Control-Allow-Origin: *");   
@@ -162,6 +165,51 @@ class Xhr extends Settings
                 $ft = $data->obj_fordis_title;
                 $sql = "insert ignore into unpam_dosen_matkul (matkul_dosen,matkul_url,matkul_fordis,matkul_fordis_title) values ('$ds','$ur','$fd','$ft')";
                 $this->db->query($sql);
+            }
+        }elseif($value=="log_dtl"){
+            $data[] = "";
+            $sql    = "SELECT WEEK(MIN(absen_time)) AS min_week,WEEK(CURDATE()) AS max_week,(SELECT COUNT(1) FROM unpam_mahasiswa WHERE IFNULL(keter,'')='') AS ttl_mahasiswa FROM unpam_absensi ";
+            $week   = single_query($this->db->query($sql));
+            $this->db->order_by("dosen", "asc");
+            $dosen = $this->db->get("unpam_matkul");
+            $result = each_query($dosen);
+            $data["tweek"] = ($week->max_week - $week->min_week) + 1;
+            $data["fweek"] = $week->min_week;
+            $data["lweek"] = $week->max_week;
+            $data["result"] = $result;
+            $data["tsiswa"] = $week->ttl_mahasiswa;
+            $this->load->view("absendosen",$data);
+        }elseif($value=="log_dtl_siswa"){
+            if($this->session->userdata('nim')!=""){
+                $value2 = $this->session->userdata('nim');
+            }
+            if($value2!=""){
+                $data[] = "";
+                $sql    = "SELECT WEEK(MIN(absen_time)) AS min_week,WEEK(CURDATE()) AS max_week,(SELECT COUNT(1) FROM unpam_mahasiswa WHERE IFNULL(keter,'')='') AS ttl_mahasiswa";
+                $sql   .= ",(select nama from unpam_mahasiswa where nim='$value2') as siswa";
+                $sql   .= ",(select max(updrec_date) from unpam_absensi) as sync";
+                $sql   .= " FROM unpam_absensi ";
+
+                // echo $sql;
+                $week   = single_query($this->db->query($sql));
+                $dosen  = "SELECT a.*,IFNULL(DATE_FORMAT(MAX(b.updrec_date),'%y-%m-%d %H:%i'),'') AS sync FROM unpam_matkul a LEFT JOIN unpam_absen_log b ON a.`dosen`=b.`obj_dosen` GROUP BY a.`dosen` ORDER BY dosen ASC";
+                $dosen  = $this->db->query($dosen);
+                $result = each_query($dosen);
+                $data["tweek"] = ($week->max_week - $week->min_week) + 1;
+                $data["fweek"] = $week->min_week;
+                $data["lweek"] = $week->max_week;
+                $data["result"] = $result;
+                $data["tsiswa"] = $week->ttl_mahasiswa;
+                $data["nim"] = $value2;
+                $data["siswa"] = $week->siswa;
+                $data["sync"] = $week->sync;
+                if(empty($week->siswa)){
+                    echo "Data NIM : $value2  tidak di temukan di database Mahasiswa";                
+                }else{
+                    $this->load->view("absensimahasiswa",$data);
+                }
+            }else{
+                echo "variabel NIM belum di pasang..!!";
             }
         }else{
             echo "variabel belum di pasang..!!";

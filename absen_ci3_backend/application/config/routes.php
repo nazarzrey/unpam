@@ -61,8 +61,13 @@ $route['nama/(:any)']         = 'xhr/get/nama/$1';
 $route['url']         = 'xhr/get/url';
 $route['url/(:any)']         = 'xhr/get/url/$1';
 $route['absenlog']         = 'xhr/get/loging';
+$route['absendosen']         = 'xhr/get/log_dtl';
+$route['absensiswa']         = 'xhr/get/log_dtl_siswa';
+$route['absensiswa/(:num)']         = 'xhr/get/log_dtl_siswa/$1';
 $route['absenlog/(:num)']         = 'xhr/get/loging/$1';
 $route['sync']         = 'xhr/get/sync';
+$route['login']         = 'Login';
+$route['dashboard']        = 'xhr/get/log_dtl_siswa/$1';
 
 $route['absen/(:any)']         = 'xhr/absen/$1';
 
