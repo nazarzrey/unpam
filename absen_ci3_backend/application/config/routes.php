@@ -68,6 +68,7 @@ $route['absenlog/(:num)']         = 'xhr/get/loging/$1';
 $route['sync']         = 'xhr/get/sync';
 $route['login']         = 'Login';
 $route['dashboard']        = 'xhr/get/log_dtl_siswa/$1';
+$route['menu']        = 'xhr/get/menu';
 
 $route['absen/(:any)']         = 'xhr/absen/$1';
 

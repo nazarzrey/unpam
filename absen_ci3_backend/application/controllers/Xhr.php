@@ -211,6 +211,9 @@ class Xhr extends Settings
             }else{
                 echo "variabel NIM belum di pasang..!!";
             }
+        }elseif($value=="menu"){
+            echo $value;
+            $this->load->view("menu");
         }else{
             echo "variabel belum di pasang..!!";
         }
