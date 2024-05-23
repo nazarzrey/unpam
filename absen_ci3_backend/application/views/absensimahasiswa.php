@@ -17,7 +17,7 @@
                     padding: 10px; /* Add padding for content */
                     display: none; /* Initially hide the popup */
                     font-size:14px;
-                    width:150px
+                    width:160px
                 }
                 .tdc:hover{background:tomato}
                 .ce{text-align:center}
