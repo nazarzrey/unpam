@@ -172,6 +172,28 @@
                             window.open(uri, '_blank');
                         }
                     });
+                    cell.addEventListener('click', () => {
+                        const uri = cell.getAttribute('uri');
+                        // Modern approach (navigator.clipboard.writeText) - preferred
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(uri)
+                            .then(() => {
+                            console.log('URI copied to clipboard successfully!');
+                            })
+                            .catch(err => {
+                            console.error('Failed to copy URI to clipboard:', err);
+                            });
+                        } else {
+                        // Fallback for older browsers (create a temporary element)
+                        const textArea = document.createElement('textarea');
+                        textArea.value = uri;
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        document.execCommand('copy');
+                        textArea.remove();
+                        console.log('URI copied to clipboard (fallback method).');
+                        }
+                    });
                 });
 
 
