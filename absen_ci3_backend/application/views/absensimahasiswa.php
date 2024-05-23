@@ -174,12 +174,13 @@
                     });
                     cell.addEventListener('click', () => {
                         const uri = cell.getAttribute('uri');
+                        const target3 =  document.getElementById('target_link');
                         // Modern approach (navigator.clipboard.writeText) - preferred
                         if (navigator.clipboard && navigator.clipboard.writeText) {
                         navigator.clipboard.writeText(uri)
                             .then(() => {
                             console.log('URI copied to clipboard successfully!');
-                            target2.innerHTML = 'URI copied to clipboard successfully!';
+                            target3.innerHTML = 'URI copied to clipboard successfully!';
                             })
                             .catch(err => {
                             console.error('Failed to copy URI to clipboard:', err);
