@@ -36,7 +36,9 @@
     </style>
 </head>
 <body>
-    <h2>Rekap Absensi - Minggu ke <?php echo $week." ".getLastDateOfCurrentWeek($week,1,6)["date"].date("-Y"); ?></h2>
+    <h2>Rekap Absensi - Minggu ke : <?php echo $week." (".getLastDateOfCurrentWeek($week,1,6)["date"].date("-Y").")"; ?></h2>
+    <a href="<?= base_url('grup/'. (($week - 1)>=8?($week - 1):"#")); ?>">Prev</a>
+    <a href="<?= base_url('grup/'. (($week + 1)<=date("W")-1?($week + 1):"#")); ?>">Next</a>
     <table border="1">
         <thead>
             <tr>

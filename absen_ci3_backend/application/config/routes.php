@@ -70,6 +70,7 @@ $route['login']         = 'Login';
 $route['dashboard']        = 'xhr/get/log_dtl_siswa/$1';
 $route['menu']        = 'xhr/get/menu';
 $route['grup']        = 'xhr/get/grup';
+$route['grup/(:num)']        = 'xhr/get/grup/$1';
 
 $route['absen/(:any)']         = 'xhr/absen/$1';
 

@@ -215,7 +215,7 @@ class Xhr extends Settings
             echo $value;
             $this->load->view("menu");
         }elseif($value=="grup"){
-            $this->detail_week();
+            $this->detail_week($value2);
         }else{
             echo "variabel belum di pasang..!!";
         }
@@ -223,11 +223,12 @@ class Xhr extends Settings
 
 
 
-    public function detail_week(){
-        
+    public function detail_week($week_number = ""){
         $this->load->model('Absensi_model');
         // Dapatkan nomor minggu saat ini
-        $week_number = date('W') - 1;
+        if ($week_number === "") {
+            $week_number = date('W') - 1;
+        }
 
         // Ambil data absensi, mahasiswa, matkul, dan dosen matkul
         $absensi_data = $this->Absensi_model->get_absensi_by_week($week_number);
