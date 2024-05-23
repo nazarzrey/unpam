@@ -179,6 +179,7 @@
                         navigator.clipboard.writeText(uri)
                             .then(() => {
                             console.log('URI copied to clipboard successfully!');
+                            target2.innerHTML = 'URI copied to clipboard successfully!';
                             })
                             .catch(err => {
                             console.error('Failed to copy URI to clipboard:', err);
