@@ -22,7 +22,7 @@ class Absensi_model extends CI_Model {
         // $this->db->from('unpam_matkul');
         // $query = $this->db->get();
         // return $query->result_array();
-        $sql = "SELECT a.*,max(b.`updrec_date`) as sync FROM unpam_matkul a left join unpam_absen_log b
+        $sql = "SELECT a.*,date_format(max(b.`updrec_date`),'%d-%m-%y %H:%i') as sync FROM unpam_matkul a left join unpam_absen_log b
         on trim(a.`dosen`)=trim(b.`obj_dosen`) group by a.`dosen`;";
         $query = $this->db->query($sql);
         return $query->result_array();
