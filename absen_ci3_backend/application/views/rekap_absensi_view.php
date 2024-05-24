@@ -39,6 +39,9 @@
     <h2>Rekap Absensi - Minggu ke : <?php echo $week." (".getLastDateOfCurrentWeek($week,1,6)["date"].date("-Y").")"; ?></h2>
     <a href="<?= base_url('grup/'. (($week - 1)>=8?($week - 1):"#")); ?>">Prev</a>
     <a href="<?= base_url('grup/'. (($week + 1)<=date("W")-1?($week + 1):"#")); ?>">Next</a>
+    <?php 
+    dbg($matkul_data);
+    ?>
     <table border="1">
         <thead>
             <tr>
@@ -52,7 +55,7 @@
         <tbody>
             <?php foreach ($rekap_absensi as $rekap): ?>
                 <tr>
-                    <td><?php echo $rekap['nim']; ?></td>
+                    <td>&nbsp;</td>
                     <td><?php echo $rekap['nama']; ?></td>
                     <?php
                     foreach ($matkul_data as $matkul) {

@@ -243,7 +243,7 @@ class Xhr extends Settings
                 'nim' => substr($mahasiswa['nim'], 0, 12),
                 'nama' => trim($mahasiswa['nama']),
             ];
-
+            // dbg($matkul_data);
             foreach ($matkul_data as $matkul) {
                 $rekap_absensi[$mahasiswa['nim']][$matkul['id_matkul']] = 0;
             }
