@@ -46,7 +46,7 @@
             font-size: 14px;
             font-weight: normal;
         } 
-        .t1{width: 300px;}
+        .t1{width: 300px; }
         .t2{width:100px}
     </style>
 </head>
