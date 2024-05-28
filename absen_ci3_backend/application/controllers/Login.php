@@ -17,9 +17,8 @@ class Login extends CI_Controller {
         $kelas = $this->input->post('kelas');
         $user = $this->Login_model->check_login($nim, $kelas);
         
-        dbg($user);
-        // die();
         if ($user) {
+            $this->Login_model->insert_log('login', $nim);
             $this->session->set_userdata('nim', $user->nim);
             redirect('dashboard');
         } else {

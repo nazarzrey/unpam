@@ -21,4 +21,12 @@ class Login_model extends CI_Model {
         
         return false;
     }
+    public function insert_log($tipe, $script) {
+        $data = array(
+            'tipe' => $tipe,
+            'script' => $script,
+            'running' => date('Y-m-d H:i:s')
+        );
+        $this->db->insert('log_data', $data);
+    }
 }
