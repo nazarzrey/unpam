@@ -22,50 +22,49 @@
             width: 160px;
         }
         .tdc:hover { background: tomato; }
-        .ce { text-align: center; }
+        .ce { text-align: center !important; }
+        .cl { text-align: left; }
+        .cr { text-align: right; }
         .tr { text-align: right; }
         .pert { background: #b1ffcf; }
         .judul { padding: 10px; font-size: 20px; }
         .perj { background: #8ae2be; font-size: 14px; font-weight: normal; }
         .sync { width: 70px; font-size: 10px; }
         th { text-align: center; }
-        .nav-buttons { margin: 10px 0; text-align: center; }
-        .hidden,.none{ display: none; }
-            .mobile{
-                display:none;
-            }
-            .desktop{
-                display:block
-            }
-        @media only screen and (max-width: 600px) {
-            .mobile{
-                display:block;
-            }
-            .desktop{
-                display:none
-            }
+        .nav-buttons { margin: 10px 0; text-align: right; margin-right: 70px; }
+        .hidden { display: none; }
+        .mobile { display: none; }
+        .desktop { display: revert; }
+        @media only screen and (max-width: 800px) {
+            .sync { width: 40px; font-size: 10px; }
+            .mobile { display: revert; }
+            .desktop { display: none; }
+            .tdc, .tdb { width: 45px; }
         }
     </style>
 </head>
 <body>
     <?php
     $totalWeeks = $lweek - $fweek + 1;
-    $columnsToShow = 4;
-    $initialStart = $totalWeeks - $columnsToShow + 1;
+    $columnsToShowDesktop = 10;
+    $columnsToShowMobile = 3;
+    $initialStartDesktop = $totalWeeks - $columnsToShowDesktop + 1;
+    $initialStartMobile = $totalWeeks - $columnsToShowMobile + 1;
 
-    echo "<div class='judul text-center'>$siswa : $nim - PERTEMUAN SEMESTER 1</div>";
+    echo "<div class='judul text-center'>$siswa : $nim - PERTEMUAN SEMESTER 1 - Minggu ke $totalWeeks</div>";
     echo "<div class='nav-buttons'>
             <button id='prev-btn' class='btn btn-primary'>&lt;</button>
             <button id='next-btn' class='btn btn-primary'>&gt;</button>
           </div>";
     echo "<table border='1'>";
     echo "<thead>";
-    echo "<tr><th rowspan='2'>DOSEN</th><th rowspan='2'>MATKUL</th><th class='none' rowspan='2'>SKS</th><th rowspan='2'><span class='desktop'>MIN ABSEN</span><span class='mobile'>MIN ABS</span></th>";
-
+    echo "<tr><th rowspan='2'>DOSEN</th><th rowspan='2'><span class='desktop'>MATKUL</span><span class='mobile'>MAT KUL</span></th><th class='desktop' rowspan='2'>SKS</th><th rowspan='2'><span class='desktop ce'>MIN ABSEN</span><span class='mobile'>MIN ABS</span></th>";
+    
     for ($z = $fweek; $z <= $lweek; $z++) {
-        echo "<th class='perj week-$z'>" . getLastDateOfCurrentWeek($z, 1, 6)["date"] . "</th>";
+        $frw = $z == $fweek ? "id='first-week'" : "";
+        echo "<th class='perj week-$z' $frw><span class='desktop'>" . getLastDateOfCurrentWeek($z, 1, 6)["date"] . "</span><span class='mobile'>" . str_replace("-", " ", getLastDateOfCurrentWeek($z, 1, 6)["date"]) . "</span></th>";
     }
-    echo "<th rowspan='2'>Last</th>";
+    echo "<th rowspan='2' style='width:20px'>LAST SYNC</th>";
     echo "</tr><tr>";
     for ($z = $fweek; $z <= $lweek; $z++) {
         echo "<th class='pert week-$z'>" . ($z - ($fweek - 1)) . "</th>";
@@ -83,8 +82,8 @@
                     WHERE b.matkul_dosen = '$hasil->dosen'
                     GROUP BY a.url_matkul
                     ORDER BY WEEK(MIN(a.absen_time))";
-        $qry_dosen = "SELECT url_matkul, minggu, absen, sum(absen) as total, 
-                      group_concat(minggu, '-', absen) as absen_dtl, min_absen 
+        $qry_dosen = "SELECT url_matkul, minggu, absen, SUM(absen) AS total, 
+                      GROUP_CONCAT(minggu, '-', absen) AS absen_dtl, min_absen 
                       FROM ($qry_mhs) ab 
                       GROUP BY url_matkul 
                       ORDER BY minggu";
@@ -104,9 +103,9 @@
         }
 
         echo "<tr>";
-        echo "<td>" . Uw($hasil->dosen) . "</td>";
-        echo "<td  class=''>" .substr($hasil->matkul_singkat,0,3) . "</td>";
-        echo "<td class='ce mobile'>" . $hasil->sks . "</td>";
+        echo "<td class='cl'>" . Uw($hasil->dosen) . "</td>";
+        echo "<td class=''><span>" . substr($hasil->matkul_singkat, 0, 3) . "</span></td>";
+        echo "<td class='ce desktop'>" . $hasil->sks . "</td>";
         echo "<td class='ce'>" . $hasil->min_absen . "</td>";
         for ($z = $fweek; $z <= $lweek; $z++) {
             if (isset($result_array[$z])) {
@@ -117,10 +116,12 @@
             }
         }
 
-        echo "<td class='ce sync'>" . $hasil->sync . "</td>";
+        echo "<td class='ce sync'><span class='desktop'>" . $hasil->sync . "</span><span class='mobile'>" . str_replace("-", "", $hasil->sync) . "</span></td>";
         echo "</tr>";
     }
-
+    echo "<tr><td class='kurang tr'>Nilai < dari minimal Absen</td><td rowspan='3' colspan='".($tweek+4)."' class='tr' id='target_link'></td></tr>";
+    echo "<tr><td class='pert tr'>Pertemuan Minggu ke </td></tr>";
+    echo "<tr><td class='pert tr'>last sync  ".($sync)."</td></tr>";
     echo "</tbody></table>";
     echo "<div class='m-2 mt-3'>
             <a href='" . base_url('login/logout') . "' class='btn btn-sm btn-danger w-100'>Logout</a>
@@ -128,26 +129,29 @@
     ?>
 
     <script>
+        const wScreen = screen.width;
         const totalWeeks = <?= $totalWeeks + ($fweek - 1) ?>;
-        const columnsToShow = <?= $columnsToShow-1 ?>;
+        const columnsToShowDesktop = 10;
+        const columnsToShowMobile = 3;
+        const columnsToShow = wScreen >= 800 ? columnsToShowDesktop : columnsToShowMobile;
         let currentStart = totalWeeks - columnsToShow + 1;
-        console.log(totalWeeks);
-        console.log(columnsToShow);
         console.log(currentStart);
+
         function updateVisibility() {
             for (let i = 1; i <= totalWeeks; i++) {
-                console.log(i);
                 const elements = document.querySelectorAll(`.week-${i}`);
                 elements.forEach(el => {
                     if (i >= currentStart && i < currentStart + columnsToShow) {
-                        console.log("a "+i)
                         el.classList.remove('hidden');
                     } else {
-                        console.log("b "+i)
                         el.classList.add('hidden');
                     }
                 });
             }
+
+            // Update the state of the Previous and Next buttons
+            document.getElementById('prev-btn').disabled = currentStart <= ((wScreen>=800?columnsToShow-2:columnsToShowDesktop-2))
+            document.getElementById('next-btn').disabled = currentStart >= totalWeeks - columnsToShow + 1;
         }
 
         document.getElementById('prev-btn').addEventListener('click', () => {
@@ -156,7 +160,6 @@
                 updateVisibility();
             }
         });
-
         document.getElementById('next-btn').addEventListener('click', () => {
             if (currentStart < totalWeeks - columnsToShow + 1) {
                 currentStart++;
@@ -248,3 +251,4 @@
     </script>
 </body>
 </html>
+
