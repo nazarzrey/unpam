@@ -12,6 +12,7 @@
         th { font-size: 14px; }
         .tdb { background: #f1f1f1; }
         .kurang { background: #f3e29f; }
+        .kurang2 { background: #f8ff47;border:solid 2px #ff0000 !important }
         .popup {
             position: absolute;
             background-color: #fff;
@@ -19,7 +20,7 @@
             padding: 10px;
             display: none;
             font-size: 14px;
-            width: 160px;
+            max-width: 400px;
         }
         .tdc:hover { background: tomato; }
         .ce { text-align: center !important; }
@@ -40,6 +41,9 @@
             .mobile { display: revert; }
             .desktop { display: none; }
             .tdc, .tdb { width: 45px; }
+        }
+        .double{
+            border:double 2px blue;
         }
     </style>
 </head>
@@ -72,7 +76,9 @@
     echo "</tr></thead><tbody>";
 
     foreach ($result as $key => $hasil) {
-        $qry_mhs = "SELECT a.url_matkul,
+       $qry_mhs = "SELECT a.url_matkul,
+                    b.`matkul_fordis`,
+                    b.`matkul_fordis_title`,
                     WEEK(MIN(a.absen_time)) AS minggu,
                     COUNT(CASE WHEN a.nim LIKE '$nim%' THEN 1 ELSE NULL END) AS absen,
                     IFNULL(b.matkul_min_absen, IFNULL(c.min_absen, 2)) AS min_absen
@@ -82,20 +88,37 @@
                     WHERE b.matkul_dosen = '$hasil->dosen'
                     GROUP BY a.url_matkul
                     ORDER BY WEEK(MIN(a.absen_time))";
-        $qry_dosen = "SELECT url_matkul, minggu, absen, SUM(absen) AS total, 
-                      GROUP_CONCAT(minggu, '-', absen) AS absen_dtl, min_absen 
-                      FROM ($qry_mhs) ab 
-                      GROUP BY url_matkul 
-                      ORDER BY minggu";
-
+        // $qry_dosen = "SELECT url_matkul, minggu, absen, SUM(absen) AS total, 
+        //               GROUP_CONCAT(minggu, '-', absen) AS absen_dtl, min_absen 
+        //               FROM ($qry_mhs) ab 
+        //               GROUP BY url_matkul 
+        //               ORDER BY minggu";
+    //    $qry_dosen = "SELECT 
+    //                     GROUP_CONCAT(DISTINCT url_matkul SEPARATOR ',') AS url_matkul,       
+    //                     GROUP_CONCAT(DISTINCT CONCAT(matkul_fordis,' - ',matkul_fordis_title) SEPARATOR ',') AS double_title,
+    //                     GROUP_CONCAT(DISTINCT absen SEPARATOR ',') AS double_absen,GROUP_CONCAT(minggu, '-', absen) AS absen_dtl,
+    //                     CASE WHEN COUNT(minggu) > 1 THEN COUNT(minggu) ELSE 1 END AS double_tugas,minggu,SUM(absen) AS total,min_absen
+    //                   FROM ($qry_mhs) abcd
+    //                 GROUP BY minggu;";
+       $qry_dosen = "SELECT GROUP_CONCAT(DISTINCT url_matkul SEPARATOR ',') AS url_matkul,
+                        GROUP_CONCAT(DISTINCT CONCAT(matkul_fordis_title,' : (',absen,')') SEPARATOR '#') AS double_title, 
+                        GROUP_CONCAT(minggu, '-', absen) AS absen_dtl,
+                        CASE WHEN COUNT(minggu) > 1 THEN COUNT(minggu) ELSE 1 END AS double_tugas,
+                        minggu,SUM(absen) AS absen,min_absen
+                    FROM ($qry_mhs) abcd
+                    GROUP BY minggu;";
+// echo "<br/>";
         $rsl_dosen = each_query($this->db->query($qry_dosen));
-
+        
+        // dbg($rsl_dosen);
         $result_array = [];
         foreach ($rsl_dosen as $row) {
             $newObject = new stdClass();
             $newObject->minggu = $row->minggu;
             $newObject->absen = $row->absen;
-            $newObject->total = $row->total;
+            // $newObject->total = $row->total;
+            $newObject->double_tugas = $row->double_tugas;
+            $newObject->double_title = $row->double_title;
             $newObject->absen_dtl = $row->absen_dtl;
             $newObject->min_absen = $row->min_absen;
             $newObject->url_matkul = $row->url_matkul;
@@ -108,9 +131,15 @@
         echo "<td class='ce desktop'>" . $hasil->sks . "</td>";
         echo "<td class='ce'>" . $hasil->min_absen . "</td>";
         for ($z = $fweek; $z <= $lweek; $z++) {
+            $dbl = "";
             if (isset($result_array[$z])) {
-                $cls = $result_array[$z]->absen < $result_array[$z]->min_absen ? "kurang" : "";
-                echo "<td class='tdc $cls week-$z' alt='" . $result_array[$z]->absen_dtl . "' uri='" . $result_array[$z]->url_matkul . "'>" . $result_array[$z]->absen . "</td>";
+                if($result_array[$z]->double_tugas>1 ){
+                    $dbl = "double";
+                    $cls = $result_array[$z]->absen < ($result_array[$z]->min_absen*$result_array[$z]->double_tugas) ? "kurang2" : "";
+                }else{
+                    $cls = $result_array[$z]->absen < $result_array[$z]->min_absen ? "kurang" : "";
+                }
+                echo "<td class='tdc $cls week-$z $dbl' alt='" . $result_array[$z]->double_title . "' uri='" . $result_array[$z]->url_matkul . "'>" . $result_array[$z]->absen . "</td>";
             } else {
                 echo "<td class='tdb week-$z'></td>";
             }
@@ -119,9 +148,10 @@
         echo "<td class='ce sync'><span class='desktop'>" . $hasil->sync . "</span><span class='mobile'>" . str_replace("-", "", $hasil->sync) . "</span></td>";
         echo "</tr>";
     }
-    echo "<tr><td class='kurang tr'>Nilai < dari minimal Absen</td><td rowspan='3' colspan='".($tweek+4)."' class='tr' id='target_link'></td></tr>";
+    echo "<tr><td class='kurang tr'>Nilai < dari minimal Absen</td><td rowspan='4' colspan='".($tweek+4)."' class='tr' id='target_link'></td></tr>";
     echo "<tr><td class='pert tr'>Pertemuan Minggu ke </td></tr>";
     echo "<tr><td class='pert tr'>last sync  ".($sync)."</td></tr>";
+    echo "<tr><td class='tr kurang2'>nilai < dari dobel tugas</td></tr>";
     echo "</tbody></table>";
     echo "<div class='m-2 mt-3'>
             <a href='" . base_url('login/logout') . "' class='btn btn-sm btn-danger w-100'>Logout</a>
@@ -183,9 +213,9 @@
                     target.innerHTML = uriContent + "<br/>Klik 2x di kotaknya untuk langsung membuka halaman e-learning";
                 }
                 if (altContent) {
-                    const formattedContent = altContent.split(',').map(pair => {
-                        const [meeting, attendance] = pair.split('-');
-                        return `Pertemuan ${meeting} = ${attendance}\n`;
+                    const formattedContent = altContent.split('#').map(pair => {
+                        const [meeting] = pair.split('#');
+                        return `${meeting} \n`;
                     }).join('\n');
 
                     popup.textContent = formattedContent;

@@ -204,7 +204,8 @@ class Xhr extends Settings
                 $data["siswa"] = $week->siswa;
                 $data["sync"] = $week->sync;
                 if(empty($week->siswa)){
-                    echo "Data NIM : $value2  tidak di temukan di database Mahasiswa";                
+                    //echo "Data NIM : $value2  tidak di temukan di database Mahasiswa";                                    
+                    $this->load->view('login_view');
                 }else{
                     $this->load->view("absensimahasiswa",$data);
                 }
