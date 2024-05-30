@@ -355,7 +355,7 @@ class Xhr extends Settings
                 }
             }
         }
-        $url = explode("#",$obj_url)[0];
+        $url = explode(",",explode("#",$obj_url)[0])[0];
         $fordis = $obj_fordis;
         if(is_array($fordis)){
             $ftitle = addslashes($fordis[0]["fordistitle"]);
