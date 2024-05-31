@@ -248,12 +248,26 @@
                 }
             });
 
+            // cell.addEventListener('dblclick', () => {
+            //     const uri = cell.getAttribute('uri');
+            //     if (uri) {
+            //         window.open(uri, '_blank');
+            //     }
+            // });
+
             cell.addEventListener('dblclick', () => {
                 const uri = cell.getAttribute('uri');
                 if (uri) {
-                    window.open(uri, '_blank');
+                    const urls = uri.split(','); // Split the URLs by comma
+                    urls.forEach(url => {
+                        const trimmedUrl = url.trim(); // Trim any extra whitespace
+                        if (trimmedUrl) {
+                            window.open(trimmedUrl, '_blank'); // Open each URL in a new tab
+                        }
+                    });
                 }
             });
+
 
             cell.addEventListener('click', () => {
                 const uri = cell.getAttribute('uri');

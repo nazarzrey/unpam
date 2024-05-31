@@ -129,6 +129,11 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 });
 
 function send_data(obj_data,url,kls,adm){
+  // if(!obj_data){
+  // }else{
+  //   lg("kosong")
+  //   return;
+  // }
   if (Object.keys(obj_data).length === 0 && obj_data.constructor === Object) {
       console.log("Data is empty, skipping the send request.");
       return;
@@ -152,6 +157,7 @@ function send_data(obj_data,url,kls,adm){
   if (typeof UriServer === 'undefined'){
     console.log("URL server blum di definiskan, silahkan refresh");    
     chrome.runtime.sendMessage({message: "URL server blum di definiskan, silahkan refresh"});
+    chrome.tabs.reload();
     return;
   }
   fetch(UriServer, {
