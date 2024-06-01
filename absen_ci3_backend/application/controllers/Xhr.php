@@ -237,12 +237,14 @@ class Xhr extends Settings
         $matkul_data = $this->Absensi_model->get_all_matkul();
         $dosen_matkul_data = $this->Absensi_model->get_all_dosen_matkul();
 
+        // dbg($mahasiswa_data);
         // Buat rekap absensi
         $rekap_absensi = [];
         foreach ($mahasiswa_data as $mahasiswa) {
             $rekap_absensi[$mahasiswa['nim']] = [
-                'nim' => substr($mahasiswa['nim'], 0, 12),
-                'nama' => trim($mahasiswa['nama']),
+                'nim' => $mahasiswa['nim'],
+                'nama' => trim($mahasiswa['nama']),                
+                'keter' => $mahasiswa['keter']
             ];
             // dbg($matkul_data);
             foreach ($matkul_data as $matkul) {
@@ -258,6 +260,7 @@ class Xhr extends Settings
             }
         }
 
+        // dbg($absensi_data);
         // Mark subjects with no attendance as offline
         foreach ($matkul_data as $matkul) {
             $id_matkul = $matkul['id_matkul'];

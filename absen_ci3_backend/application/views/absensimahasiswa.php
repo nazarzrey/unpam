@@ -88,18 +88,6 @@
                     WHERE b.matkul_dosen = '$hasil->dosen'
                     GROUP BY a.url_matkul
                     ORDER BY WEEK(MIN(a.absen_time))";
-        // $qry_dosen = "SELECT url_matkul, minggu, absen, SUM(absen) AS total, 
-        //               GROUP_CONCAT(minggu, '-', absen) AS absen_dtl, min_absen 
-        //               FROM ($qry_mhs) ab 
-        //               GROUP BY url_matkul 
-        //               ORDER BY minggu";
-    //    $qry_dosen = "SELECT 
-    //                     GROUP_CONCAT(DISTINCT url_matkul SEPARATOR ',') AS url_matkul,       
-    //                     GROUP_CONCAT(DISTINCT CONCAT(matkul_fordis,' - ',matkul_fordis_title) SEPARATOR ',') AS double_title,
-    //                     GROUP_CONCAT(DISTINCT absen SEPARATOR ',') AS double_absen,GROUP_CONCAT(minggu, '-', absen) AS absen_dtl,
-    //                     CASE WHEN COUNT(minggu) > 1 THEN COUNT(minggu) ELSE 1 END AS double_tugas,minggu,SUM(absen) AS total,min_absen
-    //                   FROM ($qry_mhs) abcd
-    //                 GROUP BY minggu;";
        $qry_dosen = "SELECT GROUP_CONCAT(DISTINCT url_matkul SEPARATOR ',') AS url_matkul,
                         GROUP_CONCAT(DISTINCT CONCAT(matkul_fordis_title,' : (',absen,')') SEPARATOR '#') AS double_title, 
                         GROUP_CONCAT(minggu, '-', absen) AS absen_dtl,
@@ -262,7 +250,7 @@
                     urls.forEach(url => {
                         const trimmedUrl = url.trim(); // Trim any extra whitespace
                         if (trimmedUrl) {
-                            window.open(trimmedUrl, '_blank'); // Open each URL in a new tab
+                            window.open(trimmedUrl, '_blank'); // Open each URL in a new tab                            
                         }
                     });
                 }

@@ -24,7 +24,6 @@
             z-index: 1;
         }
         tbody {
-            /* display: block; */
             overflow-y: auto;
             width: 100%;
         }
@@ -46,14 +45,39 @@
             font-size: 14px;
             font-weight: normal;
         } 
-        .t1{width: 300px; }
-        .t2{width:100px}
+        .t1 { width: 300px; }
+        .t2 { width: 100px; }
+        .tl{text-align:left}
+        .checked {
+            color: green;
+        }
+        .btn,.btn1{
+            padding:5px;
+            border: radius 5px;
+            background:green;
+            text-decoration:none;
+            color:#fff;
+            margin:2px;
+            border-radius:5px;
+        }
+        .btn1{background:blue}
+        .susulan{
+            color:blue
+        }
     </style>
 </head>
 <body>
-    <h2>Rekap Absensi - Minggu ke : <?php echo $week." (".getLastDateOfCurrentWeek($week,1,6)["date"].date("-Y").")"; ?></h2>
-    <a href="<?= base_url('grup/'. (($week - 1)>=8?($week - 1):"#")); ?>">Prev</a>
-    <a href="<?= base_url('grup/'. (($week + 1)<=date("W")-1?($week + 1):"#")); ?>">Next</a>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Rekap Absensi - Minggu ke : <?php echo $week." (".getLastDateOfCurrentWeek($week,1,6)["date"].date("-Y").")"; ?></h2>
+    </div>
+    <div style="float:left">
+    <a class='btn' href="<?= base_url('grup/'. (($week - 1)>=8?($week - 1):"#")); ?>">Prev</a>
+    <a class='btn1' href="<?= base_url('grup/'. (($week + 1)<=date("W")-1?($week + 1):"#")); ?>">Next</a>
+    </div>
+    <div style="float:right">
+        <input type="checkbox" id="toggleCheckbox">
+        <label for="toggleCheckbox">Munculkan Angka</label>
+    </div>
     <?php 
     // dbg($matkul_data);
     ?>
@@ -73,9 +97,21 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($rekap_absensi as $rekap): ?>
+
+            <?php 
+            // dbg($rekap_absensi);
+            foreach ($rekap_absensi as $rekap): ?>
                 <tr>
-                    <td class='t1'><?php echo $rekap['nama']; ?></td>
+                    <?php
+                    if($rekap["keter"]!=""){ 
+                        $susul = "- ".Uw($rekap["keter"]);
+                        $csus = "susulan";
+                    }else{
+                        $susul = "";
+                        $csus = "";
+                    }
+                    ?>
+                    <td class='t1 tl <?= $csus ?>'><?php echo Uw($rekap['nama'])." ".$susul; ?></td>
                     <?php
                     foreach ($matkul_data as $matkul) {
                         $id_matkul = $matkul['id_matkul'];
@@ -89,7 +125,7 @@
                             } elseif ($absen_count < $min_absen) {
                                 $class = "kurang";
                             } else {
-                                $class = "";
+                                $class = "checked";
                             }
                             echo "<td class='t2 $class'>" . $absen_count . "</td>";
                         }
@@ -100,11 +136,26 @@
         </tbody>
     </table>
     <script>
-        // document.addEventListener('DOMContentLoaded', function () {
-        //     const theadHeight = document.querySelector('thead').offsetHeight;
-        //     const tableHeight = window.innerHeight - theadHeight - 50; // Adjust the 50 to your needs
-        //     document.querySelector('tbody').style.maxHeight = tableHeight + 'px';
-        // });
+        document.getElementById('toggleCheckbox').addEventListener('change', function() {
+            const isChecked = this.checked;
+            const cells = document.querySelectorAll('td.checked');
+            cells.forEach(cell => {
+                if (isChecked) {
+                    cell.innerHTML = cell.getAttribute('data-original');
+                    cell.style.color = '';
+                } else {
+                    cell.innerHTML = '&#x2713;'; // Checkmark symbol
+                    cell.style.color = 'green';
+                }
+            });
+        });
+
+        // Save original values in data attribute and set initial state to checkmark
+        document.querySelectorAll('td.checked').forEach(cell => {
+            cell.setAttribute('data-original', cell.innerHTML);
+            cell.innerHTML = '&#x2713;'; // Initial state with checkmark symbol
+            cell.style.color = 'green';
+        });
     </script>
 </body>
 </html>
