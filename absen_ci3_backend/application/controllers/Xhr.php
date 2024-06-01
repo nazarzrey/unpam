@@ -203,9 +203,9 @@ class Xhr extends Settings
                 $data["nim"] = $value2;
                 $data["siswa"] = $week->siswa;
                 $data["sync"] = $week->sync;
-                if(empty($week->siswa)){
-                    //echo "Data NIM : $value2  tidak di temukan di database Mahasiswa";                                    
-                    $this->load->view('login_view');
+                if(empty($week->siswa)){    
+                    $data["tipe"] = "dashboard";                      
+                    $this->load->view('login_view',$data);
                 }else{
                     $this->load->view("absensimahasiswa",$data);
                 }
@@ -213,10 +213,15 @@ class Xhr extends Settings
                 echo "variabel NIM belum di pasang..!!";
             }
         }elseif($value=="menu"){
-            echo $value;
+            // echo $value;
             $this->load->view("menu");
         }elseif($value=="grup"){
-            $this->detail_week($value2);
+            $data["tipe"] = "grup";
+            if($this->session->userdata("nim")==""){
+                $this->load->view('login_view',$data);
+            }else{
+                $this->detail_week($value2);
+            }
         }else{
             echo "variabel belum di pasang..!!";
         }

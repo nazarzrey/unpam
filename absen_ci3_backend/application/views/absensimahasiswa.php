@@ -28,7 +28,7 @@
         .cr { text-align: right; }
         .tr { text-align: right; }
         .pert { background: #b1ffcf; }
-        .judul { padding: 10px; font-size: 20px; }
+        .judul { padding: 10px; font-size: 18px; }
         .perj { background: #8ae2be; font-size: 14px; font-weight: normal; }
         .sync { width: 70px; font-size: 10px; }
         th { text-align: center; }
@@ -48,6 +48,12 @@
     </style>
 </head>
 <body>
+    <?php 
+    // dbg($this->session->userdata);
+        if($this->session->userdata("tipe")=="admin"){
+            require_once(APPPATH.'views/menu_adm.php');
+        }
+    ?>
     <?php
     $totalWeeks = $lweek - $fweek + 1;
     $columnsToShowDesktop = 10;

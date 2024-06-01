@@ -67,8 +67,16 @@
     </style>
 </head>
 <body>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>Rekap Absensi - Minggu ke : <?php echo $week." (".getLastDateOfCurrentWeek($week,1,6)["date"].date("-Y").")"; ?></h2>
+    <?php 
+    // dbg($this->session->userdata);
+        if($this->session->userdata("tipe")=="admin"){
+            require_once(APPPATH.'views/menu_adm.php');
+        }else{
+            die("<h1>Anda bukan Admin</h1>");
+        }
+    ?>
+    <div style=" justify-content: space-between;text-align:center !important">
+        <h2 style="text-align:center !important;">Rekap Absensi - Minggu ke : <?php echo $week." (".getLastDateOfCurrentWeek($week,1,6)["date"].date("-Y").")"; ?></h2>
     </div>
     <div style="float:left">
     <a class='btn' href="<?= base_url('grup/'. (($week - 1)>=8?($week - 1):"#")); ?>">Prev</a>

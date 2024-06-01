@@ -13,22 +13,35 @@ class Login extends CI_Controller {
     }
 
     public function authenticate() {
+        // dbg($this->uri->segments);
         $nim = $this->input->post('nim');
         $kelas = $this->input->post('kelas');
         $user = $this->Login_model->check_login($nim, $kelas);
-        
+        if(isset($this->uri->segments[3])){
+            $redirect = $this->uri->segments[3];
+        }else{
+            $redirect = "dashboard";
+        };
         if ($user) {
             $this->Login_model->insert_log('login', $nim);
             $this->session->set_userdata('nim', $user->nim);
-            redirect('dashboard');
+            $this->session->set_userdata('nama', $user->nama);
+            $this->session->set_userdata('tipe', $user->tipe);
+            redirect($redirect);
         } else {
             $this->session->set_flashdata('error', 'Invalid NIM or kelas');
             redirect('login');
         }
     }
 
-    public function logout() {
+    public function logout($value="") {
+        if(isset($this->uri->segments[3])){
+            $redirect = $this->uri->segments[3];
+        }else{
+            $redirect = "login";
+        };
         $this->session->unset_userdata('nim');
-        redirect('login');
+        // dbg($this->uri->segments);
+        redirect($redirect);
     }
 }

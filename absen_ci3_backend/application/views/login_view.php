@@ -20,7 +20,14 @@
                                 <?php echo $this->session->flashdata('error'); ?>
                             </div>
                         <?php endif; ?>
-                        <form action="<?php echo base_url('login/authenticate'); ?>" method="POST">
+                        <?php
+                        if(isset($tipe)){
+                            $xtipe = $tipe;
+                        }else{
+                            $xtipe = "dashboard";
+                        }
+                        ?>
+                        <form action="<?php echo base_url('login/authenticate/'.$xtipe); ?>" method="POST">
                             <div class="form-group">
                                 <label for="nim">NIM</label>
                                 <input type="text" class="form-control" id="nim" name="nim" required>
