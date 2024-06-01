@@ -93,6 +93,9 @@
         <thead>
             <tr>
                 <th class='t1'>Sync</th>
+                <?php
+                // dbg($matkul_data);
+                ?>
                 <?php foreach ($matkul_data as $matkul): ?>
                     <th class='sync t2'><?php echo $matkul['sync']; ?></th>
                 <?php endforeach; ?>

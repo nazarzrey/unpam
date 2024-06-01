@@ -4,7 +4,7 @@ class Absensi_model extends CI_Model {
         $this->db->select('a.*, m.id_matkul, m.min_absen');
         $this->db->from('unpam_absensi a');
         $this->db->join('unpam_dosen_matkul dm', 'dm.matkul_url = a.url_matkul', 'left');
-        $this->db->join('unpam_matkul m', 'm.dosen = dm.matkul_dosen', 'left');
+        $this->db->join('unpam_matkul m', 'm.dosen = dm.matkul_dosen', 'leftx');
         $this->db->where('WEEK(a.absen_time)', $week);
         $query = $this->db->get();
         return $query->result_array();
