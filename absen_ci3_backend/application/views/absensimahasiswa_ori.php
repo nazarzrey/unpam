@@ -39,7 +39,7 @@
             echo "<tr><th width='250px' rowspan='2'>DOSEN</th><th width='80px'  rowspan='2'>MATKUL</th><th width='80px'  rowspan='2'>SKS</th><th width='80px'  rowspan='2'>MIN ABSEN</th>";
             // echo "<th width='250px'>Dosen</th><th  width='80px'>Matkul</th>";            
             for($z=$fweek;$z<=$lweek;$z++){
-                echo "<th class='perj'>".getLastDateOfCurrentWeek($z,1,6)["date"]."</th>";
+                echo "<th class='perj'>".getLastDateOfCurrentWeek($z,1,0)["date"]."</th>";
             }
             echo "<th class='perj'>Last</th>";
             echo "</tr>";

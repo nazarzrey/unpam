@@ -76,7 +76,7 @@
         }
     ?>
     <div style=" justify-content: space-between;text-align:center !important">
-        <h2 style="text-align:center !important;">Rekap Absensi - Minggu ke : <?php echo $week." (".getLastDateOfCurrentWeek($week,1,6)["date"].date("-Y").")"; ?></h2>
+        <h2 style="text-align:center !important;">Rekap Absensi - Minggu ke : <?php echo $week." (".getLastDateOfCurrentWeek($week,1,0)["date"].date("-Y").")"; ?></h2>
     </div>
     <div style="float:left">
     <a class='btn' href="<?= base_url('grup/'. (($week - 1)>=8?($week - 1):"#")); ?>">Prev</a>

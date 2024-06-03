@@ -72,7 +72,7 @@
     
     for ($z = $fweek; $z <= $lweek; $z++) {
         $frw = $z == $fweek ? "id='first-week'" : "";
-        echo "<th class='perj week-$z' $frw><span class='desktop'>" . getLastDateOfCurrentWeek($z, 1, 6)["date"] . "</span><span class='mobile'>" . str_replace("-", " ", getLastDateOfCurrentWeek($z, 1, 6)["date"]) . "</span></th>";
+        echo "<th class='perj week-$z' $frw><span class='desktop'>" . getLastDateOfCurrentWeek($z, 1, 0)["date"] . "</span><span class='mobile'>" . str_replace("-", " ", getLastDateOfCurrentWeek($z, 1, 0)["date"]) . "</span></th>";
     }
     echo "<th rowspan='2' style='width:20px'>LAST SYNC</th>";
     echo "</tr><tr>";
