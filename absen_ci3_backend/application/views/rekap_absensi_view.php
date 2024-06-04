@@ -64,6 +64,7 @@
         .susulan{
             color:blue
         }
+        .tr:hover{border:solid 2px;background:#e6fbff !important;cursor:pointer}
     </style>
 </head>
 <body>
@@ -112,7 +113,7 @@
             <?php 
             // dbg($rekap_absensi);
             foreach ($rekap_absensi as $rekap): ?>
-                <tr>
+                <tr class='tr'>
                     <?php
                     if($rekap["keter"]!=""){ 
                         $susul = "- ".Uw($rekap["keter"]);
