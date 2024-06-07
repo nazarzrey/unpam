@@ -93,6 +93,7 @@
     <table border="1">
         <thead>
             <tr>
+                <th class='' rowspan='2'>No</th>
                 <th class='t1'>Sync</th>
                 <?php
                 // dbg($matkul_data);
@@ -112,6 +113,7 @@
 
             <?php 
             // dbg($rekap_absensi);
+            $z = 1;
             foreach ($rekap_absensi as $rekap): ?>
                 <tr class='tr'>
                     <?php
@@ -123,6 +125,7 @@
                         $csus = "";
                     }
                     ?>
+                    <td class=''><?= $z ?></td>
                     <td class='t1 tl <?= $csus ?>'><?php echo Uw($rekap['nama'])." ".$susul; ?></td>
                     <?php
                     foreach ($matkul_data as $matkul) {
@@ -144,7 +147,7 @@
                     }
                     ?>
                 </tr>
-            <?php endforeach; ?>
+            <?php $z++; endforeach; ?>
         </tbody>
     </table>
     <script>
