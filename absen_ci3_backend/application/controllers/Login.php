@@ -15,7 +15,10 @@ class Login extends CI_Controller {
     public function authenticate() {
         // dbg($this->uri->segments);
         $nim = $this->input->post('nim');
-        $kelas = $this->input->post('kelas');
+        $kelas = strtoupper(trim($this->input->post('kelas')));
+        if(substr($kelas,0,1)=="0"){
+            $kelas = right($kelas,7);
+        }
         $user = $this->Login_model->check_login($nim, $kelas);
         if(isset($this->uri->segments[3])){
             $redirect = $this->uri->segments[3];
