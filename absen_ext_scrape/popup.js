@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var inputKLS = document.getElementById('inputKLS');
     var inputAdmin = document.getElementById('inputAdmin');
     var saveButton = document.getElementById('saveButton');
-    var targetUrlSH = document.getElementById('targetUrl'); //alias aja
+    // var targetUrlSH = document.getElementById('targetUrl'); //alias aja
     var urlLearning = document.getElementById('urlLearn');
     var UrlServer = document.getElementById('UrlServer');    
     var lasttime = localStorage.getItem("lastSync");
@@ -20,15 +20,26 @@ document.addEventListener('DOMContentLoaded', function () {
     // var lastSync = new Date().toLocaleString();
     // var selisih = hitungSelisihMenit();
     function hitungSelisihMenit(waktuTersimpan) {
-        let waktuInput = new Date(waktuTersimpan);
-        let sekarang = new Date();
-        let selisihMiliDetik = sekarang - waktuInput;
-        let selisihMenit = Math.floor(selisihMiliDetik / 60000);
-        localStorage.setItem("sync", waktuInput+" "+sekarang+" "+waktuTersimpan);   
-        chrome.storage.local.set({sync: waktuInput+" "+sekarang+" "+waktuTersimpan}, function() {
-        });
-        return selisihMenit;
+        // Konversi waktu tersimpan ke objek Date
+        let waktuInput = new Date(waktuTersimpan).toLocaleDateString('id-ID');
+        
+        // Ambil tanggal hari ini
+        let sekarang = new Date().toLocaleDateString('id-ID');
+        
+        console.log(waktuTersimpan+" past: " + waktuInput + " now: " + sekarang);
+        
+        // Bandingkan dua tanggal yang sudah diformat menjadi string
+        if (waktuInput !== sekarang) {
+            return "ya";
+        } else {
+            return "tidak";
+        }
     }
+    
+    // Contoh penggunaan fungsi
+    let hasil = hitungSelisihMenit("2024-09-19");
+    console.log(hasil);
+    
 
     function loadDataInput(){
         // Cek apakah ada data di localStorage saat halaman dimuat
@@ -85,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
     saveButton.addEventListener('click', function () {
         var inputKLSValue = inputKLS.value.trim();
         var inputAdminValue = inputAdmin.value.trim();
-        var lastSync = new Date();
+        var lastSync = new Date().toLocaleDateString('id-ID');
         var selisih = hitungSelisihMenit(lasttime);
         if (inputKLSValue === "") {
             h1.innerHTML = "Inputan Kelas tidak boleh kosong!";
@@ -130,12 +141,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Tambahkan event listener untuk menerima pesan dari background.js
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    console.log(request+"ABCDE")
+    console.log(request)
     var balikan = request.message
     var UrlSrv  = request.UrlServer
     var UrlELE  = request.UrlLearn
-    console.log(balikan+" "+UrlSrv+" "+UrlELE);
-    var cetakBalikan = document.getElementById('balikan1'); 
+    // console.log(balikan+" "+UrlSrv+" "+UrlELE+" ABCD");
+    var cetakBalikan = document.getElementById('balikan1');  
     if (balikan) {
         cetakBalikan.innerHTML= request.message;
         setTimeout(() => {
@@ -143,5 +154,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         }, 5000);
     }else{
         cetakBalikan.innerHTML = "";
+    }    
+    if (UrlSrv) {
+        document.getElementById('UrlServer').value = UrlSrv;
     }
+    if (UrlELE) {
+        document.getElementById('urlLearn').value = UrlELE;
+        // otourlLearning.value = UrlELE;
+    } 
 });

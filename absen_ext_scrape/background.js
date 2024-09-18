@@ -130,28 +130,34 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
             args: [getJobDescriptionClassName(tabUrl)],
           })
           .then((queryResult) => {
-            lg(queryResult[0].result);
+            // lg(queryResult[0].result);
             var url = tabUrl
             send_data(queryResult[0].result,url,Kls,Admin);
             // lg(UrlCrawl("selisih")+"AABC")
+            setTimeout(() => {              
+              if(UrlCrawl("selisih")=="1"){
             
-            getUrl("get");
-            getUrl("send");
-            // setTimeout(() => {              
-            //   if(UrlCrawl("selisih")=="z"){
-            //     lg("jalanin get ke server otomatis krna datanya gagal di get")
-            //     getUrl("get");
-            //     getUrl("send");
-            //   }else if(UrlCrawl("selisih")==""){
-            //     getUrl("get");
-            //     getUrl("send");
-            //     lg("jalanin get ke server otomatis krna datanya kosong")
-            //   }else if(UrlCrawl("selisih")>45000){
-            //     getUrl("get");
-            //     getUrl("send");
-            //     lg("jalanin get ke server otomatis setelah 45rb detik")
-            //   };
-            // }, 5000);
+                setTimeout(() => {              
+                  getUrl("get");
+                }, 500);
+                setTimeout(() => {              
+                  getUrl("send");
+                }, 1000);
+                
+                lg("jalanin get ke server otomatis krna datanya gagal di get")
+
+              }else if(UrlCrawl("selisih")==""){
+            
+                setTimeout(() => {              
+                  getUrl("get");
+                }, 500);
+                setTimeout(() => {              
+                  getUrl("send");
+                }, 1000);
+                
+                lg("jalanin get ke server otomatis krna datanya kosong")
+              }
+            }, 5000);
           });
       }else{
         let msg = "Url pada browser tidak sama dengan inputan URL...!!!"
@@ -208,7 +214,7 @@ function send_data(obj_data,url,kls,adm){
     if (typeof UriServer === 'undefined'){
       console.log("URL server blum di definiskan, silahkan refresh");    
       chrome.runtime.sendMessage({message: "URL server blum di definiskan, silahkan refresh"});
-      // chrome.tabs.reload(); //matikan dulu auto reload servernya supaya ga berat2in
+      chrome.tabs.reload(); //matikan dulu auto reload servernya supaya ga berat2in
       return;
     }
     fetch(UriServer, {
@@ -253,11 +259,12 @@ async function getUrl(tipe) {
               // chrome.storage.local.set({UrlLearn: url}, function() {
               //     console.log('UrlLearn : ' + url);
               // });              
-              chrome.runtime.sendMessage({UrlLearn: url});
+              chrome.runtime.sendMessage({UrlLearn: data.url});
           }else{
-              chrome.storage.local.set({UrlServer: url}, function() {
-                  console.log('UrlServer : ' + url);
-              });
+              // chrome.storage.local.set({UrlServer: url}, function() {
+              //     console.log('UrlServer : ' + url);
+              // });
+              chrome.runtime.sendMessage({UrlServer: data.url});
           }
       }
   } catch (error) {
