@@ -6,8 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var saveButton = document.getElementById('saveButton');
     // var targetUrlSH = document.getElementById('targetUrl'); //alias aja
     var urlLearning = document.getElementById('urlLearn');
-    var UrlServer = document.getElementById('UrlServer');    
-    var lasttime = localStorage.getItem("lastSync");
+    var UrlServer = document.getElementById('UrlServer');   
 
     // function hitungSelisihMenit(waktuTersimpan) {
     //     let waktuInput = new Date(waktuTersimpan).toLocaleString();
@@ -21,7 +20,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // var selisih = hitungSelisihMenit();
     function hitungSelisihMenit(waktuTersimpan) {
         // Konversi waktu tersimpan ke objek Date
-        let waktuInput = new Date(waktuTersimpan).toLocaleDateString('id-ID');
+        let parts = waktuTersimpan.split('/');
+        let waktuInputFormatted = `${parts[2]}-${parts[1]}-${parts[0]}`;  // Format YYYY-MM-DD
+    
+        let waktuInput = new Date(waktuInputFormatted).toLocaleDateString('id-ID');
         
         // Ambil tanggal hari ini
         let sekarang = new Date().toLocaleDateString('id-ID');
@@ -37,16 +39,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     
     // Contoh penggunaan fungsi
-    let hasil = hitungSelisihMenit("2024-09-19");
-    console.log(hasil);
-    
 
     function loadDataInput(){
         // Cek apakah ada data di localStorage saat halaman dimuat
-        var storeLearnURL = localStorage.getItem("UrlLearn");
         var storedDataKLS = localStorage.getItem("KelasName");
         var storedDataAdmin = localStorage.getItem("UserName");
+        var storeLearnURL = localStorage.getItem("UrlLearn");
         var storeServerURL = localStorage.getItem("UrlServer");
+        console.log(storeLearnURL+" load ");
+        console.log(storeServerURL+" load ");
         if (storedDataAdmin) {
             inputAdmin.value = storedDataAdmin;
         }
@@ -67,8 +68,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     async function getUrl(tipe) {
         try {
-            // let response = await fetch('https://absenunpam.my.id/xhr/get/link-'+tipe);
-            let response = await fetch('http://localhost/web/unpam_project/absen_ci3_backend/xhr/get/link-'+tipe);
+            let response = await fetch('https://absenunpam.my.id/xhr/get/link-'+tipe);
+            // let response = await fetch('http://localhost/web/unpam_project/absen_ci3_backend/xhr/get/link-'+tipe);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -90,44 +91,51 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
         }
-    }
-    
+    }    
     
     saveButton.addEventListener('click', function () {
         var inputKLSValue = inputKLS.value.trim();
-        var inputAdminValue = inputAdmin.value.trim();
-        var lastSync = new Date().toLocaleDateString('id-ID');
+        var inputAdminValue = inputAdmin.value.trim(); 
+        var lasttime = localStorage.getItem("lastSync");
+        console.log(lasttime)
         var selisih = hitungSelisihMenit(lasttime);
-        if (inputKLSValue === "") {
-            h1.innerHTML = "Inputan Kelas tidak boleh kosong!";
-        } else if (inputAdminValue === "") {
-            h1.innerHTML = "Admin tidak boleh kosong!";
-        } else {
-            h1.innerHTML = "Data berhasil disimpan!";             
-            localStorage.setItem("KelasName", inputKLSValue);                 
-            chrome.storage.local.set({KelasName: inputKLSValue}, function() {
-                console.log('Kelas : ' + inputKLSValue);
-            });  
-            getUrl("get");
-            getUrl("send");
-            localStorage.setItem("UserName", inputAdminValue);   
-            chrome.storage.local.set({UserName: inputAdminValue}, function() {
-                console.log('Admin : ' + inputAdminValue);
-            });
-            localStorage.setItem("selisih", selisih);   
-            chrome.storage.local.set({selisih: selisih}, function() {
-                console.log('selisih : ' + selisih);
-            });
-            localStorage.setItem("lastSync", lastSync);   
-            chrome.storage.local.set({lastSync: lastSync}, function() {
-                console.log('lastSync : ' + lastSync);
-            });
-            setTimeout(() => {
-                chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-                    chrome.tabs.reload(tabs[0].id);
+        setTimeout(() => {            
+            var lastSync = new Date().toLocaleDateString('id-ID');
+            if (inputKLSValue === "") {
+                h1.innerHTML = "Inputan Kelas tidak boleh kosong!";
+            } else if (inputAdminValue === "") {
+                h1.innerHTML = "Admin tidak boleh kosong!";
+            } else {
+                h1.innerHTML = "Data berhasil disimpan!";             
+                localStorage.setItem("KelasName", inputKLSValue);                 
+                chrome.storage.local.set({KelasName: inputKLSValue}, function() {
+                    console.log('Kelas : ' + inputKLSValue);
+                });              
+                setTimeout(() => {              
+                  getUrl("get");
+                }, 100);
+                setTimeout(() => {              
+                  getUrl("send");
+                }, 300);
+                localStorage.setItem("UserName", inputAdminValue);   
+                chrome.storage.local.set({UserName: inputAdminValue}, function() {
+                    console.log('Admin : ' + inputAdminValue);
                 });
-            }, 2000);
-        } 
+                localStorage.setItem("selisih", selisih);   
+                chrome.storage.local.set({selisih: selisih}, function() {
+                    console.log('selisih : ' + selisih);
+                });
+                localStorage.setItem("lastSync", lastSync);   
+                chrome.storage.local.set({lastSync: lastSync}, function() {
+                    console.log('lastSync : ' + lastSync);
+                });
+                setTimeout(() => {
+                    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                        chrome.tabs.reload(tabs[0].id);
+                    });
+                }, 2000);
+            } 
+        }, 500);
         setTimeout(() => {
             h1.innerHTML = "";
             h2.innerHTML = "";
@@ -151,15 +159,18 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         cetakBalikan.innerHTML= request.message;
         setTimeout(() => {
             cetakBalikan.innerHTML = "";
-        }, 5000);
+        }, 2500);
     }else{
         cetakBalikan.innerHTML = "";
     }    
     if (UrlSrv) {
         document.getElementById('UrlServer').value = UrlSrv;
+        localStorage.setItem("UrlServer", UrlSrv);   
+        chrome.storage.local.set({UrlServer: UrlSrv});
     }
     if (UrlELE) {
         document.getElementById('urlLearn').value = UrlELE;
-        // otourlLearning.value = UrlELE;
-    } 
+        localStorage.setItem("UrlLearn", UrlELE);   
+        chrome.storage.local.set({UrlLearn: UrlELE});
+    }
 });

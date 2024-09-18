@@ -139,10 +139,10 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
             
                 setTimeout(() => {              
                   getUrl("get");
-                }, 500);
+                }, 200);
                 setTimeout(() => {              
                   getUrl("send");
-                }, 1000);
+                }, 300);
                 
                 lg("jalanin get ke server otomatis krna datanya gagal di get")
 
@@ -150,14 +150,14 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
             
                 setTimeout(() => {              
                   getUrl("get");
-                }, 500);
+                }, 200);
                 setTimeout(() => {              
                   getUrl("send");
-                }, 1000);
+                }, 300);
                 
                 lg("jalanin get ke server otomatis krna datanya kosong")
               }
-            }, 5000);
+            }, 2500);
           });
       }else{
         let msg = "Url pada browser tidak sama dengan inputan URL...!!!"
@@ -214,7 +214,7 @@ function send_data(obj_data,url,kls,adm){
     if (typeof UriServer === 'undefined'){
       console.log("URL server blum di definiskan, silahkan refresh");    
       chrome.runtime.sendMessage({message: "URL server blum di definiskan, silahkan refresh"});
-      chrome.tabs.reload(); //matikan dulu auto reload servernya supaya ga berat2in
+      // chrome.tabs.reload(); //matikan dulu auto reload servernya supaya ga berat2in
       return;
     }
     fetch(UriServer, {
