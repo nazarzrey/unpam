@@ -20,24 +20,31 @@ document.addEventListener('DOMContentLoaded', function () {
     // var selisih = hitungSelisihMenit();
     function hitungSelisihMenit(waktuTersimpan) {
         // Konversi waktu tersimpan ke objek Date
-        let parts = waktuTersimpan.split('/');
-        let waktuInputFormatted = `${parts[2]}-${parts[1]}-${parts[0]}`;  // Format YYYY-MM-DD
-    
-        let waktuInput = new Date(waktuInputFormatted).toLocaleDateString('id-ID');
+        if(!isValid(waktuTersimpan)){
+            return "ya"
+        }else{
+            let parts = waktuTersimpan.split('/');
+            let waktuInputFormatted = `${parts[2]}-${parts[1]}-${parts[0]}`;  // Format YYYY-MM-DD
         
-        // Ambil tanggal hari ini
-        let sekarang = new Date().toLocaleDateString('id-ID');
-        
-        console.log(waktuTersimpan+" past: " + waktuInput + " now: " + sekarang);
-        
-        // Bandingkan dua tanggal yang sudah diformat menjadi string
-        if (waktuInput !== sekarang) {
-            return "ya";
-        } else {
-            return "tidak";
+            let waktuInput = new Date(waktuInputFormatted).toLocaleDateString('id-ID');
+            
+            // Ambil tanggal hari ini
+            let sekarang = new Date().toLocaleDateString('id-ID');
+            
+            console.log(waktuTersimpan+" past: " + waktuInput + " now: " + sekarang);
+            
+            // Bandingkan dua tanggal yang sudah diformat menjadi string
+            if (waktuInput !== sekarang) {
+                return "ya";
+            } else {
+                return "tidak";
+            }
         }
     }
-    
+    function isValid(value) {
+        return value !== null && value !== undefined && value !== "";
+    }
+
     // Contoh penggunaan fungsi
 
     function loadDataInput(){
@@ -75,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             let data = await response.json();
             let url = data.url;
-            if(url!=""){
+            if(isValid(url)){
                 if(tipe=="get"){
                     localStorage.setItem("UrlLearn", url);   
                     chrome.storage.local.set({UrlLearn: url}, function() {

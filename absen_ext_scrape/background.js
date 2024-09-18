@@ -248,13 +248,14 @@ function lg(val){
 }
 async function getUrl(tipe) {
   try {
-      let response = await fetch('http://localhost/web/unpam_project/absen_ci3_backend/xhr/get/link-'+tipe);
+      let response = await fetch('https://absenunpam.my.id/xhr/get/link-'+tipe);
+      // let response = await fetch('http://localhost/web/unpam_project/absen_ci3_backend/xhr/get/link-'+tipe);
       if (!response.ok) {
           throw new Error('Network response was not ok');
       }
       let data = await response.json();
       let url = data.url;
-      if(url!=""){
+      if(isValid(url)){
           if(tipe=="get"){
               // chrome.storage.local.set({UrlLearn: url}, function() {
               //     console.log('UrlLearn : ' + url);
@@ -274,3 +275,8 @@ async function getUrl(tipe) {
 // dari skrip di atas  saya mau tambahakan mengambil elemen dg kriteria spt ini
 // elemnnya #page-content get value dari .discussionname
 // elemennya #page-header get value dari .h2
+
+
+function isValid(value) {
+  return value !== null && value !== undefined && value !== "";
+}
