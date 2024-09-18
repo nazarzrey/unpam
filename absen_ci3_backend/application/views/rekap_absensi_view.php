@@ -65,6 +65,7 @@
             color:blue
         }
         .tr:hover{border:solid 2px;background:#e6fbff !important;cursor:pointer}
+        .tno{width: 30px;}
     </style>
 </head>
 <body>
@@ -93,7 +94,7 @@
     <table border="1">
         <thead>
             <tr>
-                <th class='' rowspan='2'>No</th>
+                <th class='tno' rowspan='2'>No</th>
                 <th class='t1'>Sync</th>
                 <?php
                 // dbg($matkul_data);

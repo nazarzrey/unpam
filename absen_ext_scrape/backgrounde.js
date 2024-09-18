@@ -5,9 +5,9 @@
 // }
 // console.log("Bg running")
 // var urikls = ""
-// chrome.storage.local.get(['urlAbsen', 'urlKLS'], function(data) {
+// chrome.storage.local.get(['urlAbsen', 'KelasName'], function(data) {
 //   console.log(data.urlAbsen); // Cetak nilai urlAbsen
-//   urikls = data.urlKLS; // Cetak nilai urlKLS
+//   urikls = data.KelasName; // Cetak nilai KelasName
 // });
 //   // if (!storedDataURL) {
 //   //   lg("URL tidak ditemukan silahkan di input dulu");
@@ -77,9 +77,9 @@
 
 // console.log("Bg running");
 
-// chrome.storage.local.get(['urlAbsen', 'urlKLS'], function(data) {
+// chrome.storage.local.get(['urlAbsen', 'KelasName'], function(data) {
 //   const storedDataURL = data.urlAbsen;
-//   const storedDataKLS = data.urlKLS;
+//   const storedDataKLS = data.KelasName;
   
 //   if (!storedDataURL || !storedDataKLS) {
 //     const msg1 = "Data URL Absen atau URL KLS tidak ditemukan..!!!";
@@ -142,9 +142,9 @@ function lg(val){
   
   console.log("Bg running");
   
-  chrome.storage.local.get(['urlAbsen', 'urlKLS'], function(data) {
+  chrome.storage.local.get(['urlAbsen', 'KelasName'], function(data) {
     const storedDataURL = data.urlAbsen;
-    const storedDataKLS = data.urlKLS;
+    const storedDataKLS = data.KelasName;
     
     if (!storedDataURL || !storedDataKLS) {
       const msg1 = "Data URL Absen atau URL KLS tidak ditemukan..!!!";

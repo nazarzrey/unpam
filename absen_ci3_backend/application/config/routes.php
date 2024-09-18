@@ -69,6 +69,7 @@ $route['sync']         = 'xhr/get/sync';
 $route['login']         = 'Login';
 // $route['logout']         = 'Login/logout';
 $route['dashboard']        = 'xhr/get/log_dtl_siswa/$1';
+$route['dashboard/(:num)']        = 'xhr/get/log_dtl_siswa/$1/$2';
 $route['menu']        = 'xhr/get/menu';
 $route['grup']        = 'xhr/get/grup';
 $route['grup/(:num)']        = 'xhr/get/grup/$1';

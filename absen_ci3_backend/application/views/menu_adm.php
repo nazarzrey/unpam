@@ -13,5 +13,4 @@
   <a class="mn" href="<?= base_url("dashboard")?>">Absensi</a>
   <a class="mn" href="<?= base_url("grup")?>">Grup Absen</a>
   <a class="mn" href="<?= base_url("login/logout". $redirect)?>">Logout</a>
-  <a class="nm" href="">Welcome <?= $this->session->userdata("nama") ?></a>
 </div>

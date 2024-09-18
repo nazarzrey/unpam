@@ -10,38 +10,38 @@ console.log("unpam cek absensi Bg running")
 
 var backUrlCrawl = "";
 var backUrlKelas = "";
-var backUrlAdmin = "";
+var backUserName = "";
 function UrlCrawl(tipe){
   if(tipe=="url"){
-    chrome.storage.local.get(['UrlMatKul'], function(result) {
-        if (!result.UrlMatKul) {
+    chrome.storage.local.get(['UrlLearn'], function(result) {
+        if (!result.UrlLearn) {
             console.log("URL tidak ditemukan jadi pakai yang lain");
             backUrlCrawl = "http://localhost/web/unpam_project/contoh/"; 
         }else{
-          backUrlCrawl = result.UrlMatKul; 
+          backUrlCrawl = result.UrlLearn; 
         }
       })
       return backUrlCrawl;
   }else if(tipe=="kelas"){
-    chrome.storage.local.get(['urlKLS'], function(result) {
-        if (!result.urlKLS) {
+    chrome.storage.local.get(['KelasName'], function(result) {
+        if (!result.KelasName) {
             console.log("URL tidak ditemukan jadi pakai yang lain");
             backUrlKelas = "TPLE004"; 
         }else{
-          backUrlKelas = result.urlKLS; 
+          backUrlKelas = result.KelasName; 
         }
       })
       return backUrlKelas;    
   }else{
-    chrome.storage.local.get(['UrlAdmin'], function(result) {
-        if (!result.UrlAdmin) {
+    chrome.storage.local.get(['UserName'], function(result) {
+        if (!result.UserName) {
             console.log("URL tidak ditemukan jadi pakai yang lain");
-            backUrlAdmin = "Nazar"; 
+            backUserName = "Nazar"; 
         }else{
-          backUrlAdmin = result.UrlAdmin; 
+          backUserName = result.UserName; 
         }
       })
-      return backUrlAdmin;    
+      return backUserName;    
   }
 }
 
@@ -106,7 +106,9 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     var Kls   = UrlCrawl("kelas");
     var Admin = UrlCrawl("admin");
     if (typeof tab.url !== 'undefined'){
-      var tabUrl = tab.url.replace(".ac.id",".id");
+ //     var tabUrl = tab.url.replace(".ac.id",".id");
+      var tabUrl = tab.url;
+        console.log("URL TAB "+tabUrl);
         if(tabUrl?.startsWith(UrlCrawl("url"))) {
         chrome.scripting
           .executeScript({
@@ -128,6 +130,26 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   }
 });
 
+function checkKeywordInUrl(keyword) {
+  let currentUrl = window.location.href;
+  let isKeywordFound = currentUrl.toLowerCase().includes(keyword.toLowerCase());
+
+  if (isKeywordFound) {
+    return "Kata '" + keyword + "' ditemukan dalam URL.";
+  } else {
+    return "Kata '" + keyword + "' tidak ditemukan dalam URL.";
+  }
+}
+
+/*
+let keywordToSearch = "unpam";
+let result = checkKeywordInUrl(keywordToSearch);
+console.log(result);
+
+// Untuk menampilkan pesan di halaman, misalnya dalam sebuah elemen dengan id "result":
+document.getElementById("result").textContent = result;
+*/
+
 function send_data(obj_data,url,kls,adm){
   // if(!obj_data){
   // }else{
@@ -138,16 +160,17 @@ function send_data(obj_data,url,kls,adm){
       console.log("Data is empty, skipping the send request.");
       return;
   }
-  var get7an = 'https://nazrey.com/project/unpam/absen_ci3_backend/receive_data'
+  //var get7an = 'https://nazrey.com/project/unpam/absen_ci3_backend/receive_data'
+  var get7an = 'https://absenunpam.my.id/receive_data'
   //var UriServer = 'http://localhost/web/unpam_project/absen_ci3_backend/receive_data';
-  chrome.storage.local.get(['UrlTarget'], function(result) {
+  chrome.storage.local.get(['UrlServer'], function(result) {
     if (chrome.runtime.lastError) {
       console.error("Error retrieving URL from local storage:", chrome.runtime.lastError.message);
       // Handle error (e.g., use a default URL)
       UriServer = get7an; // Or alternative URL
     } else {
-      if (result.UrlTarget) {
-        UriServer = result.UrlTarget;
+      if (result.UrlServer) {
+        UriServer = result.UrlServer;
       } else {
         UriServer = get7an; // Use default URL if not set
       }

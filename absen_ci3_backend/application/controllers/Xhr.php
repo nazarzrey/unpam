@@ -32,12 +32,36 @@ class Xhr extends Settings
         #$this->load->helper('fungsi');
         
     }
+    public function semester($value=""){
+        if($value!=""){
+            return $value;
+        }else{            
+            $sql = "SELECT konten FROM unpam_setting WHERE jenis='semester'";
+            $hasil=single_query($this->db->query($sql))->konten;
+            // dbg($hasil);
+            return $hasil;
+        }
+    }
+    public function week($value=""){
+        if($value!=""){
+            return $value;
+        }else{            
+            $sql = "select ifnull((SELECT WEEK(konten)-(SELECT MIN(WEEK(absen_time)) FROM unpam_absensi) AS time_week FROM unpam_setting WHERE jenis='start_week'),0) as minggu  ";
+            $hasil=single_query($this->db->query($sql))->minggu;
+            return $hasil;
+        }
+    }
     public function get($value = "", $value2 = "")
     {
-        if($value=="link"){
+        if($value=="link-get"){
             header('Access-Control-Allow-Origin: *');
             header('Content-type: application/json');
-            $data  = $this->Mod_query->get_setting("url");
+            $data  = $this->Mod_query->get_setting("url-elearning");
+            echo json_encode( array("url" => $data[0]->konten));
+        }elseif($value=="link-send"){
+            header('Access-Control-Allow-Origin: *');
+            header('Content-type: application/json');
+            $data  = $this->Mod_query->get_setting("url-server");
             echo json_encode( array("url" => $data[0]->konten));
         }elseif($value=="absen"){
             header('Access-Control-Allow-Origin: *');
@@ -173,9 +197,10 @@ class Xhr extends Settings
             $this->db->order_by("dosen", "asc");
             $dosen = $this->db->get("unpam_matkul");
             $result = each_query($dosen);
-            $data["tweek"] = ($week->max_week - $week->min_week) + 1;
+            $data["tweek"] = ($week->max_week - $week->min_week) +1;
             $data["fweek"] = $week->min_week;
-            $data["lweek"] = $week->max_week;
+            $data["lweek"] = $week->max_week;            
+            $data["minggu"] = week("");            
             $data["result"] = $result;
             $data["tsiswa"] = $week->ttl_mahasiswa;
             $this->load->view("absendosen",$data);
@@ -192,12 +217,15 @@ class Xhr extends Settings
 
                 // echo $sql;
                 $week   = single_query($this->db->query($sql));
-                $dosen  = "SELECT a.*,IFNULL(DATE_FORMAT(MAX(b.updrec_date),'%y-%m-%d %H:%i'),'') AS sync FROM unpam_matkul a LEFT JOIN unpam_absen_log b ON a.`dosen`=b.`obj_dosen` GROUP BY a.`dosen` ORDER BY dosen ASC";
+                $dosen  = "SELECT a.*,IFNULL(DATE_FORMAT(MAX(b.updrec_date),'%y-%m-%d %H:%i'),'') AS sync FROM unpam_matkul a LEFT JOIN unpam_absen_log b ON a.`dosen`=b.`obj_dosen`
+                            WHERE semester='".$this->semester("")."'
+                            GROUP BY a.`dosen`,matkul ORDER BY dosen ASC";
                 $dosen  = $this->db->query($dosen);
                 $result = each_query($dosen);
                 $data["tweek"] = ($week->max_week - $week->min_week) + 1;
                 $data["fweek"] = $week->min_week;
-                $data["lweek"] = $week->max_week;
+                $data["lweek"] = $week->max_week;  
+                $data["minggu"] = $this->week("");
                 $data["result"] = $result;
                 $data["tsiswa"] = $week->ttl_mahasiswa;
                 $data["nim"] = $value2;
@@ -222,6 +250,11 @@ class Xhr extends Settings
             }else{
                 $this->detail_week($value2);
             }
+        }elseif($value=="url-elearning"){
+            $sql = "SELECT IFNULL((SELECT konten FROM unpam_setting WHERE jenis='url'),'x') AS konten";
+            $qry = $this->db->query($sql);
+            $data = each_query($qry);
+            echo json_encode($data);
         }else{
             echo "variabel belum di pasang..!!";
         }

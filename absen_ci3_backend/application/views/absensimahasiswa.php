@@ -61,7 +61,7 @@
     $initialStartDesktop = $totalWeeks - $columnsToShowDesktop + 1;
     $initialStartMobile = $totalWeeks - $columnsToShowMobile + 1;
 
-    echo "<div class='judul text-center'>$siswa : $nim - PERTEMUAN SEMESTER 1 - Minggu ke $totalWeeks</div>";
+    echo "<div class='judul text-center'>$siswa : $nim - PERTEMUAN SEMESTER  2 - Minggu ke $totalWeeks</div>";
     echo "<div class='nav-buttons'>
             <button id='prev-btn' class='btn btn-primary'>&lt;</button>
             <button id='next-btn' class='btn btn-primary'>&gt;</button>
@@ -80,7 +80,7 @@
         echo "<th class='pert week-$z'>" . ($z - ($fweek - 1)) . "</th>";
     }
     echo "</tr></thead><tbody>";
-
+    // dbg($result);
     foreach ($result as $key => $hasil) {
        $qry_mhs = "SELECT a.url_matkul,
                     b.`matkul_fordis`,
@@ -101,11 +101,13 @@
                         minggu,SUM(absen) AS absen,min_absen
                     FROM ($qry_mhs) abcd
                     GROUP BY minggu;";
+        // echo $qry_dosen;                    
 // echo "<br/>";
         $rsl_dosen = each_query($this->db->query($qry_dosen));
-        
+        if($rsl_dosen){
         // dbg($rsl_dosen);
         $result_array = [];
+        // dbg(count($rsl_dosen));
         foreach ($rsl_dosen as $row) {
             $newObject = new stdClass();
             $newObject->minggu = $row->minggu;
@@ -119,6 +121,7 @@
             $result_array[$row->minggu] = $newObject;
         }
 
+    }
         echo "<tr>";
         echo "<td class='cl'>" . Uw($hasil->dosen) . "</td>";
         echo "<td class=''><span>" . substr($hasil->matkul_singkat, 0, 3) . "</span></td>";
@@ -144,10 +147,11 @@
     }
     echo "<tr><td class='kurang tr'>Nilai < dari minimal Absen</td><td rowspan='4' colspan='".($tweek+4)."' class='tr' id='target_link'></td></tr>";
     echo "<tr><td class='pert tr'>Pertemuan Minggu ke </td></tr>";
-    echo "<tr><td class='pert tr'>last sync  ".($sync)."</td></tr>";
+    echo "<tr><td class='pert tr bg-secondary text-light'>last sync  ".($sync)."</td></tr>";
     echo "<tr><td class='tr kurang2'>nilai < dari dobel tugas</td></tr>";
     echo "</tbody></table>";
     echo "<div class='m-2 mt-3'>
+            <a class='alert alert-1 text-primary'>Data nya tidak selalu realtime bisa jadi blum masuk, krna admin belum sync, lihat last sync nya<a>
             <a href='" . base_url('login/logout') . "' class='btn btn-sm btn-danger w-100'>Logout</a>
           </div>";
     ?>

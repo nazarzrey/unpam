@@ -11,7 +11,7 @@
       content="Web site created using create-react-app"
     />
     <style>
-      body{border-radius:5px;padding:10px;background-color: #d7e671;}
+      body{border-radius:5px;padding:10px;background-color: #71cde6c2;}
       .h-screen{width:350px;}
       input{width: 100%;margin-bottom: 10px;}
       h2,.h3{color:red}
@@ -20,6 +20,7 @@
       .fl{float:left}
       .targetUrl{display: none;}
       #balikan1{font-style: italic;font-size: 14px;}
+      .ro{background: #e0e0e0;border:solid 1px #ccc}
     </style>
     <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
     <title>React App</title>
@@ -31,21 +32,22 @@
       <div style="float:left;width:100%"  class="">
         <div style="width: 49%;"  class="fl">
           <label for="inputAdmin">Admin:</label><br>
-          <input type="text" id="inputAdmin" style="width: 100px;" value="Dalpa" disabled>
+          <input type="text" id="inputAdmin" style="width: 100px;" value="Users">
         </div>
         <div style="width: 50%;" class="fl">
           <label for="inputKLS">Kelas:</label><br>
           <input type="text" id="inputKLS" style="width: 100px;" value="TPLE004">
         </div>
       </div>
-      <label for="inputMatKul">Input URL nya:</label><br>
-      <input type="text" id="inputMatKul" value="https://e-learning.unpam.id/mod/forum/" style="width:83%"> <button id="saveButton">Save</button><br>
+      <label for="urlLearn">Url Elearning :</label><br>
+      <input type="text" id="urlLearn" class="ro" readonly value="https://e-learning.unpam.id/mod/forum/" style="width:70%"> <button id="saveButton">Manual Sync</button><br>
       <div id="targetUrl">
-        <label for="urlTarget">Url Target:</label><br>
-        <input type="text" id="urlTarget" value="https://nazrey.com/project/unpam/absen_ci3_backend/receive_data"  style="width:98%"><br>
+        <label for="UrlServer">Url Target :</label><br>
+        <input type="text" id="UrlServer" class="ro" readonly value="https://absenunpam.my.id/receive_data"  style="width:98%"><br>
       </div>
-      ex : <a href='https://e-learning.unpam.id/mod/forum/'>https://e-learning.unpam.id/mod/forum/</a>
-      <br>  <br>  
+      <label style="font-size: 11px;">Url Elearning dan Server akan di download otomatis dari server</label>
+      <br>  
+      <br>  
     <!-- </form> -->
     <!-- http://localhost/web/unpam_project/absen_ci3_backend/receive_data -->
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -53,6 +55,7 @@
     <h3 id="h1" class="h3"></h3>
     <h3 id="h2" class="h3"></h3>
     <div id="balikan1"></div>
+    <label style="font-size: 10px;">v 1.0.2 ref 24-09-18</label>
   </body>
-  <script src="popup.js?v1"></script> <!-- Menambahkan skrip JavaScript -->
+  <script src="popup.js?v102"></script> <!-- Menambahkan skrip JavaScript -->
 </html>
