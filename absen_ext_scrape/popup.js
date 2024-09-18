@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
         let sekarang = new Date();
         let selisihMiliDetik = sekarang - waktuInput;
         let selisihMenit = Math.floor(selisihMiliDetik / 60000);
-        
         localStorage.setItem("sync", waktuInput+" "+sekarang+" "+waktuTersimpan);   
         chrome.storage.local.set({sync: waktuInput+" "+sekarang+" "+waktuTersimpan}, function() {
         });
@@ -68,12 +67,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 if(tipe=="get"){
                     localStorage.setItem("UrlLearn", url);   
                     chrome.storage.local.set({UrlLearn: url}, function() {
-                        console.log('UrlLearn : ' + url);
+                        // console.log('UrlLearn : ' + url);
                     });
                 }else{
                     localStorage.setItem("UrlServer", url);   
                     chrome.storage.local.set({UrlServer: url}, function() {
-                        console.log('UrlServer : ' + url);
+                        // console.log('UrlServer : ' + url);
                     });
                 }
             }
@@ -131,7 +130,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Tambahkan event listener untuk menerima pesan dari background.js
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    console.log(request+"ABCDE")
     var balikan = request.message
+    var UrlSrv  = request.UrlServer
+    var UrlELE  = request.UrlLearn
+    console.log(balikan+" "+UrlSrv+" "+UrlELE);
     var cetakBalikan = document.getElementById('balikan1'); 
     if (balikan) {
         cetakBalikan.innerHTML= request.message;

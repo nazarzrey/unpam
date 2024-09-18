@@ -47,7 +47,7 @@ function UrlCrawl(tipe){
     chrome.storage.local.get(['selisih'], function(result) {
         if (!result.selisih) {
             console.log("Data selisih tidak ditemukan jadi pakai 0");
-            backselisih = 0; 
+            backselisih = "z"; 
         }else{
           backselisih = result.selisih; 
         }
@@ -133,12 +133,25 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
             lg(queryResult[0].result);
             var url = tabUrl
             send_data(queryResult[0].result,url,Kls,Admin);
-            setTimeout(() => {              
-              lg(UrlCrawl("selisih")+" zzz");
-            }, 1500);
+            // lg(UrlCrawl("selisih")+"AABC")
             
-            // getUrl("get");
-            // getUrl("send");
+            getUrl("get");
+            getUrl("send");
+            // setTimeout(() => {              
+            //   if(UrlCrawl("selisih")=="z"){
+            //     lg("jalanin get ke server otomatis krna datanya gagal di get")
+            //     getUrl("get");
+            //     getUrl("send");
+            //   }else if(UrlCrawl("selisih")==""){
+            //     getUrl("get");
+            //     getUrl("send");
+            //     lg("jalanin get ke server otomatis krna datanya kosong")
+            //   }else if(UrlCrawl("selisih")>45000){
+            //     getUrl("get");
+            //     getUrl("send");
+            //     lg("jalanin get ke server otomatis setelah 45rb detik")
+            //   };
+            // }, 5000);
           });
       }else{
         let msg = "Url pada browser tidak sama dengan inputan URL...!!!"
@@ -195,7 +208,7 @@ function send_data(obj_data,url,kls,adm){
     if (typeof UriServer === 'undefined'){
       console.log("URL server blum di definiskan, silahkan refresh");    
       chrome.runtime.sendMessage({message: "URL server blum di definiskan, silahkan refresh"});
-      chrome.tabs.reload();
+      // chrome.tabs.reload(); //matikan dulu auto reload servernya supaya ga berat2in
       return;
     }
     fetch(UriServer, {
@@ -237,12 +250,11 @@ async function getUrl(tipe) {
       let url = data.url;
       if(url!=""){
           if(tipe=="get"){
-              localStorage.setItem("UrlLearn", url);   
-              chrome.storage.local.set({UrlLearn: url}, function() {
-                  console.log('UrlLearn : ' + url);
-              });
+              // chrome.storage.local.set({UrlLearn: url}, function() {
+              //     console.log('UrlLearn : ' + url);
+              // });              
+              chrome.runtime.sendMessage({UrlLearn: url});
           }else{
-              localStorage.setItem("UrlServer", url);   
               chrome.storage.local.set({UrlServer: url}, function() {
                   console.log('UrlServer : ' + url);
               });
