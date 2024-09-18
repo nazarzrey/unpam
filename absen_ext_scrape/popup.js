@@ -122,7 +122,9 @@ document.addEventListener('DOMContentLoaded', function () {
             h1.innerHTML = "";
             h2.innerHTML = "";
         }, 2500);
-        loadDataInput();
+        setTimeout(() => {
+            loadDataInput();
+        }, 500);
     });
     loadDataInput();
 });

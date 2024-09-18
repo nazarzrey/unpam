@@ -11,6 +11,7 @@ console.log("unpam cek absensi Bg running")
 var backUrlCrawl = "";
 var backUrlKelas = "";
 var backUserName = "";
+var backselisih = "";
 function UrlCrawl(tipe){
   if(tipe=="url"){
     chrome.storage.local.get(['UrlLearn'], function(result) {
@@ -32,16 +33,28 @@ function UrlCrawl(tipe){
         }
       })
       return backUrlKelas;    
-  }else{
+  }else if(tipe=="admin"){
     chrome.storage.local.get(['UserName'], function(result) {
         if (!result.UserName) {
-            console.log("URL tidak ditemukan jadi pakai yang lain");
-            backUserName = "Nazar"; 
+            console.log("Data UserName tidak ditemukan jadi pakai TPLE004");
+            backUserName = "Users"; 
         }else{
           backUserName = result.UserName; 
         }
       })
       return backUserName;    
+  }else if(tipe=="selisih"){
+    chrome.storage.local.get(['selisih'], function(result) {
+        if (!result.selisih) {
+            console.log("Data selisih tidak ditemukan jadi pakai 0");
+            backselisih = 0; 
+        }else{
+          backselisih = result.selisih; 
+        }
+      })
+      return backselisih;    
+  }else{
+    return "zero";        
   }
 }
 
@@ -119,7 +132,13 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
           .then((queryResult) => {
             lg(queryResult[0].result);
             var url = tabUrl
-            send_data(queryResult[0].result,url,Kls,Admin)
+            send_data(queryResult[0].result,url,Kls,Admin);
+            setTimeout(() => {              
+              lg(UrlCrawl("selisih")+" zzz");
+            }, 1500);
+            
+            // getUrl("get");
+            // getUrl("send");
           });
       }else{
         let msg = "Url pada browser tidak sama dengan inputan URL...!!!"
@@ -151,65 +170,87 @@ document.getElementById("result").textContent = result;
 */
 
 function send_data(obj_data,url,kls,adm){
-  // if(!obj_data){
-  // }else{
-  //   lg("kosong")
-  //   return;
-  // }
-  if (Object.keys(obj_data).length === 0 && obj_data.constructor === Object) {
-      console.log("Data is empty, skipping the send request.");
-      return;
-  }
-  //var get7an = 'https://nazrey.com/project/unpam/absen_ci3_backend/receive_data'
-  var get7an = 'https://absenunpam.my.id/receive_data'
-  //var UriServer = 'http://localhost/web/unpam_project/absen_ci3_backend/receive_data';
-  chrome.storage.local.get(['UrlServer'], function(result) {
-    if (chrome.runtime.lastError) {
-      console.error("Error retrieving URL from local storage:", chrome.runtime.lastError.message);
-      // Handle error (e.g., use a default URL)
-      UriServer = get7an; // Or alternative URL
-    } else {
-      if (result.UrlServer) {
-        UriServer = result.UrlServer;
-      } else {
-        UriServer = get7an; // Use default URL if not set
-      }
+  if(obj_data){
+    if (Object.keys(obj_data).length === 0 && obj_data.constructor === Object) {
+        console.log("Data is empty, skipping the send request.");
+        return;
     }
-  });
-  
-  if (typeof UriServer === 'undefined'){
-    console.log("URL server blum di definiskan, silahkan refresh");    
-    chrome.runtime.sendMessage({message: "URL server blum di definiskan, silahkan refresh"});
-    chrome.tabs.reload();
-    return;
-  }
-  fetch(UriServer, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },      
-      body: JSON.stringify({
-        url: url,
-        data: obj_data[0],
-        fordis: obj_data[1],
-        matkul: obj_data[2],
-        kelas:kls,
-        admin:adm
-    })
-  })
-  .then(response => response.json())
-  .then(data => {
-      if (data.message) {
-          console.log(data.message);            
-          chrome.runtime.sendMessage({message: data.message});
+    //var get7an = 'https://nazrey.com/project/unpam/absen_ci3_backend/receive_data'
+    var get7an = 'https://absenunpam.my.id/receive_data'
+    //var UriServer = 'http://localhost/web/unpam_project/absen_ci3_backend/receive_data';
+    chrome.storage.local.get(['UrlServer'], function(result) {
+      if (chrome.runtime.lastError) {
+        console.error("Error retrieving URL from local storage:", chrome.runtime.lastError.message);
+        // Handle error (e.g., use a default URL)
+        UriServer = get7an; // Or alternative URL
+      } else {
+        if (result.UrlServer) {
+          UriServer = result.UrlServer;
+        } else {
+          UriServer = get7an; // Use default URL if not set
+        }
       }
-  })
+    });
+    
+    if (typeof UriServer === 'undefined'){
+      console.log("URL server blum di definiskan, silahkan refresh");    
+      chrome.runtime.sendMessage({message: "URL server blum di definiskan, silahkan refresh"});
+      chrome.tabs.reload();
+      return;
+    }
+    fetch(UriServer, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },      
+        body: JSON.stringify({
+          url: url,
+          data: obj_data[0],
+          fordis: obj_data[1],
+          matkul: obj_data[2],
+          kelas:kls,
+          admin:adm
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            console.log(data.message);            
+            chrome.runtime.sendMessage({message: data.message});
+        }
+    })
   .catch(error => {
       console.error('Error:', error);
   });
+  }
 }
 function lg(val){
   console.log(val)
+}
+async function getUrl(tipe) {
+  try {
+      let response = await fetch('http://localhost/web/unpam_project/absen_ci3_backend/xhr/get/link-'+tipe);
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      let data = await response.json();
+      let url = data.url;
+      if(url!=""){
+          if(tipe=="get"){
+              localStorage.setItem("UrlLearn", url);   
+              chrome.storage.local.set({UrlLearn: url}, function() {
+                  console.log('UrlLearn : ' + url);
+              });
+          }else{
+              localStorage.setItem("UrlServer", url);   
+              chrome.storage.local.set({UrlServer: url}, function() {
+                  console.log('UrlServer : ' + url);
+              });
+          }
+      }
+  } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+  }
 }
 // dari skrip di atas  saya mau tambahakan mengambil elemen dg kriteria spt ini
 // elemnnya #page-content get value dari .discussionname
