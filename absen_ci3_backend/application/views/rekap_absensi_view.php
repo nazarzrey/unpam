@@ -113,8 +113,9 @@
         <tbody>
 
             <?php 
-            // dbg($rekap_absensi);
+            dbg($rekap_absensi);
             $z = 1;
+            $mangkir = array();
             foreach ($rekap_absensi as $rekap): ?>
                 <tr class='tr'>
                     <?php

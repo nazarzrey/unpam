@@ -11,6 +11,15 @@ class Absensi_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    public function get_matkul_aktif($week) {
+        //b.`dosen`,b.`id_matkul`,b.`matkul`,b.`matkul_singkat`
+        $sql = "SELECT GROUP_CONCAT(DISTINCT(id_matkul)) AS matkul_aktif FROM unpam_dosen_matkul a 
+                LEFT JOIN unpam_matkul b ON a.`matkul_dosen`=b.`dosen`
+                WHERE WEEK(a.updrec_date) = '$week' "; 
+                // GROUP BY matkul_dosen
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
 
     public function get_all_mahasiswa() {
         $this->db->select('nama,substr(nim,1,12) as nim,keter');

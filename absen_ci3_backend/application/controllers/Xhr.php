@@ -240,7 +240,7 @@ class Xhr extends Settings
                     $this->load->view("absensimahasiswa",$data);
                 }
 			}else{
-                echo "variabel NIM belum di pasang..!!";
+                echo "variabel NIM belum di pasang gitu..!!";
             }
         }elseif($value=="menu"){
             // echo $value;
@@ -257,6 +257,23 @@ class Xhr extends Settings
             $qry = $this->db->query($sql);
             $data = each_query($qry);
             echo json_encode($data);
+		}elseif($value=="mangkir"){
+            $this->load->model('Absensi_model');
+            $mahasiswa_data = $this->Absensi_model->get_all_mahasiswa();
+            $rekap_absensi = [];
+            foreach ($mahasiswa_data as $mahasiswa) {
+                $rekap_absensi[$mahasiswa['nim']] = [
+                    'nim' => $mahasiswa['nim'],
+                    'nama' => trim($mahasiswa['nama']),                
+                    'keter' => $mahasiswa['keter']
+                ];
+                // dbg($matkul_data);
+                foreach ($matkul_data as $matkul) {
+                    $rekap_absensi[$mahasiswa['nim']][$matkul['id_matkul']] = 0;
+                }
+            }
+            // $data = each_query($qry);
+            echo json_encode($rekap_absensi);
 		}elseif($value=="makalah"){
 				echo "konsep makalh di mari";
         }else{
@@ -275,6 +292,7 @@ class Xhr extends Settings
 
         // Ambil data absensi, mahasiswa, matkul, dan dosen matkul
         $absensi_data = $this->Absensi_model->get_absensi_by_week($week_number);
+        $matkul_aktif = $this->Absensi_model->get_matkul_aktif($week_number);
         $mahasiswa_data = $this->Absensi_model->get_all_mahasiswa();
         $matkul_data = $this->Absensi_model->get_all_matkul();
         $dosen_matkul_data = $this->Absensi_model->get_all_dosen_matkul();
@@ -293,12 +311,35 @@ class Xhr extends Settings
                 $rekap_absensi[$mahasiswa['nim']][$matkul['id_matkul']] = 0;
             }
         }
-
+        dbg($matkul_aktif[0]["matkul_aktif"]);
         // Populate attendance data
+        // dbg($absensi_data);
+        // foreach ($absensi_data as $absensi) {
+        //     $nnim = substr($absensi['nim'], 0, 12);
+        //     $nnam = $absensi['nama'];
+        //     if($nnim!="Dosen"){
+        //         // cek exist di data matkul_aktif dari $absensi['id_matkul'];
+        //         if (isset($rekap_absensi[$nnim][$absensi['id_matkul']])) {
+        //             $rekap_absensi[$nnim][$absensi['id_matkul']]++;
+        //         }
+        //     }
+        // }
+
+                
+        // $rekap_absensi = []; // Inisialisasi array rekap absensi
+        $mtkul_akt = $matkul_aktif[0]["matkul_aktif"];
         foreach ($absensi_data as $absensi) {
             $nnim = substr($absensi['nim'], 0, 12);
-            if (isset($rekap_absensi[$nnim][$absensi['id_matkul']])) {
-                $rekap_absensi[$nnim][$absensi['id_matkul']]++;
+            $nnam = $absensi['nama'];
+            if ($nnim != "Dosen") {
+                // Cek jika id_matkul ada dalam matkul_aktif
+                if (strpos($mtkul_akt,$absensi['id_matkul']) !== false) {
+                    // Jika ada, increment rekap absensi
+                    if (!isset($rekap_absensi[$nnim][$absensi['id_matkul']])) {
+                        $rekap_absensi[$nnim][$absensi['id_matkul']] = 0;
+                    }
+                    $rekap_absensi[$nnim][$absensi['id_matkul']]++;
+                }
             }
         }
 
@@ -325,6 +366,7 @@ class Xhr extends Settings
         $data["week"] = $week_number;
         $data['rekap_absensi'] = $rekap_absensi;
         $data['matkul_data'] = $matkul_data;
+        $data['matkul_aktif'] = $matkul_aktif;
         $this->load->view('rekap_absensi_view', $data);
     }
 
