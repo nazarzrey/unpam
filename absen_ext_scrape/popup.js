@@ -6,18 +6,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var saveButton = document.getElementById('saveButton');
     // var targetUrlSH = document.getElementById('targetUrl'); //alias aja
     var urlLearning = document.getElementById('urlLearn');
-    var UrlServer = document.getElementById('UrlServer');   
-
-    // function hitungSelisihMenit(waktuTersimpan) {
-    //     let waktuInput = new Date(waktuTersimpan).toLocaleString();
-    //     let sekarang = new Date().toLocaleString();
-    //     let selisihMiliDetik = sekarang - waktuInput;
-    //     let selisihMenit = Math.floor(selisihMiliDetik / 60000);
-    //     return selisihMenit;
-    // }
-    
-    // var lastSync = new Date().toLocaleString();
-    // var selisih = hitungSelisihMenit();
+    var UrlServer = document.getElementById('UrlServer'); 
+    var mstServer = document.getElementById('divgetServer');   
+    var syncServer = document.getElementById('syncServer');  
     function hitungSelisihMenit(waktuTersimpan) {
         // Konversi waktu tersimpan ke objek Date
         if(!isValid(waktuTersimpan)){
@@ -53,6 +44,18 @@ document.addEventListener('DOMContentLoaded', function () {
         var storedDataAdmin = localStorage.getItem("UserName");
         var storeLearnURL = localStorage.getItem("UrlLearn");
         var storeServerURL = localStorage.getItem("UrlServer");
+        var storeServerSync = localStorage.getItem("syncServer");
+        
+        if(storedDataAdmin=="Nazar"){
+            urlLearning.removeAttribute('readonly');
+            urlLearning.removeAttribute('class');
+            UrlServer.removeAttribute('readonly');
+            UrlServer.removeAttribute('class');
+            mstServer.style.display = 'block';
+            syncServer.removeAttribute('readonly');
+            syncServer.removeAttribute('class');
+            //divgetServer
+        }
         console.log(storeLearnURL+" load ");
         console.log(storeServerURL+" load ");
         if (storedDataAdmin) {
@@ -64,6 +67,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (storeServerURL) {
             UrlServer.value = storeServerURL;
         }
+        if (storeServerSync) {
+            syncServer.value = storeServerSync;
+        }
         if (storedDataKLS) {
             inputKLS.value = storedDataKLS;
         } else {
@@ -74,8 +80,23 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     async function getUrl(tipe) {
+        //return;
+        let ceksyncserver = localStorage.getItem("syncServer")
+        if(ceksyncserver){
+            if(ceksyncserver!=syncServer.value){
+                localStorage.setItem("syncServer", syncServer.value);   
+                chrome.storage.local.set({syncServer: syncServer.value}, function() {
+                    console.log('new sycn server : ' + url);
+                });
+            }
+        }else{
+            localStorage.setItem("syncServer", syncServer.value);   
+            chrome.storage.local.set({syncServer: syncServer.value}, function() {
+                console.log('new sycn server : ' + url);
+            });
+        }
         try {
-            let response = await fetch('https://absenunpam.my.id/xhr/get/link-'+tipe);
+            let response = await fetch(syncServer.value+'/xhr/get/link-'+tipe);
             // let response = await fetch('http://localhost/web/unpam_project/absen_ci3_backend/xhr/get/link-'+tipe);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -94,11 +115,30 @@ document.addEventListener('DOMContentLoaded', function () {
                         // console.log('UrlServer : ' + url);
                     });
                 }
+
             }
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
         }
     }    
+    saveServer.addEventListener('click', function () {
+        let  xstoreServerSync = localStorage.getItem("syncServer");
+        console.log(xstoreServerSync+" "+syncServer.value)
+        let newSynServer = ""
+        if (xstoreServerSync) {            
+            if(syncServer.value!=xstoreServerSync){
+                newSynServer=  syncServer.value ;
+            }else{
+                newSynServer= xstoreServerSync;
+            }
+        }else{
+            newSynServer=  syncServer.value ;
+        }        
+        localStorage.setItem("syncServer", newSynServer );   
+        chrome.storage.local.set({syncServer: newSynServer }, function() {
+            console.log('syncServer : ' + newSynServer );
+        });
+    })
     
     saveButton.addEventListener('click', function () {
         var inputKLSValue = inputKLS.value.trim();

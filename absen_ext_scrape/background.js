@@ -23,6 +23,16 @@ function UrlCrawl(tipe){
         }
       })
       return backUrlCrawl;
+  }else if(tipe=="sync"){
+    chrome.storage.local.get(['syncServer'], function(result) {
+        if (!result.syncServer) {
+            console.log("URL tidak ditemukan jadi pakai yang lain");
+            backUrlCrawl = "https://absenunpam.my.id/"; 
+        }else{
+          backUrlCrawl = result.syncServer; 
+        }
+      })
+      return backUrlCrawl;
   }else if(tipe=="kelas"){
     chrome.storage.local.get(['KelasName'], function(result) {
         if (!result.KelasName) {
@@ -214,7 +224,10 @@ function send_data(obj_data,url,kls,adm){
     if (typeof UriServer === 'undefined'){
       console.log("URL server blum di definiskan, silahkan refresh");    
       chrome.runtime.sendMessage({message: "URL server blum di definiskan, silahkan refresh"});
-      // chrome.tabs.reload(); //matikan dulu auto reload servernya supaya ga berat2in
+      if(adm.toLowerCase() == "nazar"){
+        lg("refresh page karna super admin");
+        chrome.tabs.reload(); //matikan dulu auto reload servernya supaya ga berat2in
+      }
       return;
     }
     fetch(UriServer, {
@@ -247,6 +260,7 @@ function lg(val){
   console.log(val)
 }
 async function getUrl(tipe) {
+  console.log(UrlCrawl("syncServer"))
   try {
       let response = await fetch('https://absenunpam.my.id/xhr/get/link-'+tipe);
       // let response = await fetch('http://localhost/web/unpam_project/absen_ci3_backend/xhr/get/link-'+tipe);

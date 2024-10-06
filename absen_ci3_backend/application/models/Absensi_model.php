@@ -22,8 +22,16 @@ class Absensi_model extends CI_Model {
         // $this->db->from('unpam_matkul');
         // $query = $this->db->get();
         // return $query->result_array();
+        
+        if($this->session->userdata('nim')!=""){
+            $value2 = $this->session->userdata('nim');
+            $kls = $this->session->userdata('kelas');
+        }else{
+            $kls = "TPLE004";
+        }
+        
         $sql = "SELECT a.*,date_format(max(b.`updrec_date`),'%d-%m-%y %H:%i') as sync FROM unpam_matkul a left join unpam_absen_log b
-        on trim(a.`dosen`)=trim(b.`obj_dosen`) where semester=(SELECT konten FROM unpam_setting WHERE jenis='semester') group by a.`dosen`,matkul;";
+        on trim(a.`dosen`)=trim(b.`obj_dosen`) where semester=(SELECT konten FROM unpam_setting WHERE jenis='semester') and kelas='$kls' group by a.`dosen`,matkul;";
         $query = $this->db->query($sql);
         return $query->result_array();
     }

@@ -53,7 +53,6 @@ class Xhr extends Settings
     }
     public function get($value = "", $value2 = "")
     {
-		//dbg($this->uri->segments);
         if($value=="link-get"){
             header('Access-Control-Allow-Origin: *');
             header('Content-type: application/json');
@@ -208,7 +207,6 @@ class Xhr extends Settings
         }elseif($value=="log_dtl_siswa"){
             if($this->session->userdata('nim')!=""){
                 $value2 = $this->session->userdata('nim');
-                $kls = $this->session->userdata('kelas');
             }
             if($value2!=""){
                 $data[] = "";
@@ -220,7 +218,7 @@ class Xhr extends Settings
                 // echo $sql;
                 $week   = single_query($this->db->query($sql));
                 $dosen  = "SELECT a.*,IFNULL(DATE_FORMAT(MAX(b.updrec_date),'%y-%m-%d %H:%i'),'') AS sync FROM unpam_matkul a LEFT JOIN unpam_absen_log b ON a.`dosen`=b.`obj_dosen`
-                            WHERE semester='".$this->semester("")."' and kelas='$kls' 
+                            WHERE semester='".$this->semester("")."'
                             GROUP BY a.`dosen`,matkul ORDER BY dosen ASC";
                 $dosen  = $this->db->query($dosen);
                 $result = each_query($dosen);
@@ -239,7 +237,7 @@ class Xhr extends Settings
                 }else{
                     $this->load->view("absensimahasiswa",$data);
                 }
-			}else{
+            }else{
                 echo "variabel NIM belum di pasang..!!";
             }
         }elseif($value=="menu"){
@@ -257,8 +255,6 @@ class Xhr extends Settings
             $qry = $this->db->query($sql);
             $data = each_query($qry);
             echo json_encode($data);
-		}elseif($value=="makalah"){
-				echo "konsep makalh di mari";
         }else{
             echo "variabel belum di pasang..!!";
         }
@@ -354,13 +350,12 @@ class Xhr extends Settings
     {
         $json_data = file_get_contents('php://input');
         $data = json_decode($json_data, true);
-        // dbg($data['data'][0]['nama']);
+        
         if (empty($data)) {
             http_response_code(400);
             echo json_encode(array("message" => "No data received."));
             return;
         }
-        $obj_dosen  = isset($data['data'][0]['nama']) ? $data['data'][0]['nama'] : null;
         $obj_data   = isset($data['data']) ? $data['data'] : null;
         $obj_url    = isset($data['url']) ? $data['url'] : null;
         $obj_kelas  = isset($data['kelas']) ? $data['kelas'] : null;
@@ -368,7 +363,6 @@ class Xhr extends Settings
         $admin      = isset($data['admin']) ? $data['admin'] : null;
         $matkul     = isset($data['matkul']) ? $data['matkul'] : null;
         $testing    = isset($data['testing']) ? $data['testing'] : true;
-        $obj_smster = "";
         $sks        = "";
         if(is_array($matkul)){
             $mtkul  = str_replace(array("[","]"),"",$matkul[0]["pelajaran"]);
@@ -376,17 +370,8 @@ class Xhr extends Settings
             $matkl = explode("#",substr($mtkul,2,strlen($mtkul)));
             if(is_array($matkl)){
                 $matkul = trim($matkl[0]);
-                $newobj_kelas = explode(" ",trim($matkl[1]))[0];
-                $arr_kelas   = explode(" ",$newobj_kelas);
-                // if($obj_kelas == null){
-                //     $obj_kelas = right($newobj_kelas,7);
-                // }
-                // 'insert nama kelas dari dosen inputan awal'
-                if (!empty($obj_dosen)) {
-                    if (!$this->cekDataDosen($obj_dosen)) {                        
-                        $obj_kelas = right($newobj_kelas,7);                   
-                        $obj_smster = left($newobj_kelas,2);
-                    }
+                if($obj_kelas == null){
+                    $obj_kelas = explode(" ",trim($matkl[1]))[0];
                 }
             }
         };
@@ -427,7 +412,7 @@ class Xhr extends Settings
         //jagaan supaya ga di terusin 
         if ($existing_data) {
             http_response_code(409); // Konflik
-            echo json_encode(array("message" => "data log sudah pernah masuk bre"));
+            echo json_encode(array("message" => "data log sudah pernah masuk"));
             return;
         }
         
@@ -510,12 +495,7 @@ class Xhr extends Settings
         if($dosen!="" && $matkul!=""){
             $sql = "select count(1) as ttl from unpam_matkul where dosen='$dosen' and matkul='$matkul' ";
             if(single_query($this->db->query($sql))->ttl == 0){
-                
-                if (empty($obj_smster)){
-                    $upd = "insert into unpam_matkul (dosen,matkul,sks,updrec_date,kelas,updrec_by) values ('$dosen','$matkul','$sks',now(),'$kelas','$admin');";
-                }else{
-                    $upd = "insert into unpam_matkul (dosen,matkul,sks,updrec_date,kelas,updrec_by,semester) values ('$dosen','$matkul','$sks',now(),'$kelas','$admin','$obj_smster');";
-                }
+                $upd = "insert into unpam_matkul (dosen,matkul,sks,updrec_date,updrec_by) values ('$dosen','$matkul','$sks',now(),'$admin');";
                 $this->db->query($upd);
             }
         }
@@ -523,16 +503,6 @@ class Xhr extends Settings
         echo json_encode(array("message" => $arr));
     }   
     
-    public function cekDataDosen($dosen = "")
-    {
-        
-        $sql = "select count(1) as ttl from unpam_matkul where dosen='$dosen'";
-        if(single_query($this->db->query($sql))->ttl == 0){
-            return false;
-        }else{
-            return true;
-        }
-    }
 
     public function index($value = "", $value2 = "")
     {

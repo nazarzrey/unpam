@@ -67,6 +67,8 @@ $route['absensiswa']         = 'xhr/get/log_dtl_siswa';
 $route['absensiswa/(:num)']         = 'xhr/get/log_dtl_siswa/$1';
 $route['sync']         = 'xhr/get/sync';
 $route['login']         = 'Login';
+//buat bin makalah
+$route['makalah']         = 'xhr/get/makalah';
 // $route['logout']         = 'Login/logout';
 $route['dashboard']        = 'xhr/get/log_dtl_siswa/$1';
 $route['dashboard/(:num)']        = 'xhr/get/log_dtl_siswa/$1/$2';

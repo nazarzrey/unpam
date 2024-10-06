@@ -21,6 +21,7 @@
       .targetUrl{display: none;}
       #balikan1{font-style: italic;font-size: 14px;}
       .ro{background: #e0e0e0;border:solid 1px #ccc}
+      #divgetServer{display: none;}
     </style>
     <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
     <title>React App</title>
@@ -44,6 +45,11 @@
       <div id="targetUrl">
         <label for="UrlServer">Url Target :</label><br>
         <input type="text" id="UrlServer" class="ro" readonly value="https://absenunpam.my.id/receive_data"  style="width:98%"><br>
+      </div>
+      <div id="divgetServer">
+        <label for="getServer">Url get Sync :</label><br>
+        <input type="text" id="syncServer" class="ro" readonly value="https://absenunpam.my.id/"  style="width:98%"><br>
+        <button id="saveServer">Save Server</button><br>
       </div>
       <label style="font-size: 11px;">Url Elearning dan Server akan di download otomatis dari server</label>
       <br>  

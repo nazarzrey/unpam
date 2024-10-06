@@ -106,7 +106,7 @@
             <tr>
                 <th class='t1'>Nama</th>
                 <?php foreach ($matkul_data as $matkul): ?>
-                    <th class='t2'><?php echo substr($matkul['matkul_singkat'], 0, 3); ?></th>
+                    <th class='t2'><?php echo substr(empty($matkul['matkul_singkat'])?"":$matkul['matkul_singkat'], 0, 3); ?></th>
                 <?php endforeach; ?>
             </tr>
         </thead>

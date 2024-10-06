@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= base_url("assets/css/custom.css") ?>">
     <style>
         table { border-collapse: collapse; width: 100%; }
         body { font-family: Verdana, sans-serif; margin: 0; }
@@ -124,7 +125,7 @@
     }
         echo "<tr>";
         echo "<td class='cl'>" . Uw($hasil->dosen) . "</td>";
-        echo "<td class=''><span>" . substr($hasil->matkul_singkat, 0, 3) . "</span></td>";
+        echo "<td class=''><span>" . substr(empty($hasil->matkul_singkat)?"":$hasil->matkul_singkat, 0, 3) . "</span></td>";
         echo "<td class='ce desktop'>" . $hasil->sks . "</td>";
         echo "<td class='ce'>" . $hasil->min_absen . "</td>";
         for ($z = $fweek; $z <= $lweek; $z++) {
@@ -290,6 +291,22 @@
                 }
             });
         });
+		const tds = document.querySelectorAll('.tdc');
+
+		// Tambahkan event listener untuk setiap elemen td
+		tds.forEach(function(td) {
+			td.addEventListener('click', function() {
+				td.style.backgroundColor = 'orange';
+			});
+		});
+		//const judul = document.querySelectorAll('.judul');
+		const judul = document.querySelector('.judul');
+		
+		judul.addEventListener('click', function() {
+			tds.forEach(function(td) {
+				td.style.backgroundColor = 'white'; // Reset semua background td menjadi putih
+			});
+		});
     </script>
 </body>
 </html>
