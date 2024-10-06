@@ -113,7 +113,7 @@
         <tbody>
 
             <?php 
-            // dbg($rekap_absensi);
+            dbg($rekap_absensi);
             $z = 1;
             foreach ($rekap_absensi as $rekap): ?>
                 <tr class='tr'>

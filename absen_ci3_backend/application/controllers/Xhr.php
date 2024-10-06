@@ -302,7 +302,7 @@ class Xhr extends Settings
             }
         }
 
-        // dbg($absensi_data);
+        dbg($absensi_data);
         // Mark subjects with no attendance as offline
         foreach ($matkul_data as $matkul) {
             $id_matkul = $matkul['id_matkul'];
