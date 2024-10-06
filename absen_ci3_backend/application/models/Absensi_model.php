@@ -7,7 +7,7 @@ class Absensi_model extends CI_Model {
         $this->db->join('unpam_matkul m', 'm.dosen = dm.matkul_dosen', 'leftx');
         $this->db->where('WEEK(a.absen_time)', $week);
         
-    echo $this->db->get_compiled_select();
+    // echo $this->db->get_compiled_select();
         $query = $this->db->get();
         return $query->result_array();
     }

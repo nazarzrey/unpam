@@ -302,7 +302,7 @@ class Xhr extends Settings
             }
         }
 
-        dbg($absensi_data);
+        // dbg($absensi_data);
         // Mark subjects with no attendance as offline
         foreach ($matkul_data as $matkul) {
             $id_matkul = $matkul['id_matkul'];
@@ -514,7 +514,7 @@ class Xhr extends Settings
                 if (empty($obj_smster)){
                     $upd = "insert into unpam_matkul (dosen,matkul,sks,updrec_date,kelas,updrec_by) values ('$dosen','$matkul','$sks',now(),'$kelas','$admin');";
                 }else{
-                    $upd = "insert into unpam_matkul (dosen,matkul,sks,updrec_date,kelas,updrec_by,semester) values ('$dosen','$matkul','$sks',now(),'$kelas','$admin','$obj_smster');";
+                    $upd = "insert into unpam_matkul (dosen,matkul,sks,updrec_date,kelas,updrec_by,semester) values ('$dosen','$matkul','$sks',now(),'$kelas','$admin','$obj_semest');";
                 }
                 $this->db->query($upd);
             }

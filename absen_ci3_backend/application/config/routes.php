@@ -75,6 +75,7 @@ $route['dashboard/(:num)']        = 'xhr/get/log_dtl_siswa/$1/$2';
 $route['menu']        = 'xhr/get/menu';
 $route['grup']        = 'xhr/get/grup';
 $route['grup/(:num)']        = 'xhr/get/grup/$1';
+$route['mangkir/(:num)']        = 'xhr/get/mangkir/$1';
 $route['nilai']        = 'penilaian';
 $route['save_nilai']        = 'penilaian/save_nilai';
 $route['nilai/(:any)']        = 'penilaian/nilai/$1';
