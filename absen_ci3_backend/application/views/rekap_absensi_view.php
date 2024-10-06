@@ -51,7 +51,7 @@
         .checked {
             color: green;
         }
-        .btn,.btn1{
+        .btn,.btn1,.btn2{
             padding:5px;
             border: radius 5px;
             background:green;
@@ -61,11 +61,15 @@
             border-radius:5px;
         }
         .btn1{background:blue}
+        .btn2{background:tomato}
         .susulan{
             color:blue
         }
         .tr:hover{border:solid 2px;background:#e6fbff !important;cursor:pointer}
         .tno{width: 30px;}
+        .popup{position: absolute;top:1%;right:1px;background:#fff;border:solid 1px;z-index: 999;
+            font-size:12px;padding:10px
+        }
     </style>
 </head>
 <body>
@@ -83,6 +87,7 @@
     <div style="float:left">
     <a class='btn' href="<?= base_url('grup/'. (($week - 1)>=8?($week - 1):"#")); ?>">Prev</a>
     <a class='btn1' href="<?= base_url('grup/'. (($week + 1)<=date("W")-1?($week + 1):"#")); ?>">Next</a>
+    <a class='btn2' href="#">Tunggakan</a>
     </div>
     <div style="float:right">
         <input type="checkbox" id="toggleCheckbox">
@@ -113,9 +118,10 @@
         <tbody>
 
             <?php 
-            dbg($rekap_absensi);
+            // dbg($rekap_absensi);
             $z = 1;
             $mangkir = array();
+            $nm = "";
             foreach ($rekap_absensi as $rekap): ?>
                 <tr class='tr'>
                     <?php
@@ -130,8 +136,11 @@
                     <td class=''><?= $z ?></td>
                     <td class='t1 tl <?= $csus ?>'><?php echo Uw($rekap['nama'])." ".$susul; ?></td>
                     <?php
+                    $mangkir_dtl = "";
+                    // dbg($matkul_data);
                     foreach ($matkul_data as $matkul) {
                         $id_matkul = $matkul['id_matkul'];
+                        $kd_matkul = $matkul['matkul_singkat'];
                         $absen_count = $rekap[$id_matkul];
                         $min_absen = $matkul['min_absen'];
                         if ($absen_count == 'Offline') {
@@ -139,6 +148,7 @@
                         } else {
                             if ($absen_count == 0) {
                                 $class = "merah";
+                                $mangkir_dtl .= $kd_matkul.",";
                             } elseif ($absen_count < $min_absen) {
                                 $class = "kurang";
                             } else {
@@ -147,11 +157,25 @@
                             echo "<td class='t2 $class'>" . $absen_count . "</td>";
                         }
                     }
+                    if($nm!=$rekap["nama"]){
+                        if(!empty($mangkir_dtl)){
+                            $matkul = rtrim($mangkir_dtl, ',');
+                            $mangkir[] = $rekap["nama"]." (". $matkul.")";
+                        };
+                    }       
+                    $nm = $rekap["nama"];             
                     ?>
                 </tr>
             <?php $z++; endforeach; ?>
         </tbody>
     </table>
+    <div class='popup'>
+        
+    <?php 
+    foreach($mangkir as $key => $value){
+        echo $value."<br/>";
+    };?>
+    </div>
     <script>
         document.getElementById('toggleCheckbox').addEventListener('change', function() {
             const isChecked = this.checked;

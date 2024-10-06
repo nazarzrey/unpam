@@ -311,37 +311,39 @@ class Xhr extends Settings
                 $rekap_absensi[$mahasiswa['nim']][$matkul['id_matkul']] = 0;
             }
         }
-        dbg($matkul_aktif[0]["matkul_aktif"]);
+        // dbg($matkul_aktif[0]["matkul_aktif"]);
         // Populate attendance data
         // dbg($absensi_data);
-        // foreach ($absensi_data as $absensi) {
-        //     $nnim = substr($absensi['nim'], 0, 12);
-        //     $nnam = $absensi['nama'];
-        //     if($nnim!="Dosen"){
-        //         // cek exist di data matkul_aktif dari $absensi['id_matkul'];
-        //         if (isset($rekap_absensi[$nnim][$absensi['id_matkul']])) {
-        //             $rekap_absensi[$nnim][$absensi['id_matkul']]++;
-        //         }
-        //     }
-        // }
-
-                
-        // $rekap_absensi = []; // Inisialisasi array rekap absensi
         $mtkul_akt = $matkul_aktif[0]["matkul_aktif"];
         foreach ($absensi_data as $absensi) {
             $nnim = substr($absensi['nim'], 0, 12);
             $nnam = $absensi['nama'];
-            if ($nnim != "Dosen") {
-                // Cek jika id_matkul ada dalam matkul_aktif
+            if($nnim!="Dosen"){
                 if (strpos($mtkul_akt,$absensi['id_matkul']) !== false) {
-                    // Jika ada, increment rekap absensi
-                    if (!isset($rekap_absensi[$nnim][$absensi['id_matkul']])) {
-                        $rekap_absensi[$nnim][$absensi['id_matkul']] = 0;
+                    if (isset($rekap_absensi[$nnim][$absensi['id_matkul']])) {
+                        $rekap_absensi[$nnim][$absensi['id_matkul']]++;
                     }
-                    $rekap_absensi[$nnim][$absensi['id_matkul']]++;
                 }
             }
         }
+
+                
+        // // $rekap_absensi = []; // Inisialisasi array rekap absensi
+        // $mtkul_akt = $matkul_aktif[0]["matkul_aktif"];
+        // foreach ($absensi_data as $absensi) {
+        //     $nnim = substr($absensi['nim'], 0, 12);
+        //     $nnam = $absensi['nama'];
+        //     if ($nnim != "Dosen") {
+        //         // Cek jika id_matkul ada dalam matkul_aktif
+        //         if (strpos($mtkul_akt,$absensi['id_matkul']) !== false) {
+        //             // Jika ada, increment rekap absensi
+        //             if (!isset($rekap_absensi[$nnim][$absensi['id_matkul']])) {
+        //                 $rekap_absensi[$nnim][$absensi['id_matkul']] = 0;
+        //             }
+        //             $rekap_absensi[$nnim][$absensi['id_matkul']]++;
+        //         }
+        //     }
+        // }
 
         // dbg($absensi_data);
         // Mark subjects with no attendance as offline
