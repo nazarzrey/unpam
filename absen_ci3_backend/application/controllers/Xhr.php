@@ -327,7 +327,7 @@ class Xhr extends Settings
             $nnim = substr($absensi['nim'], 0, 12);
             $nnam = $absensi['nama'];
             if($nnim!="Dosen"){
-                if (strpos($mtkul_akt,$absensi['id_matkul']) !== false) {
+                if (strpos($mtkul_akt,(string)$absensi['id_matkul']) !== false) {
                     if (isset($rekap_absensi[$nnim][$absensi['id_matkul']])) {
                         $rekap_absensi[$nnim][$absensi['id_matkul']]++;
                     }
