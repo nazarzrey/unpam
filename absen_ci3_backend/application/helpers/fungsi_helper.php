@@ -1291,3 +1291,15 @@ if (!function_exists('getLastDateOfCurrentWeek')) {
 		];
 	}
 }
+
+if (!function_exists('char_len')) {
+	function char_len($value,$char,$rms) {
+		$len_value = strlen(trim($value));
+		$sisa_char = $rms - $len_value;
+		$hasil = "";
+		for($z=0;$z<=$sisa_char;$z++){
+			$hasil .= $char;
+		}
+		return $value.$hasil;
+	}
+}

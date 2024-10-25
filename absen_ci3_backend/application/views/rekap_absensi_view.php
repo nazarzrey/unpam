@@ -77,6 +77,9 @@
         #copypopup:hover,
         .popupclose:hover{background:tomato}
         #copypopup img{width: 32px;}
+        .data_dtl{
+            font-family:'Courier New', Courier, monospace
+        }
     </style>
 </head>
 <body>
@@ -194,15 +197,36 @@
         //echo $hadir;
         // dbg($mangkir);
         if($hadir>50){
-            echo "<b>Absen yang masih belum lengkap</b>";
+            
+            echo "<b>Absen E-learning yang masih belum lengkap</b>";
             echo "<hr>";
+            echo "<br>";
             foreach($mangkir as $key => $value){
                 echo $value."<br/>";
             }
             echo "<br>";
+            echo "<div class='data_dtl'>";
             foreach($matkul_aktif_link as $link){
-                echo $link["matkul_singkat"]." - ".$link["matkul_url"]."<br>";
+                // echo char_len("Matkul","&nbsp;",8)." : ".$link["matkul"]." - ".$link["matkul_singkat"]." *(".$link["matkul_fordis"].")*";  
+                // echo "<br/>";
+                // echo char_len("Dosen","&nbsp;",8)." : ".$link["matkul_dosen"];
+                // echo "<br/>";
+                // echo char_len("Url","&nbsp;",8)." : " .$link["matkul_url"];
+                // echo "<br/>";
+                // echo char_len("Last Sync","&nbsp;",8)." : " .$link["sync"];
+                // echo "<br/>";
+                // echo "<br/>";
+                echo "*".$link["matkul_singkat"]." (_".str_replace("FORUM DISKUSI ","FORDIS ",$link["matkul_fordis"])."_) lastsync ".$link["sync"]." * ";  
+                // echo "<br/>";
+                // echo char_len("Dosen","&nbsp;",8)." : ".$link["matkul_dosen"];
+                echo "<br/>";
+                echo $link["matkul_url"];
+                // echo "<br/>";
+                // echo char_len("Last Sync","&nbsp;",8)." : " .$link["sync"];
+                // echo "<br/>";
+                echo "<br/>";
             }
+            echo "</div>";
         }
         //}
         
@@ -224,20 +248,20 @@
         }
     })
     copycontent.addEventListener('click', function () {
-        const uri = cell.getAttribute('uri');
-        const target = document.getElementById('target_link');
+        // const uri = cell.getAttribute('uri');
+        const target = popupcontent
         if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(uri)
+            navigator.clipboard.writeText(target.innerText)
                 .then(() => {
                     console.log('URI copied to clipboard successfully!');
-                    target.innerHTML = 'URI copied to clipboard successfully!';
+                    alert("Sudah di Copy silahkan tambahin gula..  :D")
                 })
                 .catch(err => {
                     console.error('Failed to copy URI to clipboard:', err);
                 });
         } else {
             const textArea = document.createElement('textarea');
-            textArea.value = uri;
+            textArea.value = target;
             document.body.appendChild(textArea);
             textArea.select();
             document.execCommand('copy');

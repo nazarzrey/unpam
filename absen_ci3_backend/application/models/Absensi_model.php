@@ -47,7 +47,7 @@ class Absensi_model extends CI_Model {
         return $query->result_array();
     }
     public function get_dosen_matkul_aktif($week) {
-        $sql = "SELECT a.matkul_url,MAX(c.`updrec_date`),a.`matkul_dosen`,b.`matkul_singkat`,b.matkul  FROM unpam_dosen_matkul a 
+        $sql = "SELECT a.matkul_url,MAX(c.`updrec_date`) as sync,a.`matkul_dosen`,b.`matkul_singkat`,b.matkul,matkul_fordis  FROM unpam_dosen_matkul a 
                 LEFT JOIN unpam_matkul b ON a.`matkul_dosen`=b.`dosen`
                 LEFT JOIN url_log c ON a.`matkul_url`=c.url
                 WHERE WEEK(a.absensi_dosen) = '$week' GROUP BY a.matkul_url
