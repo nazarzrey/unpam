@@ -334,16 +334,30 @@ class Xhr extends Settings
                 }
             }
         }
+        // foreach ($rekap_absensi as $nim => $rkpmahasiswa) {
+        //     $ceknim =  $rkpmahasiswa["nim"];
+        //     foreach($rekap_absensi[$nim] as $keymatkul => $rekap){
+        //         if(is_numeric($keymatkul)){
+        //             if (strpos($mtkul_akt,(string)$keymatkul) === false) {
+        //                 $rekap_absensi[$nim][$keymatkul] = "Offline";
+        //             }
+        //         };
+        //     }
+        // }
         foreach ($rekap_absensi as $nim => $rkpmahasiswa) {
-            $ceknim =  $rkpmahasiswa["nim"];
-            foreach($rekap_absensi[$nim] as $keymatkul => $rekap){
-                if(is_numeric($keymatkul)){
-                    if (strpos($mtkul_akt,$keymatkul) === false) {
-                        $rekap_absensi[$nim][$keymatkul] = "Offline";
-                    }
-                };
+            $ceknim = $rkpmahasiswa["nim"];
+            foreach ($rekap_absensi[$nim] as $keymatkul => $rekap) {
+                
+                // Ensure keymatkul is treated as a string
+                $keymatkul_str = (string)$keymatkul;
+
+                // Check if keymatkul is numeric and not found in mtkul_akt
+                if (is_numeric($keymatkul) && strpos($mtkul_akt, $keymatkul_str) === false) {
+                    $rekap_absensi[$nim][$keymatkul] = "Offline";
+                }
             }
         }
+
         $data["week"] = $week_number;
         $data['rekap_absensi'] = $rekap_absensi;
         $data['matkul_data'] = $matkul_data;
