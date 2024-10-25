@@ -78,7 +78,7 @@
         .popupclose:hover{background:tomato}
         #copypopup img{width: 32px;}
         .data_dtl{
-            font-family:'Courier New', Courier, monospace
+            font-family:'Courier New', Courier, monospace;
         }
     </style>
 </head>
@@ -205,7 +205,7 @@
                 echo $value."<br/>";
             }
             echo "<br>";
-            echo "<div class='data_dtl'>";
+            echo "<div class='data_dtl' id='data_dtl'>";
             foreach($matkul_aktif_link as $link){
                 // echo char_len("Matkul","&nbsp;",8)." : ".$link["matkul"]." - ".$link["matkul_singkat"]." *(".$link["matkul_fordis"].")*";  
                 // echo "<br/>";
@@ -216,7 +216,7 @@
                 // echo char_len("Last Sync","&nbsp;",8)." : " .$link["sync"];
                 // echo "<br/>";
                 // echo "<br/>";
-                echo "*".$link["matkul_singkat"]." (_".str_replace("FORUM DISKUSI ","FORDIS ",$link["matkul_fordis"])."_) lastsync ".$link["sync"]." * ";  
+                echo "*".$link["matkul_singkat"]." (".str_replace("FORUM DISKUSI ","FORDIS ",$link["matkul_fordis"]).") _lastsync_ ".$link["sync"]."* ";  
                 // echo "<br/>";
                 // echo char_len("Dosen","&nbsp;",8)." : ".$link["matkul_dosen"];
                 echo "<br/>";
@@ -237,6 +237,7 @@
         
     var popup = document.getElementById('popupclose');  
     var popupcontent = document.getElementById('popupcontent');  
+    var popupcontent2 = document.getElementById('data_dtl');  
     var copycontent = document.getElementById('copypopup');  
     popup.addEventListener('click', function () {
         if(popupcontent.style.display=="block"){
@@ -250,24 +251,15 @@
     copycontent.addEventListener('click', function () {
         // const uri = cell.getAttribute('uri');
         const target = popupcontent
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(target.innerText)
-                .then(() => {
-                    console.log('URI copied to clipboard successfully!');
-                    alert("Sudah di Copy silahkan tambahin gula..  :D")
-                })
-                .catch(err => {
-                    console.error('Failed to copy URI to clipboard:', err);
-                });
-        } else {
-            const textArea = document.createElement('textarea');
-            textArea.value = target;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            textArea.remove();
-            console.log('URI copied to clipboard (fallback method).');
-        }
+        navigator.clipboard.writeText(popupcontent.innerText)
+        // navigator.clipboard.writeText(popupcontent2.innerText)
+            .then(() => {
+                console.log('URI copied to clipboard successfully!');
+                alert("Sudah di Copy silahkan tambahin gula..  :D")
+            })
+            .catch(err => {
+                console.error('Failed to copy URI to clipboard:', err);
+            });
 
     })
 
