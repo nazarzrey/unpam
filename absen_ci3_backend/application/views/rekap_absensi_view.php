@@ -80,6 +80,8 @@
         .data_dtl{
             font-family:'Courier New', Courier, monospace;
         }
+        .data_dtl a{text-decoration: none;color:blue}
+        .data_dtl a:hover{color:red}
     </style>
 </head>
 <body>
@@ -220,7 +222,7 @@
                 // echo "<br/>";
                 // echo char_len("Dosen","&nbsp;",8)." : ".$link["matkul_dosen"];
                 echo "<br/>";
-                echo $link["matkul_url"];
+                echo "<a href='".$link["matkul_url"]."' target='_blank'>".$link["matkul_url"]."</a>";
                 // echo "<br/>";
                 // echo char_len("Last Sync","&nbsp;",8)." : " .$link["sync"];
                 // echo "<br/>";
