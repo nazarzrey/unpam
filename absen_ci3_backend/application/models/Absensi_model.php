@@ -21,7 +21,7 @@ class Absensi_model extends CI_Model {
     }
 
     public function get_all_mahasiswa() {
-        $this->db->select('nama,substr(nim,1,12) as nim,keter');
+        $this->db->select('nama,substr(nim,1,12) as nim,alias,keter');
         $this->db->from('unpam_mahasiswa');
         $this->db->where('ifnull(keter,"")=','');
         $query = $this->db->get();

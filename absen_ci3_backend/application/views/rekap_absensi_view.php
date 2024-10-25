@@ -129,7 +129,8 @@
             $z = 1;
             $mangkir = array();
             $nm = "";
-					$hadir = 0;
+			$hadir = 0;
+            // dbg($rekap_absensi);
             foreach ($rekap_absensi as $rekap): ?>
                 <tr class='tr'>
                     <?php
@@ -145,6 +146,7 @@
                     <td class='t1 tl <?= $csus ?>'><?php echo Uw($rekap['nama'])." ".$susul; ?></td>
                     <?php
                     $mangkir_dtl = "";
+                    dbg($matkul_data);
                     foreach ($matkul_data as $matkul) {
                         $id_matkul = $matkul['id_matkul'];
                         $kd_matkul = $matkul['matkul_singkat'];
@@ -168,13 +170,13 @@
                             echo "<td class='t2 $class'>" . $absen_count . "</td>";
                         }
                     }
-                    if($nm!=$rekap["nama"]){
+                    if($nm!=$rekap["alias"]){
                         if(!empty($mangkir_dtl)){
                             $matkul = rtrim($mangkir_dtl, ',');
-                            $mangkir[] = Uw($rekap["nama"])." (". $matkul.")";
+                            $mangkir[] = Uw($rekap["alias"])." (". $matkul.")";
                         };
                     }       
-                    $nm = $rekap["nama"];             
+                    $nm = $rekap["alias"];             
                     ?>
                 </tr>
             <?php $z++; endforeach; ?>
@@ -191,6 +193,7 @@
         $hari_dalam_minggu = array("wed", "thu", "fri", "sat", "sun");
         if (in_array($hari_sekarang, $hari_dalam_minggu)) { */
         //echo $hadir;
+        // dbg($mangkir);
         if($hadir>50){
             echo "<b>Absen yang masih belum lengkap</b>";
             echo "<hr>";

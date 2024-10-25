@@ -272,7 +272,7 @@ class Xhr extends Settings
             foreach ($mahasiswa_data as $mahasiswa) {
                 $rekap_absensi[$mahasiswa['nim']] = [
                     'nim' => $mahasiswa['nim'],
-                    'nama' => trim($mahasiswa['nama']),                
+                    'nama' => trim($mahasiswa['nama']),            
                     'keter' => $mahasiswa['keter']
                 ];
                 // dbg($matkul_data);
@@ -303,7 +303,7 @@ class Xhr extends Settings
         $matkul_aktif = $this->Absensi_model->get_matkul_aktif($week_number);
         $mahasiswa_data = $this->Absensi_model->get_all_mahasiswa();
         $matkul_data = $this->Absensi_model->get_all_matkul();
-        $dosen_matkul_week = $this->Absensi_model->get_all_dosen_matkul();
+        $dosen_matkul_week = $this->Absensi_model->get_dosen_matkul_aktif($week_number);
 
         // dbg($mahasiswa_data);
         // Buat rekap absensi
@@ -311,7 +311,8 @@ class Xhr extends Settings
         foreach ($mahasiswa_data as $mahasiswa) {
             $rekap_absensi[$mahasiswa['nim']] = [
                 'nim' => $mahasiswa['nim'],
-                'nama' => trim($mahasiswa['nama']),                
+                'nama' => trim($mahasiswa['nama']),  
+                'alias' => trim($mahasiswa['alias']),                   
                 'keter' => $mahasiswa['keter']
             ];
             // dbg($matkul_data);
