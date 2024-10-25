@@ -31,6 +31,11 @@ class Xhr extends Settings
         $this->load->model(array('Mod_query'));
         #$this->load->helper('fungsi');
         
+        $sv = $_SERVER['SERVER_NAME'];
+        if ($sv == "localhost" || $sv == "127.0.0.1" || substr_count($sv, "192.168") == 1) {
+            dbg($this->uri->rsegments);
+        }
+        
     }
     public function semester($value=""){
         if($value!=""){
@@ -295,7 +300,7 @@ class Xhr extends Settings
         $matkul_aktif = $this->Absensi_model->get_matkul_aktif($week_number);
         $mahasiswa_data = $this->Absensi_model->get_all_mahasiswa();
         $matkul_data = $this->Absensi_model->get_all_matkul();
-        $dosen_matkul_data = $this->Absensi_model->get_all_dosen_matkul();
+        $dosen_matkul_week = $this->Absensi_model->get_all_dosen_matkul();
 
         // dbg($mahasiswa_data);
         // Buat rekap absensi
@@ -326,49 +331,16 @@ class Xhr extends Settings
                 }
             }
         }
-                
-        // // $rekap_absensi = []; // Inisialisasi array rekap absensi
-        // $mtkul_akt = $matkul_aktif[0]["matkul_aktif"];
-        // foreach ($absensi_data as $absensi) {
-        //     $nnim = substr($absensi['nim'], 0, 12);
-        //     $nnam = $absensi['nama'];
-        //     if ($nnim != "Dosen") {
-        //         // Cek jika id_matkul ada dalam matkul_aktif
-        //         if (strpos($mtkul_akt,$absensi['id_matkul']) !== false) {
-        //             // Jika ada, increment rekap absensi
-        //             if (!isset($rekap_absensi[$nnim][$absensi['id_matkul']])) {
-        //                 $rekap_absensi[$nnim][$absensi['id_matkul']] = 0;
-        //             }
-        //             $rekap_absensi[$nnim][$absensi['id_matkul']]++;
-        //         }
-        //     }
-        // }
-
-        // dbg($matkul_data);
-        // Mark subjects with no attendance as offline
-        
-
-        // dbg($rekap_absensi);
-        foreach ($matkul_data as $matkul) {
-            $id_matkul = $matkul['id_matkul'];
-            $all_zero = true;
-
-            foreach ($rekap_absensi as $rekap) {
-                if ($rekap[$id_matkul] > 0) {
-                    $all_zero = false;
-                    break;
-                }
-            }
-
-            if ($all_zero) {
-                foreach ($rekap_absensi as &$rekap) {
-                    $rekap[$id_matkul] = 'Offline';
-                }
+        foreach ($rekap_absensi as $nim => $rkpmahasiswa) {
+            $ceknim =  $rkpmahasiswa["nim"];
+            foreach($rekap_absensi[$nim] as $keymatkul => $rekap){
+                if(is_numeric($keymatkul)){
+                    if (strpos($mtkul_akt,$keymatkul) === false) {
+                        $rekap_absensi[$nim][$keymatkul] = "Offline";
+                    }
+                };
             }
         }
-
-         dbg($rekap_absensi);
-
         $data["week"] = $week_number;
         $data['rekap_absensi'] = $rekap_absensi;
         $data['matkul_data'] = $matkul_data;
@@ -498,6 +470,7 @@ class Xhr extends Settings
         $this->db->insert('unpam_absen_log', $data_to_insert);
         $arr[] = "Sukses simpan data";
         $dosen = "";
+        $absen_time = "";
         foreach ($obj_data as $item) {
             $mnama = addslashes($item['nama']);
             if(is_numeric(left(substr($mnama, -20),10))){
@@ -535,7 +508,7 @@ class Xhr extends Settings
             if($matkul!=""){
                 $sql = "select count(1) as ttl from unpam_dosen_matkul where matkul_dosen='$dosen' and matkul_url='$url_matkul' ";
                 if(single_query($this->db->query($sql))->ttl == 0){
-                    $upd = "insert ignore into unpam_dosen_matkul (matkul_dosen,matkul_desk,matkul_sks,matkul_url,matkul_kelas,matkul_fordis,matkul_fordis_title,updrec_date,updrec_by) values ('$dosen','$matkul','$sks','$url_matkul','$obj_kelas','$fflow','$ftitle',now(),'$admin');";
+                    $upd = "insert ignore into unpam_dosen_matkul (matkul_dosen,matkul_desk,matkul_sks,matkul_url,matkul_kelas,matkul_fordis,matkul_fordis_title,updrec_date,updrec_by,absensi_dosen) values ('$dosen','$matkul','$sks','$url_matkul','$obj_kelas','$fflow','$ftitle',now(),'$admin','$absen_time');";
                     $this->db->query($upd);
                     $arr[] = "sukses insert dosen";
                 }else{
@@ -549,7 +522,7 @@ class Xhr extends Settings
             }else{                
                 $sql = "select count(1) as ttl from unpam_dosen_matkul where matkul_dosen='$dosen' and matkul_url='$url_matkul' ";
                 if(single_query($this->db->query($sql))->ttl == 0){
-                    $upd = "insert into unpam_dosen_matkul (matkul_dosen,matkul_url,matkul_kelas,matkul_fordis,matkul_fordis_title,updrec_date,updrec_by) values ('$dosen','$url_matkul','$obj_kelas','$fflow','$ftitle',now(),'$admin');";
+                    $upd = "insert into unpam_dosen_matkul (matkul_dosen,matkul_url,matkul_kelas,matkul_fordis,matkul_fordis_title,updrec_date,updrec_by,absensi_dosen) values ('$dosen','$url_matkul','$obj_kelas','$fflow','$ftitle',now(),'$admin','$absen_time');";
                     $this->db->query($upd);
                     $arr[] = "sukses insert dosen matkul";
                 }

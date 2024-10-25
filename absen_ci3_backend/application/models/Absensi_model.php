@@ -12,10 +12,9 @@ class Absensi_model extends CI_Model {
         return $query->result_array();
     }
     public function get_matkul_aktif($week) {
-        //b.`dosen`,b.`id_matkul`,b.`matkul`,b.`matkul_singkat`
         $sql = "SELECT GROUP_CONCAT(DISTINCT(id_matkul)) AS matkul_aktif FROM unpam_dosen_matkul a 
                 LEFT JOIN unpam_matkul b ON a.`matkul_dosen`=b.`dosen`
-                WHERE WEEK(a.updrec_date) = '$week' "; 
+                WHERE WEEK(a.absensi_dosen) = '$week' "; 
                 // GROUP BY matkul_dosen
         $query = $this->db->query($sql);
         return $query->result_array();
