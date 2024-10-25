@@ -46,11 +46,17 @@ class Absensi_model extends CI_Model {
         $query = $this->db->query($sql);
         return $query->result_array();
     }
-
-    public function get_all_dosen_matkul() {
-        $this->db->select('*');
-        $this->db->from('unpam_dosen_matkul');
-        $query = $this->db->get();
+    public function get_dosen_matkul_aktif($week) {
+        $sql = "SELECT a.matkul_url,MAX(c.`updrec_date`),a.`matkul_dosen`,b.`matkul_singkat`,b.matkul  FROM unpam_dosen_matkul a 
+                LEFT JOIN unpam_matkul b ON a.`matkul_dosen`=b.`dosen`
+                LEFT JOIN url_log c ON a.`matkul_url`=c.url
+                WHERE WEEK(a.absensi_dosen) = '$week' GROUP BY a.matkul_url
+        ";
+        // -- $sql = "SELECT a.`matkul_dosen`,a.matkul_url,b.`matkul_singkat`,b.matkul  FROM unpam_dosen_matkul a 
+        // --         LEFT JOIN unpam_matkul b ON a.`matkul_dosen`=b.`dosen`
+        // --         WHERE WEEK(a.absensi_dosen) = '$week' "; 
+        // --         // GROUP BY matkul_dosen
+        $query = $this->db->query($sql);
         return $query->result_array();
     }
 }

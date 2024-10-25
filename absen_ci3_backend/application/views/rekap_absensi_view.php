@@ -130,7 +130,6 @@
             $mangkir = array();
             $nm = "";
 			$hadir = 0;
-            // dbg($rekap_absensi);
             foreach ($rekap_absensi as $rekap): ?>
                 <tr class='tr'>
                     <?php
@@ -146,7 +145,7 @@
                     <td class='t1 tl <?= $csus ?>'><?php echo Uw($rekap['nama'])." ".$susul; ?></td>
                     <?php
                     $mangkir_dtl = "";
-                    dbg($matkul_data);
+                    // dbg($matkul_data);
                     foreach ($matkul_data as $matkul) {
                         $id_matkul = $matkul['id_matkul'];
                         $kd_matkul = $matkul['matkul_singkat'];
@@ -200,6 +199,10 @@
             foreach($mangkir as $key => $value){
                 echo $value."<br/>";
             }
+            echo "<br>";
+            foreach($matkul_aktif_link as $link){
+                echo $link["matkul_singkat"]." - ".$link["matkul_url"]."<br>";
+            }
         }
         //}
         
@@ -221,7 +224,27 @@
         }
     })
     copycontent.addEventListener('click', function () {
-        alert("fungsi blon selesai")
+        const uri = cell.getAttribute('uri');
+        const target = document.getElementById('target_link');
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(uri)
+                .then(() => {
+                    console.log('URI copied to clipboard successfully!');
+                    target.innerHTML = 'URI copied to clipboard successfully!';
+                })
+                .catch(err => {
+                    console.error('Failed to copy URI to clipboard:', err);
+                });
+        } else {
+            const textArea = document.createElement('textarea');
+            textArea.value = uri;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            textArea.remove();
+            console.log('URI copied to clipboard (fallback method).');
+        }
+
     })
 
         document.getElementById('toggleCheckbox').addEventListener('change', function() {

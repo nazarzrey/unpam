@@ -303,7 +303,7 @@ class Xhr extends Settings
         $matkul_aktif = $this->Absensi_model->get_matkul_aktif($week_number);
         $mahasiswa_data = $this->Absensi_model->get_all_mahasiswa();
         $matkul_data = $this->Absensi_model->get_all_matkul();
-        $dosen_matkul_week = $this->Absensi_model->get_dosen_matkul_aktif($week_number);
+        $matkul_aktif_link = $this->Absensi_model->get_dosen_matkul_aktif($week_number);
 
         // dbg($mahasiswa_data);
         // Buat rekap absensi
@@ -363,6 +363,7 @@ class Xhr extends Settings
         $data['rekap_absensi'] = $rekap_absensi;
         $data['matkul_data'] = $matkul_data;
         $data['matkul_aktif'] = $matkul_aktif;
+        $data['matkul_aktif_link'] = $matkul_aktif_link;
         $this->load->view('rekap_absensi_view', $data);
     }
 
