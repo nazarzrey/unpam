@@ -313,7 +313,7 @@ class Xhr extends Settings
         }
         // dbg($matkul_aktif[0]["matkul_aktif"]);
         // Populate attendance data
-        // dbg($absensi_data);
+        // dbg($mahasiswa_data);
         $mtkul_akt = $matkul_aktif[0]["matkul_aktif"];
         foreach ($absensi_data as $absensi) {
             $nnim = substr($absensi['nim'], 0, 12);
@@ -326,7 +326,6 @@ class Xhr extends Settings
                 }
             }
         }
-
                 
         // // $rekap_absensi = []; // Inisialisasi array rekap absensi
         // $mtkul_akt = $matkul_aktif[0]["matkul_aktif"];
@@ -345,8 +344,11 @@ class Xhr extends Settings
         //     }
         // }
 
-        // dbg($absensi_data);
+        // dbg($matkul_data);
         // Mark subjects with no attendance as offline
+        
+
+        // dbg($rekap_absensi);
         foreach ($matkul_data as $matkul) {
             $id_matkul = $matkul['id_matkul'];
             $all_zero = true;
@@ -364,6 +366,8 @@ class Xhr extends Settings
                 }
             }
         }
+
+         dbg($rekap_absensi);
 
         $data["week"] = $week_number;
         $data['rekap_absensi'] = $rekap_absensi;

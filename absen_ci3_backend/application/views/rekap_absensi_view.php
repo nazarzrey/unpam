@@ -68,8 +68,15 @@
         .tr:hover{border:solid 2px;background:#e6fbff !important;cursor:pointer}
         .tno{width: 30px;}
         .popup{position: absolute;top:1%;right:1px;background:#fff;border:solid 1px;z-index: 999;
-            font-size:12px;padding:10px
+            font-size:12px;padding:10px;background:#e6fbff
         }
+		.popupclose{position:absolute;right:0;padding:10px;border:solid 1px;text-align:center;top:-1px;right:-1px;font-weight:bold;cursor:pointer;background:#fff}
+        #copypopup{
+            position:absolute;top:-1px;right:30px;border:solid 1px;text-align:center;font-weight:bold;cursor:pointer;background:#fff
+        }
+        #copypopup:hover,
+        .popupclose:hover{background:tomato}
+        #copypopup img{width: 32px;}
     </style>
 </head>
 <body>
@@ -118,10 +125,11 @@
         <tbody>
 
             <?php 
-            // dbg($rekap_absensi);
+            //dbg($rekap_absensi);
             $z = 1;
             $mangkir = array();
             $nm = "";
+					$hadir = 0;
             foreach ($rekap_absensi as $rekap): ?>
                 <tr class='tr'>
                     <?php
@@ -137,18 +145,21 @@
                     <td class='t1 tl <?= $csus ?>'><?php echo Uw($rekap['nama'])." ".$susul; ?></td>
                     <?php
                     $mangkir_dtl = "";
-                    // dbg($matkul_data);
                     foreach ($matkul_data as $matkul) {
                         $id_matkul = $matkul['id_matkul'];
                         $kd_matkul = $matkul['matkul_singkat'];
                         $absen_count = $rekap[$id_matkul];
+						if($absen_count == "0"){
+                            $mangkir_dtl .= $kd_matkul.",";
+						}
                         $min_absen = $matkul['min_absen'];
+							 //strlen($absen_count)."zzz";
                         if ($absen_count == 'Offline') {
                             echo "<td class='empty'>" . ($absen_count == 'Offline' ? '-' : $absen_count) . "</td>";
                         } else {
-                            if ($absen_count == 0) {
+							$hadir ++;
+                            if ((int)$absen_count == "0") {
                                 $class = "merah";
-                                $mangkir_dtl .= $kd_matkul.",";
                             } elseif ($absen_count < $min_absen) {
                                 $class = "kurang";
                             } else {
@@ -160,7 +171,7 @@
                     if($nm!=$rekap["nama"]){
                         if(!empty($mangkir_dtl)){
                             $matkul = rtrim($mangkir_dtl, ',');
-                            $mangkir[] = $rekap["nama"]." (". $matkul.")";
+                            $mangkir[] = Uw($rekap["nama"])." (". $matkul.")";
                         };
                     }       
                     $nm = $rekap["nama"];             
@@ -170,13 +181,46 @@
         </tbody>
     </table>
     <div class='popup'>
+	<div class='popupclose' id="popupclose">X</div>
+        <div id="copypopup" style="display:block">
+            <img src="<?= base_url("assets/images/copy.png") ?>" />
+                </div>
+        <div id="popupcontent" style="display:block">
+        <?php 
+        /*$hari_sekarang = strtolower(date("D"));
+        $hari_dalam_minggu = array("wed", "thu", "fri", "sat", "sun");
+        if (in_array($hari_sekarang, $hari_dalam_minggu)) { */
+        //echo $hadir;
+        if($hadir>50){
+            echo "<b>Absen yang masih belum lengkap</b>";
+            echo "<hr>";
+            foreach($mangkir as $key => $value){
+                echo $value."<br/>";
+            }
+        }
+        //}
         
-    <?php 
-    foreach($mangkir as $key => $value){
-        echo $value."<br/>";
-    };?>
+        ?>
+        </div>
     </div>
     <script>
+        
+    var popup = document.getElementById('popupclose');  
+    var popupcontent = document.getElementById('popupcontent');  
+    var copycontent = document.getElementById('copypopup');  
+    popup.addEventListener('click', function () {
+        if(popupcontent.style.display=="block"){
+            popupcontent.style.display = "none";
+            copycontent.style.display = "none";
+        }else{            
+            popupcontent.style.display = "block";
+            copycontent.style.display = "block";
+        }
+    })
+    copycontent.addEventListener('click', function () {
+        alert("fungsi blon selesai")
+    })
+
         document.getElementById('toggleCheckbox').addEventListener('change', function() {
             const isChecked = this.checked;
             const cells = document.querySelectorAll('td.checked');
