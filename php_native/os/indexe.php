@@ -18,6 +18,15 @@
     .aktif{
       background: #fff;color:#000;
     }
+    body { font-family: Arial, sans-serif; }
+    .input-group { margin: 10px 0; }
+    label { display: block; margin: 5px 0; }
+    input[type="text"], select { width: 25vw; padding: 8px; margin-bottom: 10px; }
+    button { padding: 10px 20px; font-size: 16px; }
+    .output { margin-top: 20px; }
+    .chart { position: relative; margin-top: 20px;  }
+    .line { position: absolute; height: 2px; background-color: #333; }
+    .point { position: absolute; width: 8px; height: 8px; background-color: red; border-radius: 50%; }
   </style>
 </head>
 <body>
@@ -32,7 +41,10 @@
   <a href="round_robin.php" <?= aktif("robin",$menu) ?>>Round Robin</a>
   <a href="round_robin.php">FJS</a>
   <a href="round_robin.php">FCFS</a>
-  <a href="disk.php"<?= aktif("disk",$menu) ?>>FCFS DISK</a>
+  <a href="disk.php"<?= aktif("disk",$menu) ?>>DISK</a>
+  <a href="fcfs.php"<?= aktif("fcfsdisk",$menu) ?>>FCFS DISK</a>
+  <a href="scan.php"<?= aktif("scandisk",$menu) ?>>SCAN DISK</a>
+  <a href="#" for="hide"><input type="checkbox" class="hide" id="hide"/><label for="hide" class="hidex" style="display:contents;" > HIDE FORM</label></a>
   <br>
   <br>
   <?php
@@ -58,6 +70,24 @@
       echo "class='aktif'";
     }
   }
+  function nilai($input){
+    // echo strlen($input);
+    $rumus = $input / 10;
+    // ln("");
+    if($input>0){
+      if($input<10){
+        for($x=1;$x<=$input;$x++){
+          echo $x;
+        }
+      }else{
+        for($y=1;$y<=$rumus;$y++){
+          for($x=1;$x<=9;$x++){
+            echo $x;
+          }
+        }
+      }
+    }
+  }
   function char($char,$len){
      $newchar ="";
     if($char==""){
@@ -71,4 +101,104 @@
   function ln($val){
     echo $val."<br/>";
   }
+  function fcfsdisk($nilai,$mulai){    
+    $string = $nilai;
+    $array = array_map('intval', explode(",", $string));
+    $angkas = $array;
+    $head = $mulai;
+    $totalMovement = 0;
+    $gerak = [];
+    $kepala = $head;
+    $last =  count($angkas);
+    foreach ($angkas as $key => $angka) {
+        $movement = abs($kepala - $angka);
+        if($key<>$last -1 ){
+          $plus = "+";
+        }else{      
+          $plus = "";
+        }
+        $geraks[] = "($kepala - $angka)$plus";
+        $hasilnya[] = $movement.$plus;
+
+        $totalMovement += $movement;
+        $kepala = $angka;
+    }
+    echo "<br/>";
+    echo "Langkah Perhitungan FCFS:<br>";
+    echo "<br/>";
+    echo "Urutan Permitaan ".$nilai;
+    echo "<br/>";
+    echo "Kepala : ".$mulai;
+    echo "<br/>";
+    echo "<br/>";
+    echo implode($geraks);
+    echo "<br/>";
+    echo "<br/>";
+    echo implode( $hasilnya);
+    echo "<br/>";
+    echo "<br>Total Pergerakan Head: $totalMovement";
+  }
+  function scandisk($nilai,$mulai){
+    $string = $nilai;
+    $array = array_map('intval', explode(",", $string));
+    $angkas = $array;
+    $head = $mulai;
+    $limit = 0;
+    sort($angkas);
+    $left = array_filter($angkas, fn($req) => $req < $head);
+    $right = array_filter($angkas, fn($req) => $req >= $head);
+    $left = array_reverse($left);
+    $totalgerak = 0;
+    $geraks = [];
+    $hasilnya = [];
+    $kepala = $head;
+    $last =  count($angkas);
+    foreach (array_merge($left, [$limit], $right) as  $key  => $angka) {
+        $gerak = abs($kepala - $angka);
+        if($key<>$last){
+          $plus = "+";
+        }else{      
+          $plus = "";
+        }
+        $geraks[] = "($kepala - $angka)$plus";
+        $hasilnya[] = $gerak.$plus;
+        $totalgerak += $gerak;
+        $kepala = $angka;
+    }
+    echo char("-",110);
+    echo "<br/>";
+    echo "Langkah Perhitungan SCAN:<br>";
+    echo "<br/>";
+    echo "Urutan Permitaan ".$nilai;
+    echo "<br/>";
+    echo "Kepala : ".$mulai;
+    echo "<br/>";
+    echo "<br/>";
+    echo implode( $geraks);
+    echo "<br/>";
+    echo "<br/>";
+    echo implode( $hasilnya);
+    echo "<br><br>Total Pergerakan Head: $totalgerak";}
   ?>
+  <script>
+    function toggleForm() {
+    var checkbox = document.getElementById("hide");
+    var formElement = document.getElementById("form");
+    
+    // Jika checkbox dicentang, sembunyikan elemen 'form', jika tidak, tampilkan
+    if (checkbox.checked) {
+        formElement.style.display = "none";
+    } else {
+        formElement.style.display = "block";
+    }
+}
+
+// Event listener untuk memanggil toggleForm saat status checkbox berubah
+document.addEventListener("DOMContentLoaded", function() {
+    var checkbox = document.getElementById("hide");
+    checkbox.addEventListener("change", toggleForm);
+
+    // Panggil toggleForm saat halaman dimuat untuk menentukan keadaan awal elemen 'form'
+    toggleForm();
+});
+  </script>

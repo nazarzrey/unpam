@@ -9,6 +9,8 @@ class Absensi_model extends CI_Model {
         
     // echo $this->db->get_compiled_select();
         $query = $this->db->get();
+        
+        // dbg($this->db->last_query());
         return $query->result_array();
     }
     public function get_matkul_aktif($week) {
@@ -20,20 +22,23 @@ class Absensi_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function get_matkul_aktif_detail($week) {
+        $sql = "SELECT id_matkul,matkul_url,b.`matkul_singkat`,CONCAT(REPLACE(a.`matkul_fordis`,'FORUM DISKUSI','FD'),'-',LEFT(matkul_fordis_title,5)) AS judul,b.`min_absen` FROM unpam_dosen_matkul a 
+                LEFT JOIN unpam_matkul b ON a.`matkul_dosen`=b.`dosen`
+                WHERE WEEK(a.absensi_dosen) = '$week' GROUP BY matkul_url order by 1 "; 
+                // GROUP BY matkul_dosen
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
     public function get_all_mahasiswa() {
-        $this->db->select('nama,substr(nim,1,12) as nim,alias,keter');
+        $this->db->select('nama,substr(nim,1,12) as nim,alias,keter,gender');
         $this->db->from('unpam_mahasiswa');
         $this->db->where('ifnull(keter,"")=','');
         $query = $this->db->get();
         return $query->result_array();
     }
 
-    public function get_all_matkul() {
-        // $this->db->select('*');
-        // $this->db->from('unpam_matkul');
-        // $query = $this->db->get();
-        // return $query->result_array();
-        
+    public function get_all_matkul() {        
         if($this->session->userdata('nim')!=""){
             $value2 = $this->session->userdata('nim');
             $kls = $this->session->userdata('kelas');

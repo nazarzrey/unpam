@@ -82,6 +82,14 @@
         }
         .data_dtl a{text-decoration: none;color:blue}
         .data_dtl a:hover{color:red}
+        td{text-align: left;}
+        .konten td{text-align: center;}
+        .kontn .aleft{text-align: left !important;}
+        .kontn .acenter{text-align:center !important}
+        .color1{background: #fdd3d3;}
+        .color2{background: blue;color:#fff}
+        .color3{background: #e6fbff !important;border: none;}
+        .colorp{background: pink !important;border: none;}
     </style>
 </head>
 <body>
@@ -106,16 +114,98 @@
         <label for="toggleCheckbox">Munculkan Angka</label>
     </div>
     <?php 
-    // dbg($matkul_data);
+    // dbg($matkul_data[0]);
+    // dbg($matkul_aktif[0]);
+    // dbg($matkul_aktif_dtl);
+    $matkul_aktif = [
+        "matkul_aktif" => $matkul_aktif[0]["matkul_aktif"]
+    ];
+
+    $matkul_aktif_array = explode(",", $matkul_aktif["matkul_aktif"]);
+    // dbg($matkul_aktif_array);
+    echo "<table border='1'>";
+    echo "<thead><th>Nama</th>";
+    $mt = "";
+                    td("&nbsp;","z");
+    foreach($matkul_aktif_dtl as $m => $kul) {
+        $cari_matkul = $kul["id_matkul"];
+        $urlmatkul = $kul["matkul_url"];
+        $kodematkul = $kul["matkul_singkat"];
+        $jdlmatkul = $kul["judul"];
+        if($m>0){
+            if($mt!=$kodematkul){
+                td("&nbsp;","z");
+            }
+        }
+        td($kodematkul." (".trim(str_replace("-FORUM","",trim($jdlmatkul))).")","c" );
+        $mt = $kodematkul;
+    }
+    echo "</thead>";
+    echo "<tbody class='konten'>";
+    // dbg($mahasiswa_data);
+    foreach($mahasiswa_data as $mhs => $siswa){
+        $nim = $siswa["nim"];
+        $sex = $siswa["gender"];
+        $idm = "";
+        echo "<tr>";
+        echo td($siswa["alias"],$sex);
+                    td("&nbsp;","z");
+        $mt = "";
+        // dbg($matkul_aktif_dtl);
+        foreach($matkul_aktif_dtl as $m => $kul) {
+            $cari_matkul = $kul["id_matkul"];
+            $urlmatkul = $kul["matkul_url"];
+            $minabs = $kul["min_absen"];
+            $kodematkul = $kul["matkul_singkat"];
+            if($m>0){
+                if($mt!=$kodematkul){
+                    td("&nbsp;","z");
+                }
+            }
+            if (in_array($cari_matkul, $matkul_aktif_array)) {                
+                $sql = "select if(count(1)=0,0,IF(COUNT(1)<$minabs,COUNT(1)-$minabs,'9999')) AS sisa from unpam_absensi where left(nim,12)='$nim' and url_matkul='$urlmatkul'";                 
+                $res = single_query($this->db->query($sql));
+                if($res->sisa==0){
+                    td($res->sisa,"cl1");
+                }else{
+                    if($res->sisa<$minabs){
+                        td($res->sisa,"cl2");
+                    }else{
+                        td(str_replace("9999","✓",$res->sisa),"");
+                    }
+                }
+            }
+             $mt = $kodematkul;
+        }
+        echo "</tr>";
+    }
+    echo "</table>";
+    function td($val,$align){
+        if($align=="l"){
+            $alg="class='aleft'";
+        }elseif($align=="l"){
+            $alg="class='acenter'";
+        }elseif($align=="cl1"){
+            $alg="class='color1'";
+        }elseif($align=="cl2"){
+            $alg="class='color2'";
+        }elseif($align=="z"){
+            $alg="class='color3'";
+        }elseif($align=="L"){
+            $alg="class='colorl'";
+        }elseif($align=="P"){
+            $alg="class='colorp'";
+        }else{
+            $alg = "";            
+        }
+        echo "<td $alg>$val</td>";
+    }
     ?>
     <table border="1">
         <thead>
             <tr>
                 <th class='tno' rowspan='2'>No</th>
                 <th class='t1'>Sync</th>
-                <?php
-                // dbg($matkul_data);
-                ?>
                 <?php foreach ($matkul_data as $matkul): ?>
                     <th class='sync t2'><?php echo $matkul['sync']; ?></th>
                 <?php endforeach; ?>
@@ -129,69 +219,14 @@
         </thead>
         <tbody>
 
-            <?php 
-            //dbg($rekap_absensi);
-            $z = 1;
-            $mangkir = array();
-            $nm = "";
-			$hadir = 0;
-            foreach ($rekap_absensi as $rekap): ?>
-                <tr class='tr'>
-                    <?php
-                    if($rekap["keter"]!=""){ 
-                        $susul = "- ".Uw($rekap["keter"]);
-                        $csus = "susulan";
-                    }else{
-                        $susul = "";
-                        $csus = "";
-                    }
-                    ?>
-                    <td class=''><?= $z ?></td>
-                    <td class='t1 tl <?= $csus ?>'><?php echo Uw($rekap['nama'])." ".$susul; ?></td>
-                    <?php
-                    $mangkir_dtl = "";
-                    // dbg($matkul_data);
-                    foreach ($matkul_data as $matkul) {
-                        $id_matkul = $matkul['id_matkul'];
-                        $kd_matkul = $matkul['matkul_singkat'];
-                        $absen_count = $rekap[$id_matkul];
-						if($absen_count == "0"){
-                            $mangkir_dtl .= $kd_matkul.",";
-						}
-                        $min_absen = $matkul['min_absen'];
-							 //strlen($absen_count)."zzz";
-                        if ($absen_count == 'Offline') {
-                            echo "<td class='empty'>" . ($absen_count == 'Offline' ? '-' : $absen_count) . "</td>";
-                        } else {
-							$hadir ++;
-                            if ((int)$absen_count == "0") {
-                                $class = "merah";
-                            } elseif ($absen_count < $min_absen) {
-                                $class = "kurang";
-                            } else {
-                                $class = "checked";
-                            }
-                            echo "<td class='t2 $class'>" . $absen_count . "</td>";
-                        }
-                    }
-                    if($nm!=$rekap["alias"]){
-                        if(!empty($mangkir_dtl)){
-                            $matkul = rtrim($mangkir_dtl, ',');
-                            $mangkir[] = Uw($rekap["alias"])." (". $matkul.")";
-                        };
-                    }       
-                    $nm = $rekap["alias"];             
-                    ?>
-                </tr>
-            <?php $z++; endforeach; ?>
         </tbody>
     </table>
     <div class='popup'>
 	<div class='popupclose' id="popupclose">X</div>
         <div id="copypopup" style="display:block">
             <img src="<?= base_url("assets/images/copy.png") ?>" />
-                </div>
-        <div id="popupcontent" style="display:block">
+        </div>
+        <div id="popupcontent">
         <?php 
         /*$hari_sekarang = strtolower(date("D"));
         $hari_dalam_minggu = array("wed", "thu", "fri", "sat", "sun");
@@ -209,23 +244,9 @@
             echo "<br>";
             echo "<div class='data_dtl' id='data_dtl'>";
             foreach($matkul_aktif_link as $link){
-                // echo char_len("Matkul","&nbsp;",8)." : ".$link["matkul"]." - ".$link["matkul_singkat"]." *(".$link["matkul_fordis"].")*";  
-                // echo "<br/>";
-                // echo char_len("Dosen","&nbsp;",8)." : ".$link["matkul_dosen"];
-                // echo "<br/>";
-                // echo char_len("Url","&nbsp;",8)." : " .$link["matkul_url"];
-                // echo "<br/>";
-                // echo char_len("Last Sync","&nbsp;",8)." : " .$link["sync"];
-                // echo "<br/>";
-                // echo "<br/>";
-                echo "*".$link["matkul_singkat"]." (".str_replace("FORUM DISKUSI ","FORDIS ",$link["matkul_fordis"]).") _lastsync_ ".$link["sync"]."* ";  
-                // echo "<br/>";
-                // echo char_len("Dosen","&nbsp;",8)." : ".$link["matkul_dosen"];
+                echo "*".$link["matkul_singkat"]." (".str_replace("FORUM DISKUSI ","FORDIS ",$link["matkul_fordis"]).") _lastsync_ ".$link["sync"]."* "; 
                 echo "<br/>";
                 echo "<a href='".$link["matkul_url"]."' target='_blank'>".$link["matkul_url"]."</a>";
-                // echo "<br/>";
-                // echo char_len("Last Sync","&nbsp;",8)." : " .$link["sync"];
-                // echo "<br/>";
                 echo "<br/>";
             }
             echo "</div>";
@@ -236,37 +257,49 @@
         </div>
     </div>
     <script>
-        
-    var popup = document.getElementById('popupclose');  
-    var popupcontent = document.getElementById('popupcontent');  
-    var popupcontent2 = document.getElementById('data_dtl');  
-    var copycontent = document.getElementById('copypopup');  
-    popup.addEventListener('click', function () {
-        if(popupcontent.style.display=="block"){
-            popupcontent.style.display = "none";
-            copycontent.style.display = "none";
-        }else{            
-            popupcontent.style.display = "block";
-            copycontent.style.display = "block";
+        var popup = document.getElementById('popupclose');  
+        var popupcontent = document.getElementById('popupcontent');  
+        var popupcontent2 = document.getElementById('data_dtl');  
+        var copycontent = document.getElementById('copypopup');  
+        popup.addEventListener('click', function () {
+            var displayPopup = false;
+            if(popupcontent.style.display=="block"){
+                popupcontent.style.display = "none";
+                copycontent.style.display = "none";
+                displayPopup = true
+            }else{            
+                popupcontent.style.display = "block";
+                copycontent.style.display = "block";
+                displayPopup = false
+            }
+            localStorage.setItem('popupState', displayPopup ? 'none' : 'block');
+        })
+        copycontent.addEventListener('click', function () {
+            const target = popupcontent
+            navigator.clipboard.writeText(popupcontent.innerText)
+                .then(() => {
+                    console.log('URI copied to clipboard successfully!');
+                    alert("Sudah di Copy silahkan tambahin gula..  :D")
+                })
+                .catch(err => {
+                    console.error('Failed to copy URI to clipboard:', err);
+                });
+
+        })
+
+        document.querySelectorAll('td.checked').forEach(cell => {
+            cell.setAttribute('data-original', cell.innerHTML);
+            cell.innerHTML = '&#x2713;'; 
+            cell.style.color = 'green';
+        });
+        const toggleCheckbox = document.getElementById('toggleCheckbox');
+
+        const savedState = localStorage.getItem('toggleCheckboxState');
+        if (savedState === 'checked') {
+            toggleCheckbox.checked = true;
         }
-    })
-    copycontent.addEventListener('click', function () {
-        // const uri = cell.getAttribute('uri');
-        const target = popupcontent
-        navigator.clipboard.writeText(popupcontent.innerText)
-        // navigator.clipboard.writeText(popupcontent2.innerText)
-            .then(() => {
-                console.log('URI copied to clipboard successfully!');
-                alert("Sudah di Copy silahkan tambahin gula..  :D")
-            })
-            .catch(err => {
-                console.error('Failed to copy URI to clipboard:', err);
-            });
 
-    })
-
-        document.getElementById('toggleCheckbox').addEventListener('change', function() {
-            const isChecked = this.checked;
+        function updateCells(isChecked) {
             const cells = document.querySelectorAll('td.checked');
             cells.forEach(cell => {
                 if (isChecked) {
@@ -277,13 +310,22 @@
                     cell.style.color = 'green';
                 }
             });
-        });
+            if (localStorage.getItem('popupState')){
+                if(localStorage.getItem('popupState')=="block"){
+                    popupcontent.style.display = "block";
+                    copycontent.style.display = "block";
+                }else{
+                    popupcontent.style.display = "none";
+                    copycontent.style.display = "none";
+                }
+            }
+        }
 
-        // Save original values in data attribute and set initial state to checkmark
-        document.querySelectorAll('td.checked').forEach(cell => {
-            cell.setAttribute('data-original', cell.innerHTML);
-            cell.innerHTML = '&#x2713;'; // Initial state with checkmark symbol
-            cell.style.color = 'green';
+        updateCells(toggleCheckbox.checked);
+        toggleCheckbox.addEventListener('change', function() {
+            const isChecked = this.checked;
+            localStorage.setItem('toggleCheckboxState', isChecked ? 'checked' : 'unchecked');
+            updateCells(isChecked);
         });
     </script>
 </body>
