@@ -288,17 +288,11 @@ class Xhr extends Settings
             echo "variabel belum di pasang..!!";
         }
     }
-
-
-
     public function detail_week($week_number = ""){
         $this->load->model('Absensi_model');
-        // Dapatkan nomor minggu saat ini
         if ($week_number === "") {
             $week_number = date('W') - 1;
         }
-
-        // Ambil data absensi, mahasiswa, matkul, dan dosen matkul
         $absensi_data = $this->Absensi_model->get_absensi_by_week($week_number);
         $mahasiswa_data = $this->Absensi_model->get_all_mahasiswa();
         $matkul_data = $this->Absensi_model->get_all_matkul();
@@ -327,11 +321,16 @@ class Xhr extends Settings
         // Populate attendance data
         // dbg($rekap_absensi);
         $mtkul_akt = $matkul_aktif[0]["matkul_aktif"];
+        // dbg($absensi_data);
+                    $urlmtkl = "";
+        // DBG(COUNT($absensi_data));
         foreach ($absensi_data as $absensi) {
             $nnim = substr($absensi['nim'], 0, 12);
-            $nnam = $absensi['nama'];
             if($nnim!="Dosen"){
                 if (strpos($mtkul_akt,(string)$absensi['id_matkul']) !== false) {
+                    // dbg($rekap_absensi);
+                    // dbg($rekap_absensi[$nnim]);
+                    // echo " ";
                     if (isset($rekap_absensi[$nnim][$absensi['id_matkul']])) {
                         $rekap_absensi[$nnim][$absensi['id_matkul']]++;
                     }
@@ -342,17 +341,15 @@ class Xhr extends Settings
         foreach ($rekap_absensi as $nim => $rkpmahasiswa) {
             $ceknim = $rkpmahasiswa["nim"];
             foreach ($rekap_absensi[$nim] as $keymatkul => $rekap) {
-                
-                // Ensure keymatkul is treated as a string
                 $keymatkul_str = (string)$keymatkul;
-
-                // Check if keymatkul is numeric and not found in mtkul_akt
                 if (is_numeric($keymatkul) && strpos($mtkul_akt, $keymatkul_str) === false) {
                     $rekap_absensi[$nim][$keymatkul] = "Offline";
                 }
             }
         }
 
+        $data["mahasiswa_data"] = $mahasiswa_data;
+        $data["matkul_aktif_dtl"] = $matkul_aktif_dtl;
         $data["week"] = $week_number;
         $data['rekap_absensi'] = $rekap_absensi;
         $data['matkul_data'] = $matkul_data;

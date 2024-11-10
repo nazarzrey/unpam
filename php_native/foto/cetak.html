@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Gallery</title>
+    <link rel="stylesheet" href="pol.css" />
+    <style>
+      html {
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        padding-top: 5px;
+        border: solid 1px transparent;
+        box-sizing: border-box; /* Include border in the element's total width and height */
+      }
+
+      body {
+        border: solid 1px;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      #gallery {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; /* Center the items horizontally */
+        align-items: center; /* Center the items vertically */
+      }
+
+      img {
+        max-width: 100%;
+        max-height: 365px;
+        height: auto;
+        border: 0px solid #ddd; /* Add a border for better visibility */
+        margin: 0 2px;
+      }
+      .polaroid1 {
+        border: solid 1px;
+      }
+      @page {
+        size: 210mm 297mm; /* Ukuran kertas F4 dalam milimeter */
+        margin: 0; /* Batas margin yang diatur ke 0 */
+        border: solid 1px red;
+        margin-top: 5px;
+      }
+      .image-container {
+        position: relative;
+        text-align: center;
+      }
+      .image-container p {
+        color: white;
+        position: absolute;
+        z-index: 999;
+        /* top: 15px; */
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 80%;
+        font-size: 12px;
+        font-style: italic;
+        bottom: 9px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+      }
+      .lands img {
+        height: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="gallery"></div>
+
+    <script>
+      async function fetchImages() {
+        try {
+          const response = await fetch("images.json");
+
+          if (!response.ok) {
+            console.error("Error fetching image data:", response.statusText);
+            return;
+          }
+
+          const imagesData = await response.json(); // JSON berisi array objek dengan nama, konten, dan tipe
+          displayImages(imagesData);
+        } catch (error) {
+          console.error("Fetch error:", error);
+        }
+      }
+      function displayImages(imagesData) {
+        const gallery = document.getElementById("gallery");
+        imagesData.forEach((imageData) => {
+          const { nama, konten, tipe } = imageData;
+          const imageUrl = "img/" + nama;
+          console.log(nama);
+
+          // Membuat elemen container dengan kelas yang sesuai
+          const container = document.createElement("div");
+          container.classList.add("polaroid");
+
+          if (tipe === "L") {
+            container.classList.add("landscape"); // Jika landscape, tambahkan kelas "landscape"
+          } else {
+            container.classList.add("portrait"); // Jika potret, tambahkan kelas "portrait"
+          }
+
+          const img = document.createElement("img");
+          img.alt = `Foto ${tipe === "L" ? "Lanskap" : "Potret"}`;
+
+          // Memeriksa apakah gambar ada
+          imageExists(imageUrl, function (exists) {
+            if (exists) {
+              img.src = imageUrl;
+              container.appendChild(img);
+
+              // Membuat elemen caption dengan teks konten
+              const caption = document.createElement("div");
+              caption.classList.add("caption");
+              caption.textContent = `${nama}`;
+
+              container.appendChild(caption);
+              gallery.appendChild(container);
+            } else {
+              console.warn(`Image not found: ${imageUrl}`);
+            }
+          });
+        });
+      }
+
+      function imageExists(url, callback) {
+        const img = new Image();
+        img.onload = function () {
+          callback(true);
+        };
+        img.onerror = function () {
+          callback(false);
+        };
+        img.src = url;
+      }
+
+      // Memuat gambar ketika halaman selesai dimuat
+      window.onload = function () {
+        fetchImages();
+      };
+    </script>
+  </body>
+</html>

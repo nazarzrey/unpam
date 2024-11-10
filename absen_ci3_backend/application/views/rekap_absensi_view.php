@@ -82,6 +82,14 @@
         }
         .data_dtl a{text-decoration: none;color:blue}
         .data_dtl a:hover{color:red}
+        td{text-align: left;}
+        .konten td{text-align: center;}
+        .kontn .aleft{text-align: left !important;}
+        .kontn .acenter{text-align:center !important}
+        .color1{background: #fdd3d3;}
+        .color2{background: blue;color:#fff}
+        .color3{background: #e6fbff !important;border: none;}
+        .colorp{background: pink !important;border: none;}
     </style>
 </head>
 <body>
@@ -225,23 +233,9 @@
             echo "<br>";
             echo "<div class='data_dtl' id='data_dtl'>";
             foreach($matkul_aktif_link as $link){
-                // echo char_len("Matkul","&nbsp;",8)." : ".$link["matkul"]." - ".$link["matkul_singkat"]." *(".$link["matkul_fordis"].")*";  
-                // echo "<br/>";
-                // echo char_len("Dosen","&nbsp;",8)." : ".$link["matkul_dosen"];
-                // echo "<br/>";
-                // echo char_len("Url","&nbsp;",8)." : " .$link["matkul_url"];
-                // echo "<br/>";
-                // echo char_len("Last Sync","&nbsp;",8)." : " .$link["sync"];
-                // echo "<br/>";
-                // echo "<br/>";
-                echo "*".$link["matkul_singkat"]." (".str_replace("FORUM DISKUSI ","FORDIS ",$link["matkul_fordis"]).") _lastsync_ ".$link["sync"]."* ";  
-                // echo "<br/>";
-                // echo char_len("Dosen","&nbsp;",8)." : ".$link["matkul_dosen"];
+                echo "*".$link["matkul_singkat"]." (".str_replace("FORUM DISKUSI ","FORDIS ",$link["matkul_fordis"]).") _lastsync_ ".$link["sync"]."* "; 
                 echo "<br/>";
                 echo "<a href='".$link["matkul_url"]."' target='_blank'>".$link["matkul_url"]."</a>";
-                // echo "<br/>";
-                // echo char_len("Last Sync","&nbsp;",8)." : " .$link["sync"];
-                // echo "<br/>";
                 echo "<br/>";
             }
             echo "</div>";

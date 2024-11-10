@@ -90,7 +90,8 @@
                     COUNT(CASE WHEN a.nim LIKE '$nim%' THEN 1 ELSE NULL END) AS absen,
                     IFNULL(b.matkul_min_absen, IFNULL(c.min_absen, 2)) AS min_absen
                     FROM unpam_absensi a
-                    LEFT JOIN unpam_dosen_matkul b ON a.url_matkul = b.matkul_url AND a.nim != 'dosen'
+                    LEFT JOIN unpam_dosen_matkul b ON a.url_matkul = b.matkul_url 
+                    -- AND a.nim != 'dosen'
                     LEFT JOIN unpam_matkul c ON b.matkul_dosen = c.dosen
                     WHERE b.matkul_dosen = '$hasil->dosen'
                     GROUP BY a.url_matkul

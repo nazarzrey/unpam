@@ -1,5 +1,6 @@
 <?php
-include "index.php";
+$menu="robin";
+include "indexe.php";
 echo $name = ucwords("round robin");
 function namanim(){
   $dt = "<div style='font-family:monospace;border:solid 1px;width:300px;padding:10px;margin:10px 0'>";
@@ -320,10 +321,10 @@ function c($char,$leng){
   return $has;
 }
 
-	function dbg($sintak)
-	{
-		#echo "<pre>".print_r($sintak,true)."</pre>";
-		echo "<pre style=''>" . print_r($sintak, true) . "</pre>";
-	}
+	// function dbg($sintak)
+	// {
+	// 	#echo "<pre>".print_r($sintak,true)."</pre>";
+	// 	echo "<pre style=''>" . print_r($sintak, true) . "</pre>";
+	// }
 include "footer.php";
 ?>

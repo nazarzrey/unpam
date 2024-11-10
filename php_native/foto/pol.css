@@ -1,0 +1,71 @@
+/* Gaya dasar untuk elemen Polaroid */
+html,
+body {
+  width: 210mm;
+  height: 297mm;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #fdecfc;
+  box-sizing: border-box;
+}
+
+#gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/* Gaya dasar untuk polaroid */
+.polaroid {
+  position: relative;
+  background-color: rgb(255, 253, 255);
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  padding: 8px 0; /* Padding untuk frame */
+  margin: 2px 1px;
+  color: #333;
+  width: 51mm;
+}
+
+/* Split4 - empat gambar per halaman */
+.split4 .polaroid {
+  width: 51mm;
+  height: 68mm;
+}
+
+/* Split3 - tiga gambar per halaman */
+.split3 .polaroid {
+  width: 120mm;
+  height: 150mm;
+}
+
+/* Gaya gambar portrait */
+.polaroid.portrait img {
+  width: 95%; /* Zoom maksimal 95% */
+  height: 240px;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 4px;
+}
+
+/* Gaya gambar landscape */
+.polaroid.landscape img {
+  width: 95%; /* Penuhi lebar frame */
+  height: 240px; /* Penuhi tinggi frame */
+  object-fit: cover; /* Pastikan gambar solid memenuhi frame tanpa distorsi */
+  object-position: center;
+  border-radius: 4px;
+}
+
+/* Caption */
+.polaroid .caption {
+  position: relative;
+  bottom: -4px;
+  /* margin-top: 8px; */
+  font-size: 12px;
+  color: #555;
+  font-style: italic;
+}

@@ -24,7 +24,7 @@ if "%1"=="" (
     echo.
     echo.
     echo.
-    call :prosescek
+    call :prosescek %1
 )
 
 exit /b
@@ -57,16 +57,19 @@ if %commit_needed% equ 0 (
     echo menjalankan git push.
     echo.
     echo.
-    goto :proses_push
+    goto :proses_push %1
 )
 
 :proses_push
+
+set commite=%1
+echo %commite%
 git pull
 rem Buat commit dan push jika ada yang perlu di-commit
 set tbt=%date:~10,4%%date:~4,2%%date:~7,2%
 set xxtime=%time:~0,2%%time:~3,2%
 set xxdate=%date:~10,4%%date:~4,2%%date:~7,2%
-set comit="commit %username% projek unpam %tbt% %xxtime%"
+set comit="commit %username% projek unpam %tbt% %xxtime% %commite%"
 git add *
 git commit -m %comit%
 git push
