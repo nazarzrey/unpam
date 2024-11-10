@@ -1,16 +1,41 @@
 <?php
 class Absensi_model extends CI_Model {
     public function get_absensi_by_week($week) {
-        $this->db->select('a.*, m.id_matkul, m.min_absen');
-        $this->db->from('unpam_absensi a');
-        $this->db->join('unpam_dosen_matkul dm', 'dm.matkul_url = a.url_matkul', 'left');
-        $this->db->join('unpam_matkul m', 'm.dosen = dm.matkul_dosen', 'leftx');
-        $this->db->where('WEEK(a.absen_time)', $week);
+        // $this->db->select('a.*, m.id_matkul, m.min_absen');
+        // $this->db->from('unpam_absensi a');
+        // $this->db->join('unpam_dosen_matkul dm', 'dm.matkul_url = a.url_matkul', 'left');
+        // $this->db->join('unpam_matkul m', 'm.dosen = dm.matkul_dosen', 'leftx');
+        // $this->db->where('WEEK(a.absen_time)', $week);
         
     // echo $this->db->get_compiled_select();
-        $query = $this->db->get();
-        
-        // dbg($this->db->last_query());
+        // $sql = "SELECT a.`url_matkul`,a.`nim`,a.`nama`, `m`.`id_matkul`, `m`.`min_absen`,COUNT(1) AS total FROM `unpam_absensi` `a` 
+        //     LEFT JOIN `unpam_dosen_matkul` `dm` ON `dm`.`matkul_url` = `a`.`url_matkul` JOIN `unpam_matkul` `m` ON `m`.`dosen` = `dm`.`matkul_dosen` 
+        //     WHERE WEEK(a.absen_time) = 44 AND nim !='dosen'
+        //     GROUP BY url_matkul,nim
+        //     ORDER BY nama,id_matkul,url_matkul";
+        $sql = "SELECT 
+                    LEFT(nim, 12) AS nim,
+                    (SELECT COUNT(1) 
+                    FROM unpam_dosen_matkul mtk 
+                    WHERE WEEK(mtk.absensi_dosen) = 44 
+                    AND mtk.matkul_dosen = ab.matkul_dosen) AS fd,
+                    nama,
+                    id_matkul,
+                    min_absen,
+                    SUM(total) AS total,
+                    GROUP_CONCAT(id_matkul_abs,'|',total) AS url_matkuls
+                FROM (
+                    SELECT a.id_matkul_abs,a.url_matkul,LEFT(a.nim, 12) AS nim,a.nama,m.id_matkul,m.min_absen,COUNT(1) AS total,dm.matkul_dosen
+                    FROM unpam_absensi a
+                    LEFT JOIN unpam_dosen_matkul dm ON dm.matkul_url = a.url_matkul
+                    JOIN unpam_matkul m ON m.dosen = dm.matkul_dosen
+                    WHERE WEEK(a.absen_time) = $week AND LOWER(a.nim) != 'dosen'
+                    -- and nama like 'ILAN%'
+                    GROUP BY a.url_matkul, LEFT(a.nim, 12)
+                    ORDER BY a.nama, m.id_matkul, a.url_matkul
+                ) ab 
+                GROUP BY id_matkul, nim;";
+        $query = $this->db->query($sql);
         return $query->result_array();
     }
     public function get_matkul_aktif($week) {
@@ -34,6 +59,7 @@ class Absensi_model extends CI_Model {
         $this->db->select('nama,substr(nim,1,12) as nim,alias,keter,gender');
         $this->db->from('unpam_mahasiswa');
         $this->db->where('ifnull(keter,"")=','');
+        // $this->db->where('alias','ILAN');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -48,12 +74,12 @@ class Absensi_model extends CI_Model {
         
         $sql = "SELECT a.*,date_format(max(b.`updrec_date`),'%d-%m-%y %H:%i') as sync FROM unpam_matkul a left join unpam_absen_log b
         on trim(a.`dosen`)=trim(b.`obj_dosen`) where semester=(SELECT konten FROM unpam_setting WHERE jenis='semester') and kelas='$kls' group by a.`dosen`,matkul;";
-        echo $sql;
         $query = $this->db->query($sql);
         return $query->result_array();
     }
     public function get_dosen_matkul_aktif($week) {
         $sql = "SELECT
+            b.`dm_id` AS id_matkul_abs,
             a.*,REPLACE(b.`matkul_fordis`,'FORUM DISKUSI ','FD-') AS fordis,
             b.`matkul_fordis_title`,
             b.matkul_url,
@@ -75,9 +101,13 @@ class Absensi_model extends CI_Model {
             AND kelas = 'TPLE004'
             AND WEEK(b.`absensi_dosen`)='$week'
             GROUP BY a.`dosen`,matkul,b.`matkul_url`
-            ORDER BY matkul,fordis";
+            ORDER BY  id_matkul,dm_id";
         $query = $this->db->query($sql);
         return $query->result_array();
+    }
+    public function upd_absensi() {
+        $sql = "UPDATE unpam_absensi a LEFT JOIN unpam_dosen_matkul b ON a.`url_matkul`=b.`matkul_url` SET a.`id_matkul_abs`=b.`dm_id` WHERE ifnull(a.id_matkul_abs,0)=0";
+        $this->db->query($sql);
     }
 }
 ?>

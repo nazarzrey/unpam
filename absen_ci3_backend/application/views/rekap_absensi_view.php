@@ -14,7 +14,8 @@
         }
         th, td {
             padding: 5px 10px;
-            text-align: center;
+            text-align: center !important;
+            font-weight: bold;
         }
         thead {
             background: #f1f1f1;
@@ -49,7 +50,7 @@
         .t2 { width: 100px; }
         .tl{text-align:left}
         .checked {
-            color: green;
+            color: blue;
         }
         .btn,.btn1,.btn2{
             padding:5px;
@@ -121,15 +122,18 @@
     $matkul_aktif_array = explode(",", $matkul_aktif["matkul_aktif"]);;
     
             // if (in_array($cari_matkul, $matkul_aktif_array)) { 
+            // dbg($matkul_aktif_link);
     ?>
     <table border="1">
         <thead>
             <tr>
-                <th class='tno' rowspan='2'>No</th>
+                <th class='tno' rowspan='3'>No</th>
                 <?php 
-                for($xy=0;$xy<=1;$xy++){
+                for($xy=0;$xy<=2;$xy++){
                         if($xy==0){
                             echo "<th class='t1'>Sync</th>";
+                        }elseif($xy==1){
+                            echo "<th class='t1'>Minimal Absen</th>";
                         }else{
                             echo "<th class='t1'>Nama</th>";
                         }
@@ -142,6 +146,8 @@
                         if(in_array($id_matkul, $matkul_aktif_array)) { 
                             if($xy==0){
                                 echo "<th class='sync t2'>".$matkul['sync']."</th>";
+                            }elseif($xy==1){
+                                echo "<th class='t2'>".$matkul['min_absen']."</th>";
                             }else{
                                 echo "<th class='t2'>".substr(empty($matkul['matkul_singkat'])?"":$matkul['matkul_singkat']."<br/>".$matkul['fordis'],0,20)."</th>";
                             }
@@ -169,25 +175,42 @@
                         $susul = "";
                         $csus = "";
                     }
+                    // dbg($rekap);
                     ?>
                     <td class=''><?= $z ?></td>
                     <td class='t1 tl <?= $csus ?>'><?php echo Uw($rekap['nama'])." ".$susul; ?></td>
                     <?php
-                    $mangkir_dtl = "";
-                    // dbg($matkul_data);
-                    foreach ($matkul_aktif_link as $matkul) {
-                        $id_matkul = $matkul['id_matkul'];
-                        $kd_matkul = $matkul['matkul_singkat'];
-                        $absen_count = $rekap[$id_matkul];
-						if($absen_count == "0"){
-                            $mangkir_dtl .= $kd_matkul.",";
-						}
-                        $min_absen = $matkul['min_absen'];
-							 //strlen($absen_count)."zzz";
-                        if ($absen_count == 'Offline') {
-                            echo "<td class='empty'>" . ($absen_count == 'Offline' ? '-' : $absen_count) . "</td>";
-                        } else {
-							$hadir ++;
+                    $mangkir_dtl = "";         
+                    $fdsk = "";     
+                    $mangkir_count = 0;  
+                    foreach ($matkul_aktif_link as $keyxy => $matkul){
+                        $id_matkul      =  $matkul["id_matkul"];
+                        $id_matkul_abs  =  $matkul["id_matkul_abs"];
+                        $min_absen      =  $matkul["min_absen"];
+                        $id_absen_count = $rekap[$id_matkul];
+                        if($fdsk!=$id_matkul){
+                                echo "<th class='empty'>&nbsp;</th>";
+                        }
+                        if(is_array($id_absen_count)){
+                            // dbg($id_absen_count);
+                            if(isset($id_absen_count[$id_matkul_abs])){
+                                $absen_count = $id_absen_count[$id_matkul_abs];
+                                if ((int)$absen_count == "0") {
+                                    $class = "merah";
+                                } elseif ($absen_count < $min_absen) {
+                                    $mangkir_dtl .= $matkul['matkul_singkat'].":".($min_absen - $absen_count).",";
+                                    $class = "kurang";
+                                } else {
+                                    $class = "checked";
+                                }
+                                echo "<td class='t2 $class'>" . $absen_count . "</td>";
+                                // echo "<th class='t2'>".$absen_count."</th>";
+                            }else{           
+                                $mangkir_dtl .= $matkul['matkul_singkat'].",";
+                                echo "<th class='t2 merah'>0</th>";
+                            }
+                        }else{
+                            $absen_count = $id_absen_count;
                             if ((int)$absen_count == "0") {
                                 $class = "merah";
                             } elseif ($absen_count < $min_absen) {
@@ -195,8 +218,13 @@
                             } else {
                                 $class = "checked";
                             }
+                            if($absen_count == 0 || $absen_count < $min_absen){
+                                $mangkir_dtl .= $matkul['matkul_singkat'].",";
+                            }
                             echo "<td class='t2 $class'>" . $absen_count . "</td>";
                         }
+                        $fdsk=$id_matkul;
+							$hadir ++;
                     }
                     if($nm!=$rekap["alias"]){
                         if(!empty($mangkir_dtl)){
@@ -214,16 +242,15 @@
 	<div class='popupclose' id="popupclose">X</div>
         <div id="copypopup" style="display:block">
             <img src="<?= base_url("assets/images/copy.png") ?>" />
-                </div>
-        <div id="popupcontent" style="display:none">
+        </div>
+        <div id="popupcontent" style="display:block">
         <?php 
         /*$hari_sekarang = strtolower(date("D"));
         $hari_dalam_minggu = array("wed", "thu", "fri", "sat", "sun");
         if (in_array($hari_sekarang, $hari_dalam_minggu)) { */
         //echo $hadir;
         // dbg($mangkir);
-        if($hadir>50){
-            
+        if($hadir>50){            
             echo "<b>Absen E-learning yang masih belum lengkap</b>";
             echo "<hr>";
             echo "<br>";
@@ -233,7 +260,7 @@
             echo "<br>";
             echo "<div class='data_dtl' id='data_dtl'>";
             foreach($matkul_aktif_link as $link){
-                echo "*".$link["matkul_singkat"]." (".str_replace("FORUM DISKUSI ","FORDIS ",$link["matkul_fordis"]).") _lastsync_ ".$link["sync"]."* "; 
+                echo "*".$link["matkul_singkat"]." (".str_replace("FORUM DISKUSI ","FORDIS ",$link["fordis"]).") _lastsync_ ".$link["sync"]."* "; 
                 echo "<br/>";
                 echo "<a href='".$link["matkul_url"]."' target='_blank'>".$link["matkul_url"]."</a>";
                 echo "<br/>";

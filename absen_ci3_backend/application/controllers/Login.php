@@ -31,6 +31,7 @@ class Login extends CI_Controller {
             $this->session->set_userdata('nama', $user->nama);
             $this->session->set_userdata('tipe', $user->tipe);
             $this->session->set_userdata('kelas', $user->kelas);
+            $this->session->set_userdata('keter', $user->kelas);
             redirect($redirect);
         } else {
             $this->session->set_flashdata('error', 'Invalid NIM or kelas');

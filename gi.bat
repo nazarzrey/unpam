@@ -64,8 +64,7 @@ if %commit_needed% equ 0 (
 
 set commite=%1
 echo %commite%
-git pull
-rem Buat commit dan push jika ada yang perlu di-commit
+rem git pull
 set tbt=%date:~10,4%%date:~4,2%%date:~7,2%
 set xxtime=%time:~0,2%%time:~3,2%
 set xxdate=%date:~10,4%%date:~4,2%%date:~7,2%
