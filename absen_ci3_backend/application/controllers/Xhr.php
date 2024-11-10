@@ -300,12 +300,12 @@ class Xhr extends Settings
 
         // Ambil data absensi, mahasiswa, matkul, dan dosen matkul
         $absensi_data = $this->Absensi_model->get_absensi_by_week($week_number);
-        $matkul_aktif = $this->Absensi_model->get_matkul_aktif($week_number);
         $mahasiswa_data = $this->Absensi_model->get_all_mahasiswa();
         $matkul_data = $this->Absensi_model->get_all_matkul();
+        $matkul_aktif = $this->Absensi_model->get_matkul_aktif($week_number);
         $matkul_aktif_link = $this->Absensi_model->get_dosen_matkul_aktif($week_number);
 
-        // dbg($mahasiswa_data);
+        // dbg($matkul_aktif_link);
         // Buat rekap absensi
         $rekap_absensi = [];
         foreach ($mahasiswa_data as $mahasiswa) {
@@ -316,13 +316,16 @@ class Xhr extends Settings
                 'keter' => $mahasiswa['keter']
             ];
             // dbg($matkul_data);
-            foreach ($matkul_data as $matkul) {
+            // foreach ($matkul_data as $matkul) {
+            //     $rekap_absensi[$mahasiswa['nim']][$matkul['id_matkul']] = 0;
+            // }
+            foreach ($matkul_aktif_link as $matkul) {
                 $rekap_absensi[$mahasiswa['nim']][$matkul['id_matkul']] = 0;
             }
         }
         // dbg($matkul_aktif[0]["matkul_aktif"]);
         // Populate attendance data
-        // dbg($mahasiswa_data);
+        // dbg($rekap_absensi);
         $mtkul_akt = $matkul_aktif[0]["matkul_aktif"];
         foreach ($absensi_data as $absensi) {
             $nnim = substr($absensi['nim'], 0, 12);
@@ -335,16 +338,7 @@ class Xhr extends Settings
                 }
             }
         }
-        // foreach ($rekap_absensi as $nim => $rkpmahasiswa) {
-        //     $ceknim =  $rkpmahasiswa["nim"];
-        //     foreach($rekap_absensi[$nim] as $keymatkul => $rekap){
-        //         if(is_numeric($keymatkul)){
-        //             if (strpos($mtkul_akt,(string)$keymatkul) === false) {
-        //                 $rekap_absensi[$nim][$keymatkul] = "Offline";
-        //             }
-        //         };
-        //     }
-        // }
+        
         foreach ($rekap_absensi as $nim => $rkpmahasiswa) {
             $ceknim = $rkpmahasiswa["nim"];
             foreach ($rekap_absensi[$nim] as $keymatkul => $rekap) {

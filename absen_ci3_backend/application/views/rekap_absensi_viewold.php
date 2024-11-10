@@ -107,41 +107,22 @@
     </div>
     <?php 
     // dbg($matkul_data);
-    // dbg($matkul_aktif);
-    
-    $matkul_aktif = ["matkul_aktif" => $matkul_aktif[0]["matkul_aktif"]];
-    $matkul_aktif_array = explode(",", $matkul_aktif["matkul_aktif"]);;
-    
-            // if (in_array($cari_matkul, $matkul_aktif_array)) { 
     ?>
     <table border="1">
         <thead>
             <tr>
                 <th class='tno' rowspan='2'>No</th>
-                <?php 
-                for($xy=0;$xy<=1;$xy++){
-                        if($xy==0){
-                            echo "<th class='t1'>Sync</th>";
-                        }else{
-                            echo "<th class='t1'>Nama</th>";
-                        }
-                    $fdsk = "";
-                    foreach ($matkul_aktif_link as $keyxy => $matkul){
-                        $id_matkul =  $matkul["id_matkul"];
-                        if($fdsk!=$id_matkul){
-                                echo "<th class='empty'>&nbsp;</th>";
-                        }
-                        if(in_array($id_matkul, $matkul_aktif_array)) { 
-                            if($xy==0){
-                                echo "<th class='sync t2'>".$matkul['sync']."</th>";
-                            }else{
-                                echo "<th class='t2'>".substr(empty($matkul['matkul_singkat'])?"":$matkul['matkul_singkat']."<br/>".$matkul['fordis'],0,20)."</th>";
-                            }
-                        }
-                        $fdsk=$id_matkul;
-                    }
-                    echo "</tr>";
-                } ?>
+                <th class='t1'>Sync</th>
+                <?php foreach ($matkul_data as $matkul): ?>
+                    <th class='sync t2'><?php echo $matkul['sync']; ?></th>
+                <?php endforeach; ?>
+            </tr>
+            <tr>
+                <th class='t1'>Nama</th>
+                <?php foreach ($matkul_data as $matkul): ?>
+                    <th class='t2'><?php echo substr(empty($matkul['matkul_singkat'])?"":$matkul['matkul_singkat'], 0, 3); ?></th>
+                <?php endforeach; ?>
+            </tr>
         </thead>
         <tbody>
 
@@ -167,7 +148,7 @@
                     <?php
                     $mangkir_dtl = "";
                     // dbg($matkul_data);
-                    foreach ($matkul_aktif_link as $matkul) {
+                    foreach ($matkul_data as $matkul) {
                         $id_matkul = $matkul['id_matkul'];
                         $kd_matkul = $matkul['matkul_singkat'];
                         $absen_count = $rekap[$id_matkul];
@@ -207,7 +188,7 @@
         <div id="copypopup" style="display:block">
             <img src="<?= base_url("assets/images/copy.png") ?>" />
                 </div>
-        <div id="popupcontent" style="display:none">
+        <div id="popupcontent" style="display:block">
         <?php 
         /*$hari_sekarang = strtolower(date("D"));
         $hari_dalam_minggu = array("wed", "thu", "fri", "sat", "sun");
@@ -252,49 +233,37 @@
         </div>
     </div>
     <script>
-        var popup = document.getElementById('popupclose');  
-        var popupcontent = document.getElementById('popupcontent');  
-        var popupcontent2 = document.getElementById('data_dtl');  
-        var copycontent = document.getElementById('copypopup');  
-        popup.addEventListener('click', function () {
-            var displayPopup = false;
-            if(popupcontent.style.display=="block"){
-                popupcontent.style.display = "none";
-                copycontent.style.display = "none";
-                displayPopup = true
-            }else{            
-                popupcontent.style.display = "block";
-                copycontent.style.display = "block";
-                displayPopup = false
-            }
-            localStorage.setItem('popupState', displayPopup ? 'none' : 'block');
-        })
-        copycontent.addEventListener('click', function () {
-            const target = popupcontent
-            navigator.clipboard.writeText(popupcontent.innerText)
-                .then(() => {
-                    console.log('URI copied to clipboard successfully!');
-                    alert("Sudah di Copy silahkan tambahin gula..  :D")
-                })
-                .catch(err => {
-                    console.error('Failed to copy URI to clipboard:', err);
-                });
-
-        })
-
-        document.querySelectorAll('td.checked').forEach(cell => {
-            cell.setAttribute('data-original', cell.innerHTML);
-            cell.innerHTML = '&#x2713;'; 
-            cell.style.color = 'green';
-        });
-        const toggleCheckbox = document.getElementById('toggleCheckbox');
-
-        const savedState = localStorage.getItem('toggleCheckboxState');
-        if (savedState === 'checked') {
-            toggleCheckbox.checked = true;
+        
+    var popup = document.getElementById('popupclose');  
+    var popupcontent = document.getElementById('popupcontent');  
+    var popupcontent2 = document.getElementById('data_dtl');  
+    var copycontent = document.getElementById('copypopup');  
+    popup.addEventListener('click', function () {
+        if(popupcontent.style.display=="block"){
+            popupcontent.style.display = "none";
+            copycontent.style.display = "none";
+        }else{            
+            popupcontent.style.display = "block";
+            copycontent.style.display = "block";
         }
+    })
+    copycontent.addEventListener('click', function () {
+        // const uri = cell.getAttribute('uri');
+        const target = popupcontent
+        navigator.clipboard.writeText(popupcontent.innerText)
+        // navigator.clipboard.writeText(popupcontent2.innerText)
+            .then(() => {
+                console.log('URI copied to clipboard successfully!');
+                alert("Sudah di Copy silahkan tambahin gula..  :D")
+            })
+            .catch(err => {
+                console.error('Failed to copy URI to clipboard:', err);
+            });
 
-        function updateCells(isChecked) {
+    })
+
+        document.getElementById('toggleCheckbox').addEventListener('change', function() {
+            const isChecked = this.checked;
             const cells = document.querySelectorAll('td.checked');
             cells.forEach(cell => {
                 if (isChecked) {
@@ -305,22 +274,13 @@
                     cell.style.color = 'green';
                 }
             });
-            if (localStorage.getItem('popupState')){
-                if(localStorage.getItem('popupState')=="block"){
-                    popupcontent.style.display = "block";
-                    copycontent.style.display = "block";
-                }else{
-                    popupcontent.style.display = "none";
-                    copycontent.style.display = "none";
-                }
-            }
-        }
+        });
 
-        updateCells(toggleCheckbox.checked);
-        toggleCheckbox.addEventListener('change', function() {
-            const isChecked = this.checked;
-            localStorage.setItem('toggleCheckboxState', isChecked ? 'checked' : 'unchecked');
-            updateCells(isChecked);
+        // Save original values in data attribute and set initial state to checkmark
+        document.querySelectorAll('td.checked').forEach(cell => {
+            cell.setAttribute('data-original', cell.innerHTML);
+            cell.innerHTML = '&#x2713;'; // Initial state with checkmark symbol
+            cell.style.color = 'green';
         });
     </script>
 </body>

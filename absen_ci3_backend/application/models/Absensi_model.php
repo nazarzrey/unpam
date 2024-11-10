@@ -28,12 +28,7 @@ class Absensi_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function get_all_matkul() {
-        // $this->db->select('*');
-        // $this->db->from('unpam_matkul');
-        // $query = $this->db->get();
-        // return $query->result_array();
-        
+    public function get_all_matkul() {        
         if($this->session->userdata('nim')!=""){
             $value2 = $this->session->userdata('nim');
             $kls = $this->session->userdata('kelas');
@@ -43,19 +38,34 @@ class Absensi_model extends CI_Model {
         
         $sql = "SELECT a.*,date_format(max(b.`updrec_date`),'%d-%m-%y %H:%i') as sync FROM unpam_matkul a left join unpam_absen_log b
         on trim(a.`dosen`)=trim(b.`obj_dosen`) where semester=(SELECT konten FROM unpam_setting WHERE jenis='semester') and kelas='$kls' group by a.`dosen`,matkul;";
+        echo $sql;
         $query = $this->db->query($sql);
         return $query->result_array();
     }
     public function get_dosen_matkul_aktif($week) {
-        $sql = "SELECT a.matkul_url,MAX(c.`updrec_date`) as sync,a.`matkul_dosen`,b.`matkul_singkat`,b.matkul,matkul_fordis  FROM unpam_dosen_matkul a 
-                LEFT JOIN unpam_matkul b ON a.`matkul_dosen`=b.`dosen`
-                LEFT JOIN url_log c ON a.`matkul_url`=c.url
-                WHERE WEEK(a.absensi_dosen) = '$week' GROUP BY a.matkul_url
-        ";
-        // -- $sql = "SELECT a.`matkul_dosen`,a.matkul_url,b.`matkul_singkat`,b.matkul  FROM unpam_dosen_matkul a 
-        // --         LEFT JOIN unpam_matkul b ON a.`matkul_dosen`=b.`dosen`
-        // --         WHERE WEEK(a.absensi_dosen) = '$week' "; 
-        // --         // GROUP BY matkul_dosen
+        $sql = "SELECT
+            a.*,REPLACE(b.`matkul_fordis`,'FORUM DISKUSI ','FD-') AS fordis,
+            b.`matkul_fordis_title`,
+            b.matkul_url,
+            IFNULL(
+            DATE_FORMAT(
+                MAX(b.`updrec_date`),
+                '%d-%m-%y %H:%i'
+            ),'00-00-00 00:00') AS sync
+            FROM
+            unpam_matkul a
+            LEFT JOIN unpam_dosen_matkul b
+                ON TRIM(a.`dosen`) = TRIM(b.`matkul_dosen`)
+            WHERE a.semester =
+            (SELECT
+                konten
+            FROM
+                unpam_setting
+            WHERE jenis = 'semester')
+            AND kelas = 'TPLE004'
+            AND WEEK(b.`absensi_dosen`)='$week'
+            GROUP BY a.`dosen`,matkul,b.`matkul_url`
+            ORDER BY matkul,fordis";
         $query = $this->db->query($sql);
         return $query->result_array();
     }
