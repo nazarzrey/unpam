@@ -138,6 +138,7 @@
                             echo "<th class='t1'>Nama</th>";
                         }
                     $fdsk = "";
+					$total_matkul_aktif = 0;
                     foreach ($matkul_aktif_link as $keyxy => $matkul){
                         $id_matkul =  $matkul["id_matkul"];
                         if($fdsk!=$id_matkul){
@@ -153,6 +154,7 @@
                             }
                         }
                         $fdsk=$id_matkul;
+						$total_matkul_aktif++;
                     }
                     echo "</tr>";
                 } ?>
@@ -160,7 +162,7 @@
         <tbody>
 
             <?php 
-            //dbg($rekap_absensi);
+            // dbg($total_matkul_aktif);
             $z = 1;
             $mangkir = array();
             $nm = "";
@@ -168,17 +170,80 @@
             foreach ($rekap_absensi as $rekap): ?>
                 <tr class='tr'>
                     <?php
-                    if($rekap["keter"]!=""){ 
-                        $susul = "- ".Uw($rekap["keter"]);
-                        $csus = "susulan";
-                    }else{
-                        $susul = "";
-                        $csus = "";
-                    }
+                    if($rekap["keter"]==""){ 
+						// dbg($rekap);
+						?>
+						<td class=''><?= $z ?></td>
+						<td class='t1 tl <?= $csus ?>'><?php echo Uw($rekap['nama']); ?></td>
+						<?php
+						$mangkir_dtl = "";         
+						$fdsk = "";     
+						$mangkir_count = 0;  
+						foreach ($matkul_aktif_link as $keyxy => $matkul){
+							$id_matkul      =  $matkul["id_matkul"];
+							$id_matkul_abs  =  $matkul["id_matkul_abs"];
+							$min_absen      =  $matkul["min_absen"];
+							$id_absen_count = $rekap[$id_matkul];
+							if($fdsk!=$id_matkul){
+									echo "<th class='empty'>&nbsp;</th>";
+							}
+							if(is_array($id_absen_count)){
+								// dbg($id_absen_count);
+								if(isset($id_absen_count[$id_matkul_abs])){
+									$absen_count = $id_absen_count[$id_matkul_abs];
+									if ((int)$absen_count == "0") {
+										$class = "merah";
+									} elseif ($absen_count < $min_absen) {
+										$mangkir_dtl .= $matkul['matkul_singkat'].":".($min_absen - $absen_count).",";
+										$class = "kurang";
+									} else {
+										$class = "checked";
+									}
+									echo "<td class='t2 $class'>" . $absen_count . "</td>";
+									// echo "<th class='t2'>".$absen_count."</th>";
+								}else{           
+									$mangkir_dtl .= $matkul['matkul_singkat'].",";
+									echo "<th class='t2 merah'>0</th>";
+								}
+							}else{
+								$absen_count = $id_absen_count;
+								if ((int)$absen_count == "0") {
+									$class = "merah";
+								} elseif ($absen_count < $min_absen) {
+									$class = "kurang";
+								} else {
+									$class = "checked";
+								}
+								if($absen_count == 0 || $absen_count < $min_absen){
+									$mangkir_dtl .= $matkul['matkul_singkat'].",";
+								}
+								echo "<td class='t2 $class'>" . $absen_count . "</td>";
+							}
+							$fdsk=$id_matkul;
+								$hadir ++;
+						}
+						if($nm!=$rekap["alias"]){
+							if(!empty($mangkir_dtl)){
+								$matkul = rtrim($mangkir_dtl, ',');
+								$mangkir[] = Uw($rekap["alias"])." (". $matkul.")";
+							};
+						}       
+						$nm = $rekap["alias"];      			
+                    ?>
+                </tr>
+					<?php $z++;} endforeach; ?>
+					
+			<?php 
+			echo "<tr class='kurang'><td colspan='".(($total_matkul_aktif*2)+2)."'>SUSULAN</td></tr>";
+			foreach ($rekap_absensi as $rekap): ?>
+                <tr class='tr'>
+                    <?php
+                    if(!empty($rekap["keter"])){ 
+			//dbg($rekap_absensi);
                     // dbg($rekap);
                     ?>
                     <td class=''><?= $z ?></td>
-                    <td class='t1 tl <?= $csus ?>'><?php echo Uw($rekap['nama'])." ".$susul; ?></td>
+                    <td class='t1 tl <?= $csus ?>'><?php echo Uw($rekap['nama']) ?></td>
                     <?php
                     $mangkir_dtl = "";         
                     $fdsk = "";     
@@ -198,7 +263,6 @@
                                 if ((int)$absen_count == "0") {
                                     $class = "merah";
                                 } elseif ($absen_count < $min_absen) {
-                                    $mangkir_dtl .= $matkul['matkul_singkat'].":".($min_absen - $absen_count).",";
                                     $class = "kurang";
                                 } else {
                                     $class = "checked";
@@ -206,7 +270,6 @@
                                 echo "<td class='t2 $class'>" . $absen_count . "</td>";
                                 // echo "<th class='t2'>".$absen_count."</th>";
                             }else{           
-                                $mangkir_dtl .= $matkul['matkul_singkat'].",";
                                 echo "<th class='t2 merah'>0</th>";
                             }
                         }else{
@@ -217,9 +280,6 @@
                                 $class = "kurang";
                             } else {
                                 $class = "checked";
-                            }
-                            if($absen_count == 0 || $absen_count < $min_absen){
-                                $mangkir_dtl .= $matkul['matkul_singkat'].",";
                             }
                             echo "<td class='t2 $class'>" . $absen_count . "</td>";
                         }
@@ -235,7 +295,7 @@
                     $nm = $rekap["alias"];             
                     ?>
                 </tr>
-            <?php $z++; endforeach; ?>
+					<?php $z++;} endforeach; ?>
         </tbody>
     </table>
     <div class='popup'>

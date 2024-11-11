@@ -1,23 +1,11 @@
 <?php
 class Absensi_model extends CI_Model {
     public function get_absensi_by_week($week) {
-        // $this->db->select('a.*, m.id_matkul, m.min_absen');
-        // $this->db->from('unpam_absensi a');
-        // $this->db->join('unpam_dosen_matkul dm', 'dm.matkul_url = a.url_matkul', 'left');
-        // $this->db->join('unpam_matkul m', 'm.dosen = dm.matkul_dosen', 'leftx');
-        // $this->db->where('WEEK(a.absen_time)', $week);
-        
-    // echo $this->db->get_compiled_select();
-        // $sql = "SELECT a.`url_matkul`,a.`nim`,a.`nama`, `m`.`id_matkul`, `m`.`min_absen`,COUNT(1) AS total FROM `unpam_absensi` `a` 
-        //     LEFT JOIN `unpam_dosen_matkul` `dm` ON `dm`.`matkul_url` = `a`.`url_matkul` JOIN `unpam_matkul` `m` ON `m`.`dosen` = `dm`.`matkul_dosen` 
-        //     WHERE WEEK(a.absen_time) = 44 AND nim !='dosen'
-        //     GROUP BY url_matkul,nim
-        //     ORDER BY nama,id_matkul,url_matkul";
-        $sql = "SELECT 
+       $sql = "SELECT 
                     LEFT(nim, 12) AS nim,
                     (SELECT COUNT(1) 
                     FROM unpam_dosen_matkul mtk 
-                    WHERE WEEK(mtk.absensi_dosen) = 44 
+                    WHERE WEEK(mtk.absensi_dosen) = $week 
                     AND mtk.matkul_dosen = ab.matkul_dosen) AS fd,
                     nama,
                     id_matkul,
@@ -29,8 +17,9 @@ class Absensi_model extends CI_Model {
                     FROM unpam_absensi a
                     LEFT JOIN unpam_dosen_matkul dm ON dm.matkul_url = a.url_matkul
                     JOIN unpam_matkul m ON m.dosen = dm.matkul_dosen
-                    WHERE WEEK(a.absen_time) = $week AND LOWER(a.nim) != 'dosen'
-                    -- and nama like 'ILAN%'
+                    WHERE WEEK(dm.`absensi_dosen`) = $week 
+                    AND LOWER(a.nim) != 'dosen'
+                    -- and nama like 'NAZA%'
                     GROUP BY a.url_matkul, LEFT(a.nim, 12)
                     ORDER BY a.nama, m.id_matkul, a.url_matkul
                 ) ab 
@@ -44,7 +33,16 @@ class Absensi_model extends CI_Model {
                 WHERE WEEK(a.absensi_dosen) = '$week' "; 
                 // GROUP BY matkul_dosen
         $query = $this->db->query($sql);
-        return $query->result_array();
+        $hasil = $query->result_array();
+        if(empty($hasil[0]["matkul_aktif"])){
+            $takeother = $this->get_all_matkul();
+            foreach($takeother as $aktif_all){
+                $matkul_aktif[] = $aktif_all["id_matkul"];
+            }
+            $balikan[] = array("matkul_aktif"=>implode(",",$matkul_aktif));
+            $hasil = $balikan;
+        }
+        return $hasil;
     }
 
     public function get_matkul_aktif_detail($week) {
@@ -58,8 +56,8 @@ class Absensi_model extends CI_Model {
     public function get_all_mahasiswa() {
         $this->db->select('nama,substr(nim,1,12) as nim,alias,keter,gender');
         $this->db->from('unpam_mahasiswa');
-        $this->db->where('ifnull(keter,"")=','');
-        // $this->db->where('alias','ILAN');
+        //$this->db->where('ifnull(keter,"")=','');
+        // $this->db->where('alias','NAZA');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -75,7 +73,8 @@ class Absensi_model extends CI_Model {
         $sql = "SELECT a.*,date_format(max(b.`updrec_date`),'%d-%m-%y %H:%i') as sync FROM unpam_matkul a left join unpam_absen_log b
         on trim(a.`dosen`)=trim(b.`obj_dosen`) where semester=(SELECT konten FROM unpam_setting WHERE jenis='semester') and kelas='$kls' group by a.`dosen`,matkul;";
         $query = $this->db->query($sql);
-        return $query->result_array();
+        $hasil = $query->result_array();
+        return $hasil;
     }
     public function get_dosen_matkul_aktif($week) {
         $sql = "SELECT

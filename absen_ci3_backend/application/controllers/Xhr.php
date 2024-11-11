@@ -217,6 +217,8 @@ class Xhr extends Settings
             if($this->session->userdata('nim')!=""){
                 $value2 = $this->session->userdata('nim');
                 $kls = $this->session->userdata('kelas');
+            }else{
+                redirect(base_url('login'));
             }
             if($value2!=""){
                 $data[] = "";
@@ -322,9 +324,6 @@ class Xhr extends Settings
         // Populate attendance data
         // dbg($rekap_absensi);
         $mtkul_akt = $matkul_aktif[0]["matkul_aktif"];
-        // dbg($absensi_data);
-                    $urlmtkl = "";
-        // DBG(COUNT($absensi_data));
         foreach ($absensi_data as $absensi) {
             $nnim = substr($absensi['nim'], 0, 12);
             if($nnim!="Dosen"){
@@ -333,11 +332,7 @@ class Xhr extends Settings
                 $fds = $absensi['fd'];
                 $ttl  = $absensi['total'];
                 if (strpos($mtkul_akt,(string)$mid) !== false) {
-                    $lurl="";
-                    $new = [];
                     if (isset($rekap_absensi[$nnim][$mid])) {
-                        // if($lid==$mid){
-                        // if($lurl)
                         if($fds>1){
                             $cek_url = explode(",",$murl);
                             if(is_array($cek_url)){
@@ -352,7 +347,6 @@ class Xhr extends Settings
                                 $arr_url[$split_url[0]] =$split_url[1];
                                 $rekap_absensi[$nnim][$mid] = $arr_url;
                             }
-                            // $rekap_absensi[$nnim][$mid] = array([$cek_url],"1");
                         }else{
                             $rekap_absensi[$nnim][$mid] = $ttl;
                         }
@@ -360,7 +354,6 @@ class Xhr extends Settings
                 }
             }
         }
-        // dbg($rekap_absensi);
         foreach ($rekap_absensi as $nim => $rkpmahasiswa) {
             $ceknim = $rkpmahasiswa["nim"];
             foreach ($rekap_absensi[$nim] as $keymatkul => $rekap) {
@@ -372,7 +365,6 @@ class Xhr extends Settings
         }
 
         $data["mahasiswa_data"] = $mahasiswa_data;
-        // $data["matkul_aktif_dtl"] = $matkul_aktif_dtl;
         $data["week"] = $week_number;
         $data['rekap_absensi'] = $rekap_absensi;
         $data['matkul_data'] = $matkul_data;

@@ -86,16 +86,15 @@
        $qry_mhs = "SELECT a.url_matkul,
                     b.`matkul_fordis`,
                     b.`matkul_fordis_title`,
-                    WEEK(MIN(a.absen_time)) AS minggu,
+                    WEEK(MIN(absensi_dosen)) AS minggu,
                     COUNT(CASE WHEN a.nim LIKE '$nim%' THEN 1 ELSE NULL END) AS absen,
                     IFNULL(b.matkul_min_absen, IFNULL(c.min_absen, 2)) AS min_absen
                     FROM unpam_absensi a
                     LEFT JOIN unpam_dosen_matkul b ON a.url_matkul = b.matkul_url 
-                    -- AND a.nim != 'dosen'
                     LEFT JOIN unpam_matkul c ON b.matkul_dosen = c.dosen
                     WHERE b.matkul_dosen = '$hasil->dosen'
                     GROUP BY a.url_matkul
-                    ORDER BY WEEK(MIN(a.absen_time))";
+                    ORDER BY WEEK(MIN(absensi_dosen))";
        $qry_dosen = "SELECT GROUP_CONCAT(DISTINCT url_matkul SEPARATOR ',') AS url_matkul,
                         GROUP_CONCAT(DISTINCT CONCAT(matkul_fordis_title,' : (',absen,')') SEPARATOR '#') AS double_title, 
                         GROUP_CONCAT(minggu, '-', absen) AS absen_dtl,
@@ -103,7 +102,8 @@
                         minggu,SUM(absen) AS absen,min_absen
                     FROM ($qry_mhs) abcd
                     GROUP BY minggu;";
-        // echo $qry_dosen;                    
+//         echo $qry_dosen;                    
+// echo "<br/>";
 // echo "<br/>";
         $rsl_dosen = each_query($this->db->query($qry_dosen));
         if($rsl_dosen){

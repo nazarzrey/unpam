@@ -1,5 +1,5 @@
 <?php
-$menu="scandisk";
+$menu="disk";
 include "indexe.php";
 echo $name = ucwords("DISK");
 ?>
@@ -16,12 +16,17 @@ echo $name = ucwords("DISK");
     echo "<br/>";
     if(isset($_GET["nilai"])){
       $mulai = $_GET["mulai"]; //15,70,10,79,34,16,92,11,51,25
-      $nilai = $_GET["nilai"];  //35
+      $nilai = str_replace(" ","",$_GET["nilai"]);  //35
+      if(empty($mulai) || empty($nilai)){
+        die("inputan harus di isi");
+      }
       $metode = $_GET["metode"];
       $asli  = explode(",",$nilai);      
       asort($asli);
       $arrayBaru = array_values($asli);
       $ang   = $nilai.",".$mulai;
+      
+    //   dbg($ang);
       $exp = explode(",",$ang);
       asort($exp);
       $max = max($exp);
@@ -34,6 +39,7 @@ echo $name = ucwords("DISK");
         echo char("-",$rms).$angka;
         $last = $angka;
       }
+        echo "<br/>";
         if($metode=="FCFS"){
             echo char("-",($terakhir-$last)).$terakhir;
             for($zre=0;$zre<=$row -1 ;$zre++){
@@ -61,7 +67,7 @@ echo $name = ucwords("DISK");
             rsort($hasilScan);
             $last = count($hasilScan);
             foreach ($hasilScan as $key => $angka) {
-                $rms = ($last - $key) - 2;
+                $rms = ($last - $key) - 1;
                 echo "<br/>";
                 echo "<br/>";
                 echo char("", $angka+$rms) . $angka;
@@ -71,14 +77,23 @@ echo $name = ucwords("DISK");
             for ($i = $posisiAwal+1 ; $i <= $last-1; $i++) {
                 $newhasilScan[] = $exp[$i];
             }
-            $last = count($hasilScan);
+            $last = count($newhasilScan);
+            // dbg($last);
+            $ceklast=$mulai;
+                echo "<br/>";
+            // dbg($newhasilScan);
             foreach ($newhasilScan as $key => $angka) {
-                $rms = ($last - $key) ;
+                $rms = $key+3 ;
                 $add = ($rms*$key);
+                // dbg($rms);
+                $add = ($angka-$ceklast)+$rms;
+                // dbg($add);
+                // dbg($add);
                 echo "<br/>";
                 echo "<br/>";
-                echo char("", $angka+$add).$angka;
-                echo char("", ($terakhir-$angka)-$add);
+                echo char("", $ceklast+$add).$angka;
+                // echo char("", ($terakhir-$angka)-$add);
+                $ceklast=$angka;
             }
                 echo "<br/>";
             echo "<br>";
