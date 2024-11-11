@@ -16,9 +16,19 @@
       <div class="input-group">
           <label for="method">Pilih metode:</label>
           <select id="method" style="width: 21vw;" name="metode">
-              <option value="FCFS">FCFS</option>
-              <option value="SCAN">SCAN</option>
-          </select>
+            <?php
+            if (isset($_GET["metode"])) {
+                // Mengambil nilai metode dari query string
+                $selected_metode = $_GET["metode"];
+            } else {
+                // Jika tidak ada nilai metode di query string, atur nilai default
+                $selected_metode = "";
+            }
+            ?>
+            <option value="FCFS" <?php if ($selected_metode == "FCFS") echo 'selected'; ?>>FCFS</option>
+            <option value="SCAN" <?php if ($selected_metode == "SCAN") echo 'selected'; ?>>SCAN</option>
+        </select>
+
       <button onclick="simulate()">Submit</button>
       </div>
       <?php }else{ ?>
