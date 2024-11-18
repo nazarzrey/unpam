@@ -209,7 +209,7 @@ class Xhr extends Settings
             $data["tweek"] = ($week->max_week - $week->min_week) +1;
             $data["fweek"] = $week->min_week;
             $data["lweek"] = $week->max_week;            
-            $data["minggu"] = week("");            
+            $data["minggu"] = $this->week("");            
             $data["result"] = $result;
             $data["tsiswa"] = $week->ttl_mahasiswa;
             $this->load->view("absendosen",$data);
@@ -262,6 +262,8 @@ class Xhr extends Settings
             }else{
                 $this->detail_week($value2);
             }
+        }elseif($value=="noted"){
+            $this->form_note();
         }elseif($value=="url-elearning"){
             $sql = "SELECT IFNULL((SELECT konten FROM unpam_setting WHERE jenis='url'),'x') AS konten";
             $qry = $this->db->query($sql);
@@ -287,8 +289,12 @@ class Xhr extends Settings
 		}elseif($value=="makalah"){
 				echo "konsep makalh di mari";
         }else{
-            echo "variabel belum di pasang..!!";
+            echo "variabel $value belum di pasang..!!";
         }
+    }
+    public function form_note(){
+        $data[] = "";
+        $this->load->view('frmNoted',$data);
     }
     public function detail_week($week_number = ""){
         $this->load->model('Absensi_model');
@@ -497,6 +503,10 @@ class Xhr extends Settings
         $dosen = "";
         $absen_time = "";
         foreach ($obj_data as $item) {
+			$postid = $item['postid'];
+			if(kosong($postid)){
+				continue;
+			}
             $mnama = addslashes($item['nama']);
             if(is_numeric(left(substr($mnama, -20),10))){
                 $nim = substr($mnama, -20);

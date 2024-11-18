@@ -87,7 +87,7 @@
 <body>
     <?php 
     // dbg($this->session->userdata);
-        if($this->session->userdata("tipe")=="admin"){
+        if($this->session->userdata("tipe")=="admin" || $this->session->userdata("tipe")=="super"){
             require_once(APPPATH.'views/menu_adm.php');
         }else{
             die("<h1>Anda bukan Admin</h1>");

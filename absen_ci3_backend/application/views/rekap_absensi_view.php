@@ -96,7 +96,7 @@
 <body>
     <?php 
     // dbg($this->session->userdata);
-        if($this->session->userdata("tipe")=="admin"){
+        if($this->session->userdata("tipe")=="admin" || $this->session->userdata("tipe")=="super"){
             require_once(APPPATH.'views/menu_adm.php');
         }else{
             die("<h1>Anda bukan Admin</h1>");
@@ -142,7 +142,7 @@
                     foreach ($matkul_aktif_link as $keyxy => $matkul){
                         $id_matkul =  $matkul["id_matkul"];
                         if($fdsk!=$id_matkul){
-                                echo "<th class='empty'>&nbsp;</th>";
+                                echo "<th class='empty' style='width:10px'>&nbsp;</th>";
                         }
                         if(in_array($id_matkul, $matkul_aktif_array)) { 
                             if($xy==0){
@@ -174,7 +174,7 @@
 						// dbg($rekap);
 						?>
 						<td class=''><?= $z ?></td>
-						<td class='t1 tl <?= $csus ?>'><?php echo Uw($rekap['nama']); ?></td>
+						<td class='t1 tl'><?php echo Uw($rekap['nama']); ?></td>
 						<?php
 						$mangkir_dtl = "";         
 						$fdsk = "";     
@@ -243,7 +243,7 @@
                     // dbg($rekap);
                     ?>
                     <td class=''><?= $z ?></td>
-                    <td class='t1 tl <?= $csus ?>'><?php echo Uw($rekap['nama']) ?></td>
+                    <td class='t1 tl'><?php echo Uw($rekap['nama']) ?></td>
                     <?php
                     $mangkir_dtl = "";         
                     $fdsk = "";     

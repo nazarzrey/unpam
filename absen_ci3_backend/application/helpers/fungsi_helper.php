@@ -771,7 +771,9 @@ if (!function_exists('issue')) {
 if (!function_exists('Uw')) {
 	function Uw($value)
 	{
-		return ucwords(strtolower($value));
+		if($value){
+			return ucwords(strtolower($value));
+		}
 	}
 }
 
@@ -1301,5 +1303,10 @@ if (!function_exists('char_len')) {
 			$hasil .= $char;
 		}
 		return $value.$hasil;
+	}
+}
+if (!function_exists('kosong')) {
+	function kosong($value) {
+		return is_null($value) || $value === "" || empty($value);
 	}
 }

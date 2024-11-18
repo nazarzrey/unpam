@@ -15,63 +15,72 @@
                 .ce{text-align:center}
             </style>
             <?php
-            echo "<table border='1' width='100%'>";
-            echo "<thead><tr><th width='250px' rowspan='2'>DOSEN</th><th width='80px'  rowspan='2'>MATKUL</th><th width='80px'  rowspan='2'>SKS</th><th colspan='$tweek'>PERTEMUAN SEMESTER 1</th></tr>";
-            // echo "<th width='250px'>Dosen</th><th  width='80px'>Matkul</th>";            
-            for($z=$fweek;$z<=$lweek;$z++){
-                echo "<th>".$z."</th>";
-            }
-            echo "</thead>";
-            foreach($result as $key =>$hasil){
-                $qry_dosen = "select minggu,absen as absen,sum(absen) as total,
-                            group_concat(minggu,'-',absen) as absen_dtl,min_absen
-                            from (
-                            SELECT url_matkul,WEEK(min(absen_time)) as minggu,COUNT(WEEK(absen_time)) AS absen,ifnull(ifnull(b.`matkul_min_absen`,c.min_absen),2) as min_absen
-                            FROM unpam_absensi a LEFT JOIN unpam_dosen_matkul b
-                            ON a.`url_matkul`=b.`matkul_url` AND nim !='dosen'
-                            left join unpam_matkul c
-                            on b.`matkul_dosen`=c.`dosen`
-                            WHERE matkul_dosen='$hasil->dosen'
-                            GROUP BY a.url_matkul,WEEK(absen_time)
-                            ORDER BY minggu) ab
-                            GROUP BY url_matkul
-                            ORDER BY minggu";
-                $rsl_dosen = each_query($this->db->query($qry_dosen));
-
-                $result_array = [];
-                foreach ($rsl_dosen as $key => $row) {
-                    $newObject = new stdClass();
-                    $newObject->minggu = $row->minggu;
-                    $newObject->absen = $row->absen;
-                    $newObject->total = $row->total;
-                    $newObject->absen_dtl = $row->absen_dtl;
-                    $newObject->min_absen = $row->min_absen;
-                    $result_array[$row->minggu] = $newObject; 
-                }
-                echo "<tr>";
-                echo "<td>".Uw($hasil->dosen)."</td>";
-                echo "<td>".$hasil->matkul_singkat."</td>";     
-                echo "<td class='ce'>".$hasil->sks."</td>";     
+            
+            $qry_smt = "SELECT IFNULL((SELECT konten FROM unpam_setting WHERE jenis='semester'),1) semester";            
+            $rsl_smt = single_query($this->db->query($qry_smt));
+            for($smt = 1;$smt<=$rsl_smt->semester;$smt++){
+                echo "<table border='1' width='100%'>";
+                echo "<thead><tr><th width='250px' rowspan='2'>DOSEN</th><th width='80px'  rowspan='2'>MATKUL</th><th width='80px'  rowspan='2'>SKS</th><th colspan='$tweek'>PERTEMUAN SEMESTER $smt</th></tr>";
+                // echo "<th width='250px'>Dosen</th><th  width='80px'>Matkul</th>";            
                 for($z=$fweek;$z<=$lweek;$z++){
-                    // dbg($result_array[$z]->absen);
-                    if(isset($result_array[$z])){
-                        $ttl_absen = $result_array[$z]->total;
-                        $min_absen = $result_array[$z]->min_absen;
-                        // echo $ttl_absen . ($tsiswa*$min_absen);
-                        // echo "</br>";
-                        if($ttl_absen<($tsiswa*$min_absen)){
-                            $cls = "kurang";
-                        }else{                            
-                            $cls = "";
-                        }
-                        echo "<td  class='tdc $cls' alt='".$result_array[$z]->absen_dtl."'>".$result_array[$z]->total."</td>";
-                    }else{
-                        echo "<td  class='tdb'></td>";
-                    };
+                    echo "<th>".$z."</th>";
                 }
-                echo "</tr>";
+                echo "</thead>";
+                foreach($result as $key =>$hasil){
+                    $qry_dosen = "select minggu,absen as absen,sum(absen) as total,
+                                group_concat(minggu,'-',absen) as absen_dtl,min_absen
+                                from (
+                                SELECT url_matkul,WEEK(min(absen_time)) as minggu,COUNT(WEEK(absen_time)) AS absen,ifnull(ifnull(b.`matkul_min_absen`,c.min_absen),2) as min_absen
+                                FROM unpam_absensi a LEFT JOIN unpam_dosen_matkul b
+                                ON a.`url_matkul`=b.`matkul_url` AND nim !='dosen'
+                                left join unpam_matkul c
+                                on b.`matkul_dosen`=c.`dosen`
+                                WHERE matkul_dosen='$hasil->dosen'
+                                and semester='$smt'
+                                GROUP BY a.url_matkul,WEEK(absen_time)
+                                ORDER BY minggu) ab
+                                GROUP BY url_matkul
+                                ORDER BY minggu";
+                    $rsl_dosen = each_query($this->db->query($qry_dosen));
+                    
+                    $result_array = [];
+                    if(!$rsl_dosen){
+                        continue;
+                    }
+                    foreach ($rsl_dosen as $key => $row) {
+                        $newObject = new stdClass();
+                        $newObject->minggu = $row->minggu;
+                        $newObject->absen = $row->absen;
+                        $newObject->total = $row->total;
+                        $newObject->absen_dtl = $row->absen_dtl;
+                        $newObject->min_absen = $row->min_absen;
+                        $result_array[$row->minggu] = $newObject; 
+                    }
+                    echo "<tr>";
+                    echo "<td>".Uw($hasil->dosen)."</td>";
+                    echo "<td>".$hasil->matkul_singkat."</td>";     
+                    echo "<td class='ce'>".$hasil->sks."</td>";     
+                    for($z=$fweek;$z<=$lweek;$z++){
+                        // dbg($result_array[$z]->absen);
+                        if(isset($result_array[$z])){
+                            $ttl_absen = $result_array[$z]->total;
+                            $min_absen = $result_array[$z]->min_absen;
+                            // echo $ttl_absen . ($tsiswa*$min_absen);
+                            // echo "</br>";
+                            if($ttl_absen<($tsiswa*$min_absen)){
+                                $cls = "kurang";
+                            }else{                            
+                                $cls = "";
+                            }
+                            echo "<td  class='tdc $cls' alt='".$result_array[$z]->absen_dtl."'>".$result_array[$z]->total."</td>";
+                        }else{
+                            echo "<td  class='tdb'></td>";
+                        };
+                    }
+                    echo "</tr>";
+                }
+                echo "</table>";
             }
-            echo "</table>";
             ?>
             <script>
                 const tableCells = document.querySelectorAll('td[alt]'); // Get all table cells with alt attribute
