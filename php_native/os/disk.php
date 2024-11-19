@@ -32,6 +32,7 @@ echo $name = ucwords("DISK");
       $max = max($exp);
       $terakhir = per50($max);
       $row = count($asli);
+        if($metode=="FCFS"){
       echo "0";
       $last = 0;
       foreach($exp as $angka){
@@ -40,7 +41,6 @@ echo $name = ucwords("DISK");
         $last = $angka;
       }
         echo "<br/>";
-        if($metode=="FCFS"){
             echo char("-",($terakhir-$last)).$terakhir;
             for($zre=0;$zre<=$row -1 ;$zre++){
                 echo "<br/>";
@@ -57,7 +57,15 @@ echo $name = ucwords("DISK");
             echo "<br>";
             echo "<br>";
             fcfsdisk($nilai,$mulai);
-        }else{
+        }elseif($metode=="SCAN"){
+      echo "0";
+      $last = 0;
+      foreach($exp as $angka){
+        $rms = ($angka - $last)-1;
+        echo char("-",$rms).$angka;
+        $last = $angka;
+      }
+        echo "<br/>";
             $hasilScan = [];
             sort($exp);
             $posisiAwal = array_search($mulai, $exp);            
@@ -100,6 +108,14 @@ echo $name = ucwords("DISK");
             echo "<br>";
             scandisk($nilai,$mulai);
 
+        } elseif ($metode == "LOOK") {
+            
+            // LOOK logic
+            lookdisk($nilai, $mulai);
+        }elseif ($metode == "LOOKIRI") {
+            
+            // LOOK logic
+            lookdiskkiri($nilai, $mulai);
         }
         echo "<br/>";
         echo "<br/>";        

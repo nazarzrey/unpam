@@ -139,6 +139,7 @@
     echo "<br>Total Pergerakan Head: $totalMovement";
   }
   function scandisk($nilai,$mulai){
+
     $string = $nilai;
     $array = array_map('intval', explode(",", $string));
     $angkas = $array;
@@ -178,8 +179,176 @@
     echo "<br/>";
     echo "<br/>";
     echo implode( $hasilnya);
-    echo "<br><br>Total Pergerakan Head: $totalgerak";}
-  ?>
+    echo "<br><br>Total Pergerakan Head: $totalgerak";
+  }
+  function lookdisk($nilai, $mulai) {
+    $string = $nilai;
+    $array = array_map('intval', explode(",", $string));
+    $angkas = $array;
+    $head = $mulai;
+
+    // Pisahkan permintaan menjadi kiri dan kanan dari kepala awal
+    sort($angkas);
+    $left = array_reverse(array_filter($angkas, fn($req) => $req < $head)); // Permintaan di kiri kepala
+    $right = array_filter($angkas, fn($req) => $req >= $head); // Permintaan di kanan kepala
+
+    // Gabungkan urutan: kanan -> kiri
+    $sequence = array_merge([$head], $right, $left);
+
+    // Inisialisasi variabel untuk perhitungan
+    $totalMovement = 0;
+    $steps = [];
+    $results = [];
+    $graphData = [];
+
+    // Hitung pergerakan untuk setiap langkah
+    for ($i = 0; $i < count($sequence) - 1; $i++) {
+        $a = $sequence[$i];
+        $b = $sequence[$i + 1];
+        $movement = abs($a - $b);
+        $totalMovement += $movement;
+        if($a<$b){
+          $steps[] = "($b - $a)";
+        }else{
+          $steps[] = "($a - $b)";
+        }
+        $results[] = $movement;
+        $graphData[] = $a;
+    }
+
+    // Tambahkan titik akhir ke grafik
+    $graphData[] = end($sequence);
+
+    // Output textual results
+    echo "<div style='color: white; font-family: Arial, sans-serif;'>";
+    echo "LOOK Scheduling:<br/><br/>";
+    echo "Head Movement Sequence: " . implode(" → ", $sequence) . "<br/><br/>";
+    echo "Langkah Perhitungan:<br/>";
+    echo implode(" + ", $steps) . "<br/><br/>";
+
+    echo "Hasil Tiap Langkah:<br/>";
+    echo implode(" + ", $results) . "<br/><br/>";
+
+    echo "Total Pergerakan Head: $totalMovement<br/><br/>";
+    echo "</div>";
+
+    // Output graphical chart
+    echo "<svg width='1200' height='500' style='border: 1px solid white; margin-top: 20px;'>";
+
+    // Hitung skala grafik (kelipatan 50)
+    $min = min($graphData);
+    $max = max($graphData);
+    $scale = 1000 / ($max - $min); // Scaling for graphical layout
+    $paddingTop = 50; // Padding for header alignment
+
+    foreach ($graphData as $i => $point) {
+        $x = ($point - $min) * $scale + 50;
+        $y = $paddingTop + ($i * 40); // Adjusted for top-to-bottom effect
+
+        // Draw the point
+        echo "<circle cx='$x' cy='$y' r='4' fill='red' />";
+
+        // Add the number above the point (aligned properly)
+        echo "<text x='$x' y='" . ($y - 10) . "' fill='white' font-size='12' text-anchor='middle'>$point</text>";
+
+        // Draw the connecting line
+        if ($i > 0) {
+            $prevX = ($graphData[$i - 1] - $min) * $scale + 50;
+            $prevY = $paddingTop + (($i - 1) * 40); // Previous point's Y position
+            echo "<line x1='$prevX' y1='$prevY' x2='$x' y2='$y' style='stroke:green;stroke-width:2' />";
+        }
+    }
+
+    echo "</svg>";
+    echo "</div>";
+  }
+  function lookdiskkiri($nilai, $mulai) {
+    $string = $nilai;
+    $array = array_map('intval', explode(",", $nilai));
+    $angkas = $array;
+    $head = $mulai;
+
+    // Pisahkan permintaan menjadi kiri dan kanan dari kepala awal
+    sort($angkas);
+    $left = array_reverse(array_filter($angkas, fn($req) => $req < $head)); // Permintaan di kiri kepala
+    $right = array_filter($angkas, fn($req) => $req >= $head); // Permintaan di kanan kepala
+
+    // Gabungkan urutan: kanan -> kiri
+    $sequence = array_merge([$head], $left,$right);
+
+    // Inisialisasi variabel untuk perhitungan
+    $totalMovement = 0;
+    $steps = [];
+    $results = [];
+    $graphData = [];
+
+    // Hitung pergerakan untuk setiap langkah
+    for ($i = 0; $i < count($sequence) - 1; $i++) {
+        $a = $sequence[$i];
+        $b = $sequence[$i + 1];
+        $movement = abs($a - $b);
+        $totalMovement += $movement;
+        $steps[] = "($a - $b)";
+        $results[] = $movement;
+        $graphData[] = $a;
+    }
+
+    // Tambahkan titik akhir ke grafik
+    $graphData[] = end($sequence);
+
+    // Output textual results
+    echo "<div style='color: white; font-family: Arial, sans-serif;'>";
+    echo "LOOK Scheduling:<br/>";
+    echo "Head Movement Sequence: " . implode(" → ", $sequence) . "<br/><br/>";
+    echo "Langkah Perhitungan:<br/>";
+    echo implode(" + ", $steps) . "<br/><br/>";
+
+    echo "Hasil Tiap Langkah:<br/>";
+    echo implode(" + ", $results) . "<br/><br/>";
+
+    echo "Total Pergerakan Head: $totalMovement<br/><br/>";
+    echo "</div>";
+    // Output graphical chart
+    $min = min($graphData);
+    $max = max($graphData);
+    // asort($graphData);
+    // dbg($graphData);
+    
+    $scale = 1000 / ($max - $min); // Scaling for graphical layout
+    echo "<svg width='1200' height='500' style='border: 1px solid white; margin-top: 20px;'>";
+    $paddingTop = 50; // Padding for header alignment
+    $xPrev = round(200 - ($mulai - $min) * $scale); // Hitung posisi X dari kanan
+    $y = 100; // Baris tetap untuk grafik
+    
+    $yPrev=50;
+    $i=0;
+    foreach ($graphData as $point) {
+        $xNext = round(200 - ($max)+$point * $scale); // Posisi X berikutnya dari kanan
+        $y = $paddingTop + ($i * 40); // Buat zigzag dengan jarak vertikal
+        if ($i > 0) {
+            echo "<line x1='$xPrev' y1='$yPrev' x2='$xNext' y2='$y' style='stroke:green;stroke-width:2;' />";
+        }
+        // echo $xPrev." # ".$yPrev." # ".$xNext." # ".$y;
+        // echo "<br/>";
+
+        echo "<circle cx='$xNext' cy='$y' r='5' fill='red' />";
+        // echo "<br/>";
+        echo "<text x='$xNext' y='" . ($y - 10) . "' fill='white' font-size='10' text-anchor='middle'>$point</text>";
+
+        // echo "<br/>";
+        // Update koordinat sebelumnya
+        $xPrev = $xNext;
+        $yPrev = $y;
+        $i++;
+    }
+
+    echo "</svg>";
+    echo "</div>";
+}
+
+
+?>
+
   <script>
     function toggleForm() {
     var checkbox = document.getElementById("hide");

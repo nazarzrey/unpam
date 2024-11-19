@@ -264,6 +264,10 @@ class Xhr extends Settings
             }
         }elseif($value=="noted"){
             $this->form_note();
+        }elseif($value=="task"){
+            $this->load->model('Tugas_model');
+            $data['tugas'] = $this->Tugas_model->get_all_tugas();
+            $this->load->view('list_tugas', $data);
         }elseif($value=="url-elearning"){
             $sql = "SELECT IFNULL((SELECT konten FROM unpam_setting WHERE jenis='url'),'x') AS konten";
             $qry = $this->db->query($sql);

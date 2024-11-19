@@ -50,7 +50,7 @@
   ?>
   <?php    
 	if($this->session->userdata("tipe")=="super"){    
-    echo '<a class="note" href="'.base_url("noted").'">Form Note</a>';
+    echo '<a class="note" href="'.base_url("note").'">Form Note</a>';
 	}
   ?>
   <a class="mn" href="<?= base_url("login/logout". $redirect)?>">Logout</a>

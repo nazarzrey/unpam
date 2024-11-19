@@ -77,7 +77,11 @@ $route['grup']        = 'xhr/get/grup';
 $route['grup/(:num)']        = 'xhr/get/grup/$1';
 
 $route['note']        = 'xhr/get/noted';
-$route['note/(:num)']        = 'xhr/get/noted/$1';
+$route['note/(:any)']        = 'xhr/get/noted/$1';
+$route['note/(:any)/(:num)']        = 'xhr/get/noted/$1/$2';
+
+$route['tugas']        = 'xhr/get/task';
+$route['tugas/(:num)']        = 'xhr/get/task/$1';
 
 $route['mangkir/(:num)']        = 'xhr/get/mangkir/$1';
 $route['nilai']        = 'penilaian';

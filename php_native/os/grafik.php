@@ -27,6 +27,8 @@
             ?>
             <option value="FCFS" <?php if ($selected_metode == "FCFS") echo 'selected'; ?>>FCFS</option>
             <option value="SCAN" <?php if ($selected_metode == "SCAN") echo 'selected'; ?>>SCAN</option>
+            <option value="LOOK" <?php if ($selected_metode == "LOOK") echo 'selected'; ?>>LOOK</option>
+            <option value="LOOKIRI" <?php if ($selected_metode == "LOOKIRI") echo 'selected'; ?>>LOOKIRI</option>
         </select>
 
       <button onclick="simulate()">Submit</button>
