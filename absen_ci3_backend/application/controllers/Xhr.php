@@ -121,45 +121,20 @@ class Xhr extends Settings
             $data[] = "";
             if($value2==""){
                 $sql = "SELECT 
-                dm.`dm_id`,
-                ual.obj_dosen, 
-                ual.obj_fordis, 
-                ual.obj_fordis_title, 
-                ual.obj_url, 
-                ual.updrec_by, 
-                COUNT(ua.url_matkul) AS total_url_matkul
-            FROM 
-                unpam_absen_log ual
-            JOIN 
-                (SELECT 
-                    obj_url, 
-                    MAX(updrec_date) AS max_updrec_date
-                FROM 
-                    unpam_absen_log
-                GROUP BY 
-                    obj_url
-                ) latest 
-            ON 
-                ual.obj_url = latest.obj_url 
-                AND ual.updrec_date = latest.max_updrec_date
-            LEFT JOIN 
-                unpam_absensi ua 
-            ON 
-                ual.obj_url = ua.url_matkul
-            LEFT JOIN 
-                unpam_dosen_matkul dm 
-            ON
-                ual.`obj_url`=dm.`matkul_url`
-            GROUP BY 
-                ual.obj_dosen, 
-                ual.obj_fordis, 
-                ual.obj_fordis_title, 
-                ual.obj_url, 
-                ual.updrec_by,
-                ual.updrec_date
-            ORDER BY 
-                ual.obj_dosen,
-                ual.updrec_date DESC;
+                a.`dm_id`,
+                a.`matkul_dosen` AS obj_dosen, 
+                a.`matkul_fordis` AS obj_fordis, 
+                a.`matkul_fordis_title` AS obj_fordis_title, 
+                a.`matkul_url` AS obj_url, 
+                a.`absensi_dosen` AS updrec_by, 
+                COUNT(b.`url_matkul`) AS total_url_matkul,
+                left(b.nim,12)  as nim,
+                week(absensi_dosen) as minggu
+                FROM unpam_dosen_matkul a
+                LEFT JOIN unpam_absensi b ON a.`matkul_url`=b.`url_matkul`
+                WHERE b.`nim`!='Dosen'
+                GROUP BY a.`matkul_url`
+                ORDER BY absensi_dosen DESC;
             ";
                 $data["hasilnya"] = each_query($this->db->query($sql));
                 $this->load->view("logabsen",$data);
@@ -173,15 +148,14 @@ class Xhr extends Settings
                 $data["master"] = $result;
                 $msUrl =$result->matkul_url;
                 $msMin= $result->matkul_min_absen;
-                $mssyn= $result->updrec_date;
-                $sql = "
+               $sql = "
                 SELECT a.nama,a.nim,IFNULL(b.absen,0) AS absen,IFNULL(b.hasil,0) AS hasil FROM unpam_mahasiswa a LEFT JOIN (
-                SELECT a.nama,COUNT(1) AS absen,IF(COUNT(1)<$msMin,COUNT(1)-$msMin,IF(COUNT(1)>$msMin,IF(COUNT(1)<6,'Semangat','Luar Biasa'),'standar')) hasil FROM unpam_mahasiswa a
-                LEFT JOIN unpam_absensi b ON a.`nama`=b.`nama`
+                SELECT a.nama,COUNT(1) AS absen,IF(COUNT(1)<$msMin,COUNT(1)-$msMin,IF(COUNT(1)>$msMin,IF(COUNT(1)<6,'Semangat','Luar Biasa'),'standar')) hasil                 
+                FROM unpam_mahasiswa a LEFT JOIN unpam_absensi b ON LEFT(a.nim,12)=LEFT(b.`nim`,12)
                 WHERE url_matkul='$msUrl'
                 AND b.nim LIKE '%55201-E'
                 GROUP BY a.nama ORDER BY 2 DESC) b ON a.`nama`=b.nama
-                ORDER BY 3 DESC;";      
+                ORDER BY absen DESC,nama;";      
                 $data["hasilnya"] = each_query($this->db->query($sql));
                 $this->load->view("logabsendtl",$data);                
             }

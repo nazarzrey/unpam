@@ -19,7 +19,9 @@ application/logs/*
 .tmp*
 #file php#
 database.php
+config.php
 # absen_ci3_backend/application/config/database.php
+# absen_ci3_backend/application/config/config.php
 g.bat
 gigi.bat
 #*.zip
