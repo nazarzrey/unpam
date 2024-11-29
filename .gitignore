@@ -24,6 +24,10 @@ config.php
 # absen_ci3_backend/application/config/config.php
 g.bat
 gigi.bat
-#*.zip
+*.zip
 *.rar
-#
+*.pdf
+*.xlsx
+*.docx
+*.txt
+*.mp4
