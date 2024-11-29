@@ -7,9 +7,10 @@
 		
 ?>
 <style>
-    .mn,.nm,.su,.note{text-decoration:none;font-size:14px;padding:5px 10px; background:tomato;color:#fff}
+    .mn,.nm,.su,.note,.note2{text-decoration:none;font-size:14px;padding:5px 10px; background:tomato;color:#fff}
     .nm{float:right;background:green}
     .note{background: blue;}
+    .note2{background: black;}
 	  .su{background:blue;}
     ul {
       list-style: none; /* Menghilangkan titik (bullet) */
@@ -36,6 +37,7 @@
     .new_menu{
       padding-top: 10px;
     }
+    a:hover{text-decoration: none;color:#fff}
 </style>
 <div style="position:relative">    
   <a class="mn" href="<?= base_url("dashboard")?>">Absensi</a>
@@ -50,7 +52,8 @@
   ?>
   <?php    
 	if($this->session->userdata("tipe")=="super"){    
-    echo '<a class="note" href="'.base_url("note").'">Form Note</a>';
+    echo '<a class="note" href="'.base_url("note").'">Form Note</a> ';
+    echo '<a class="note2" href="'.base_url("kelompok").'">Form Kelompok</a>';
 	}
   ?>
   <a class="mn" href="<?= base_url("login/logout". $redirect)?>">Logout</a>

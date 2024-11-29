@@ -88,6 +88,8 @@ $route['nilai']        = 'penilaian';
 $route['save_nilai']        = 'penilaian/save_nilai';
 $route['nilai/(:any)']        = 'penilaian/nilai/$1';
 
+$route['kelompok']        = 'TugasKelompok';
+
 $route['absen/(:any)']         = 'xhr/absen/$1';
 
 $route['create']         = 'backend/generate_dyn';
