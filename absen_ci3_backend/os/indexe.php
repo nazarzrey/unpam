@@ -41,7 +41,7 @@
   <a href="round_robin.php" <?= aktif("robin",$menu) ?>>Round Robin</a>
   <a href="round_robin.php">FJS</a>
   <a href="round_robin.php">FCFS</a>
-  <a href="disk.php"<?= aktif("disk",$menu) ?>>GANCET DISK</a>
+  <a href="disk.php"<?= aktif("disk",$menu) ?>>GHANT CHART DISK</a>
   <a href="fcfs.php"<?= aktif("fcfsdisk",$menu) ?>>FCFS DISK</a>
   <a href="scan.php"<?= aktif("scandisk",$menu) ?>>SCAN DISK</a>
   <a href="#" for="hide"><input type="checkbox" class="hide" id="hide"/><label for="hide" class="hidex" style="display:contents;" > HIDE FORM</label></a>
