@@ -103,6 +103,7 @@ $files = array_filter($files, function($file) use ($directory) {
                         </td>
                     </tr>
                 <?php endforeach; ?>
+		<tr><td><a href="https://nazrey.com/download/">More Download</a></td></tr>
             </tbody>
         </table>
     <?php endif; ?>
