@@ -230,7 +230,7 @@
 							$fdsk=$id_matkul;
 							$hadir ++;
 						}
-                            echo "<td class='hidex nim_".$rekap['nim']."' data-absen='".$isi_fordis."' data-kurang='".$ada_kurang."'>".$rekap["nama"]." ".$isi_fordis." kurang ".$ada_kurang."</td>";
+                            echo "<td class='hide nim_".$rekap['nim']."' data-absen='".$isi_fordis."' data-kurang='".$ada_kurang."'>".$rekap["nama"]." ".$isi_fordis." kurang ".$ada_kurang."</td>";
 						if($nm!=$rekap["alias"]){
 							if(!empty($mangkir_dtl)){
 								$matkul = rtrim($mangkir_dtl, ',');
