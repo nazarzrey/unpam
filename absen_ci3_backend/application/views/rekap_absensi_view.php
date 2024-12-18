@@ -176,7 +176,7 @@
 						?>
 						<td class=''><?= $z ?></td>
 						<td class='t1 tl mahasiswa' data-id="<?= $rekap['nim'] ?>">
-                            <span><?php echo potongNama(Uw($rekap['nama'])); ?></span><b class="nilai_<?= $rekap['nim'] ?>">0</b></td>
+                            <span><?php echo potongNama(Uw($rekap['alias'])); ?></span><b class="nilai_<?= $rekap['nim'] ?>">0</b></td>
 						<?php
 						$mangkir_dtl = "";         
 						$fdsk = "";     
