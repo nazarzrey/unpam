@@ -1310,3 +1310,32 @@ if (!function_exists('kosong')) {
 		return is_null($value) || $value === "" || empty($value);
 	}
 }
+
+if (!function_exists('potongNama')) {
+	function potongNama($nama) {
+			// Jika nama sudah di bawah 20 karakter, kembalikan apa adanya
+			$rms = 20;
+			$sps = 3;
+			if (strlen($nama) <= $rms) {
+					return $nama;
+			}
+
+			// Pecah nama menjadi array berdasarkan spasi
+			$kata = explode(' ', $nama);
+
+			// Ambil 3 kata pertama jika lebih dari 3
+			$namaSingkat = implode(' ', array_slice($kata, 0,$sps));
+
+			// Jika panjang lebih dari 20 karakter, potong kata terakhir
+			if (strlen($namaSingkat) > $rms) {
+					// Ambil huruf pertama dari kata terakhir
+					$kataTerakhir = $kata[3] ?? end($kata);
+					$hurufDepan = substr($kataTerakhir, 0, 1);
+
+					// Gabungkan dua kata pertama dengan huruf awal kata terakhir
+					$namaSingkat = $kata[0] . ' ' . $kata[1] . ' ' . $hurufDepan . '';
+			}
+
+			return $namaSingkat;
+	}
+}

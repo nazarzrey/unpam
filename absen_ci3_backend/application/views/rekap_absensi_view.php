@@ -48,7 +48,7 @@
         } 
         .t1 { width: 300px; }
         .t2 { width: 100px; }
-        .tl{text-align:left}
+        .tl{text-align:left !important;padding-left:10px !important;}
         .checked {
             color: blue;
         }
@@ -91,6 +91,8 @@
         .color2{background: blue;color:#fff}
         .color3{background: #e6fbff !important;border: none;}
         .colorp{background: pink !important;border: none;}
+        .hide{display: none;}
+        .mahasiswa b{float: right;}
     </style>
 </head>
 <body>
@@ -159,10 +161,9 @@
                     echo "</tr>";
                 } ?>
         </thead>
-        <tbody>
-
+        <tbody  id='rumusfds' data-matkul='<?= $total_matkul_aktif ?>'>
+            <input type="text"  class="hide">
             <?php 
-            // dbg($total_matkul_aktif);
             $z = 1;
             $mangkir = array();
             $nm = "";
@@ -174,11 +175,14 @@
 						// dbg($rekap);
 						?>
 						<td class=''><?= $z ?></td>
-						<td class='t1 tl'><?php echo Uw($rekap['nama']); ?></td>
+						<td class='t1 tl mahasiswa' data-id="<?= $rekap['nim'] ?>">
+                            <span><?php echo potongNama(Uw($rekap['nama'])); ?></span><b class="nilai_<?= $rekap['nim'] ?>">0</b></td>
 						<?php
 						$mangkir_dtl = "";         
 						$fdsk = "";     
 						$mangkir_count = 0;  
+                        $isi_fordis = 0;
+                        $ada_kurang = 0;
 						foreach ($matkul_aktif_link as $keyxy => $matkul){
 							$id_matkul      =  $matkul["id_matkul"];
 							$id_matkul_abs  =  $matkul["id_matkul_abs"];
@@ -196,8 +200,10 @@
 									} elseif ($absen_count < $min_absen) {
 										$mangkir_dtl .= $matkul['matkul_singkat'].":".($min_absen - $absen_count).",";
 										$class = "kurang";
+                                        $ada_kurang = $ada_kurang + 1;
 									} else {
-										$class = "checked";
+										$class = "checked ".$rekap['nim'];
+                                        $isi_fordis = $isi_fordis +1;
 									}
 									echo "<td class='t2 $class'>" . $absen_count . "</td>";
 									// echo "<th class='t2'>".$absen_count."</th>";
@@ -211,8 +217,10 @@
 									$class = "merah";
 								} elseif ($absen_count < $min_absen) {
 									$class = "kurang";
+                                    $ada_kurang = $ada_kurang + 1;
 								} else {
-									$class = "checked";
+									$class = "checked ".$rekap['nim'];
+                                    $isi_fordis = $isi_fordis +1;
 								}
 								if($absen_count == 0 || $absen_count < $min_absen){
 									$mangkir_dtl .= $matkul['matkul_singkat'].",";
@@ -220,8 +228,9 @@
 								echo "<td class='t2 $class'>" . $absen_count . "</td>";
 							}
 							$fdsk=$id_matkul;
-								$hadir ++;
+							$hadir ++;
 						}
+                            echo "<td class='hidex nim_".$rekap['nim']."' data-absen='".$isi_fordis."' data-kurang='".$ada_kurang."'>".$rekap["nama"]." ".$isi_fordis." kurang ".$ada_kurang."</td>";
 						if($nm!=$rekap["alias"]){
 							if(!empty($mangkir_dtl)){
 								$matkul = rtrim($mangkir_dtl, ',');
@@ -267,7 +276,7 @@
                                 } else {
                                     $class = "checked";
                                 }
-                                echo "<td class='t2 $class'>" . $absen_count . "</td>";
+                                echo "<td class='t2 $class '>" . $absen_count . "</td>";
                                 // echo "<th class='t2'>".$absen_count."</th>";
                             }else{           
                                 echo "<th class='t2 merah'>0</th>";
@@ -314,6 +323,7 @@
             echo "<b>Absen E-learning yang masih belum lengkap</b>";
             echo "<hr>";
             echo "<br>";
+            dbg($mangkir);
             foreach($mangkir as $key => $value){
                 echo $value."<br/>";
             }
@@ -368,11 +378,83 @@
             cell.innerHTML = '&#x2713;'; 
             cell.style.color = 'green';
         });
+        
+        // document.querySelectorAll('td.mahasiswa').forEach(cell => {
+        //     // Ambil ID Mahasiswa dari atribut data-id
+        //     const mahasiswaID = cell.getAttribute('data-id');
+        //     lg(mahasiswaID);
+        //     // Ambil baris (tr) dari elemen saat ini
+        //     const baris = cell.closest('.tr');
+        //     lg(baris);
+        //     // Cari elemen lain di dalam baris yang memiliki kelas sesuai ID
+        //     const elemenDenganID = baris.querySelectorAll(`.${mahasiswaID}`);
+        //     lg(elemenDenganID);
+        //     // Hitung jumlah elemen dengan ID
+        //     const jumlahIsi = elemenDenganID.length;
+
+        //     // Hitung persentase absen berdasarkan patokan awal 8
+        //     const patokanAwal = 8; // Maksimum pertemuan
+        //     const persentase = (jumlahIsi / patokanAwal) * 100;
+
+        //     // Tampilkan hasil di konsol
+        //     console.log(`ID Mahasiswa: ${mahasiswaID}`);
+        //     console.log(`Jumlah Isi: ${jumlahIsi}`);
+        //     console.log(`Persentase Absen: ${persentase.toFixed(2)}%`);
+        // });
+        // Ambil elemen <tbody> berdasarkan ID
+        // Ambil total pertemuan dari atribut data-matkul di elemen tbody
+        const elemenTbody = document.getElementById('rumusfds');
+        const totalPertemuan = parseInt(elemenTbody.getAttribute('data-matkul'));
+
+        // Loop untuk memproses setiap mahasiswa
+        document.querySelectorAll('td.mahasiswa').forEach(cell => {
+            // Ambil ID mahasiswa dari atribut data-id
+            const mahasiswaID = cell.getAttribute('data-id');
+            
+            // Ambil baris (tr) dari elemen saat ini
+            const baris = cell.closest('.tr');
+
+            // Cari elemen cek_absensi berdasarkan ID
+            const elemenCekAbsensi = baris.querySelector(`.nim_${mahasiswaID}`);
+            let nilaiCekAbsensi = baris.querySelector(`.nilai_${mahasiswaID}`);
+
+            if (elemenCekAbsensi) {
+                // Ambil data-absen
+                const dataAbsen = parseInt(elemenCekAbsensi.getAttribute('data-absen')) || 0;
+                const dataKurang = parseInt(elemenCekAbsensi.getAttribute('data-kurang')) || 0;
+
+                // Hitung persentase kehadiran
+                const persentase = (dataAbsen / totalPertemuan) * 100;
+
+                // Tambahkan background ke elemen mahasiswaID
+                if(dataKurang>0){                
+                    cell.style.background = `linear-gradient(to right, #fff ${persentase}%, #f3e29f ${persentase}%)`;
+                    
+                }else{                    
+                    cell.style.background = `linear-gradient(to right, #fff ${persentase}%, #ffafa1 ${persentase}%)`;
+                }
+                cell.style.color = '#000'; // Opsional: Warna teks agar terlihat jelas
+                cell.style.padding = '5px';
+                
+                // Log untuk debug
+                // console.log(`ID Mahasiswa: ${mahasiswaID}`);
+                // console.log(`Data Absen: ${dataAbsen}`);
+                // console.log(`Persentase Kehadiran: ${persentase.toFixed(2)}%`);
+                nilaiCekAbsensi.innerHTML=dataAbsen;
+            } else {
+                console.log(`Cek_absensi untuk ID ${mahasiswaID} tidak ditemukan.`);
+            }
+        });
+
+
         const toggleCheckbox = document.getElementById('toggleCheckbox');
 
         const savedState = localStorage.getItem('toggleCheckboxState');
         if (savedState === 'checked') {
             toggleCheckbox.checked = true;
+        }
+        function lg(val){
+            console.log(val);
         }
 
         function updateCells(isChecked) {
