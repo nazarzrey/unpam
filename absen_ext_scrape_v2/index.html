@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!-- <link rel="icon" href="%PUBLIC_URL%/favicon.ico" /> -->
+    <link rel="icon" href="favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <style>
+      body {
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #84e671c2;
+      }
+      .h-screen {
+        width: 350px;
+      }
+      input {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+      h2,
+      .h3 {
+        color: red;
+      }
+      h1,
+      h2,
+      h3 {
+        padding: 0;
+        margin: 0;
+      }
+      .brd {
+        border: solid 1px;
+      }
+      .fl {
+        float: left;
+      }
+      .targetUrl {
+        display: none;
+      }
+      #balikan1 {
+        font-style: italic;
+        font-size: 14px;
+      }
+      .ro {
+        background: #e0e0e0;
+        border: solid 1px #ccc;
+      }
+      #divgetServer {
+        display: none;
+      }
+    </style>
+    <link rel="manifest" href="manifest.json" crossorigin="use-credentials" />
+    <title>React App</title>
+  </head>
+  <body class="h-screen">
+    <title>ABSEN FORDIS UNPAM</title>
+    <!-- <form id="frmInput"> -->
+    <h3 style="text-align: center">ABSEN FORDIS UNPAM</h3>
+    <br />
+    <div style="float: left; width: 100%" class="">
+      <div style="width: 49%" class="fl">
+        <label for="inputAdmin">Admin:</label><br />
+        <input type="text" id="inputAdmin" style="width: 100px" value="Nazar" />
+      </div>
+      <div style="width: 50%" class="fl">
+        <label for="inputKLS">Kelas:</label><br />
+        <input type="text" id="inputKLS" style="width: 100px" value="TPLE004" />
+      </div>
+    </div>
+    <label for="urlLearn">Url Elearning :</label><br />
+    <input
+      type="text"
+      id="urlLearn"
+      class="ro"
+      readonly
+      value="http://localhost/unpam/absen_ci3_backend/u-courses/"
+      style="width: 70%"
+    />
+    <!-- value="http://localhost/unpam/absen_ci3_backend/u-courses/" -->
+    <button id="saveButton">Save & Sync</button><br />
+    <div id="targetUrl">
+      <label for="UrlServer">Url Target :</label><br />
+      <input
+        type="text"
+        id="UrlServer"
+        class="ro"
+        value="http://localhost/unpam/absen_ci3_backend/receive_data"
+        readonly
+        style="width: 98%"
+      /><br />
+
+      <!-- value="https://absenunpam.my.id/receive_data" -->
+    </div>
+    <div id="divgetServer">
+      <label for="getServer">Url get Sync :</label><br />
+      <input
+        type="text"
+        id="syncServer"
+        class="ro"
+        readonly
+        value="http://localhost/unpam/absen_ci3_backend/"
+        style="width: 98%"
+      /><br />
+      <!-- value="https://absenunpam.my.id/" -->
+      <button id="saveServer">Save Server</button><br />
+    </div>
+    <label style="font-size: 11px"
+      >Url Elearning dan Server akan di download otomatis dari server<br />
+      Jangan lupa ganti get sync nya klo udah beres
+    </label>
+    <br />
+    <br />
+    <!-- </form> -->
+    <!-- http://localhost/web/unpam_project/absen_ci3_backend/receive_data -->
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root" class="h-full"></div>
+    <h3 id="h1" class="h3"></h3>
+    <h3 id="h2" class="h3"></h3>
+    <div id="balikan1"></div>
+    <label style="font-size: 10px">v 2.0 ref 25-03-05</label>
+  </body>
+  <script src="popup.js?v112"></script>
+  <!-- Menambahkan skrip JavaScript -->
+</html>

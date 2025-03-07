@@ -1,0 +1,39 @@
+{
+  "id": "02cc2b46-839a-4828-9fd0-18c01006f917",
+  "kode_course": "20242-03TPLE004-22TIF0152",
+  "id_trx_course_sub_section": "3b4ec307-c024-4d18-a8ce-84cbeb4da964",
+  "reply_level": 0,
+  "id_dosen": "01809",
+  "post_type": "TOPIC",
+  "judul": "Sistem berkas menurut anda adalah",
+  "konten": "<p>Sistem berkas menurut anda adalah</p>",
+  "files": [],
+  "dosen": {
+    "id_pegawai": "211130",
+    "id_dosen": "01809",
+    "nama_dosen": "SOFYAN MUFTI PRASETIYO",
+    "nama_gelar": "SOFYAN MUFTI PRASETIYO ST.,M.Kom",
+    "alamat_email": "sofyan.brin@gmail.com"
+  },
+  "data": [
+    {
+      "id": "a7aa0c94-5a02-4e38-bd1d-1cba68424a07",
+      "id_trx_course_sub_section": "3b4ec307-c024-4d18-a8ce-84cbeb4da964",
+      "id_parent": "02cc2b46-839a-4828-9fd0-18c01006f917",
+      "reply_level": 1,
+      "id_dosen": null,
+      "nim": "231011450485",
+      "post_type": "REPLY",
+      "judul": "RE Sistem berkas menurut anda adalah",
+      "konten": "Assalamu'alaikum izin menjawab pak\nSistem berkas (file system) adalah metode yang digunakan oleh sistem operasi untuk mengelola, menyimpan, mengatur, dan mengambil data di media penyimpanan seperti hard disk, SSD, atau flash drive. Sistem berkas menentukan bagaimana data disimpan dalam bentuk file dan folder serta bagaimana metadata (seperti nama, ukuran, dan tanggal modifikasi) dikelola.",
+      "files": [],
+      "mahasiswa": {
+        "nim": "231011450485",
+        "nama_mahasiswa": "NAZA RUDIN",
+        "alamat_email": "z*********r@g****.com",
+        "no_hp_mahasiswa": ""
+      },
+      "createdAt": "2025-03-03T10:35:38.931Z"
+    }
+  ]
+}

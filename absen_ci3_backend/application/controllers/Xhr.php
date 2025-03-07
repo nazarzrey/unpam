@@ -36,7 +36,7 @@ class Xhr extends Settings
         
         $sv = $_SERVER['SERVER_NAME'];
         if ($sv == "localhost" || $sv == "127.0.0.1" || substr_count($sv, "192.168") == 1) {
-            dbg($this->uri->rsegments);
+//            dbg($this->uri->rsegments);
         }
         
     }

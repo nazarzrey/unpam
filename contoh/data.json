@@ -1,0 +1,115 @@
+{
+  "id": "3eb4e2a1-7094-4a67-bddc-65a49b43e081",
+  "kode_course": "20242-03TPLE004-22TIF0133",
+  "id_trx_course_sub_section": "dbecfdf7-8830-449c-82f8-fdfb9e3be462",
+  "reply_level": 0,
+  "id_dosen": "02599",
+  "post_type": "TOPIC",
+  "judul": "PENGANTAR JARINGAN KOMPUTER",
+  "konten": "<p style=\"text-align:center;\"><strong>PENGANTAR JARINGAN KOMPUTER</strong></p><p style=\"text-align:center;\">&nbsp;</p><p style=\"text-align:justify;\">Jaringan Komputer dalamarti luasadalahsekumpulandari bebebrapa computer yang tersambung dan saling terhubung sehingga dapat saling berbagi &nbsp;informasi dan berkomunikasi antara satu perangkat dengan perangkat lainnya. Banyak manfaat dari jaringan komputer pada aktivitas individu contohnya seperti berkomunikasi menggunakan video, pesan instan, email serta Berbagi perangkat seperti pencetak, pemindai, dan mesin fotokopi, berbagi berkas, Berbagi perangkat lunak dan program operasi pada sistem jarak jauh, Memperbolehkan pengguna jaringan mengakses dan memelihara informasi dengan mudah, dan masih banyak lagi. Zymon Machajewski menuturkan bahwa jaringan komputer adalah perangkat komputer atau device yang telah terkoneksi Bersama antara computer satu dengan beberapa compute ryang lain yang bertujuan untuk dapat berbagi sumberdaya.</p><p style=\"text-align:justify;\"><strong>Komputer-komputer yang terkoneksi pada sebuah jaringan tidak mesti memiliki jenis yang sama. Hal ini tentubeda dari pengkonsepan jaringan di bidang ilmukehidupan, dimana sekumpulanselmembentuksebuah jaringan harusmemiliki fungsi dengan jenis yang sama. Dalam jaringan komputer, komputer yang terhubung bisamemiliki tipe, system operasi program atau &nbsp;aplikasi yang berbeda-beda antara satu dengan lainnya, tetapi antara computer&nbsp;</strong></p><p style=\"text-align:justify;\"><strong>Tersebut harus menggunakan aturan komunikasi atauyang seringkita sebut dengan protokol yang sama, tujuan dari penggunaan protokol yang sama ialah agar perangkat computer mampu bertukar data maupun informasi antara satu komputer dengan perangkat komputer lainnya.&nbsp;</strong></p><p style=\"text-align:justify;\">&nbsp;</p><p style=\"text-align:justify;\"><i><strong>Silakan di pelajari dan di fahami materi yang ada di modul pertemuan 1 selanjutnya&nbsp;</strong></i></p><p style=\"text-align:center;\"><i><strong>Mahasiswa dipersilakan untuk&nbsp; membuat komentar, bertanya, menjawab&nbsp; serta membuat kesimpulan dari materi diskusi&nbsp; </strong></i><strong>PENGANTARJARINGANKOMPUTER</strong></p>",
+  "files": [],
+  "dosen": {
+    "id_pegawai": "211860",
+    "id_dosen": "02599",
+    "nama_dosen": "NANANG",
+    "nama_gelar": "NANANG S.KOM., M.KOM.",
+    "alamat_email": "dosen02599@unpam.ac.id"
+  },
+  "data": [
+    {
+      "id": "bc1bb0d6-261f-448b-bb71-97cb34c94290",
+      "id_trx_course_sub_section": "dbecfdf7-8830-449c-82f8-fdfb9e3be462",
+      "id_parent": "3eb4e2a1-7094-4a67-bddc-65a49b43e081",
+      "reply_level": 1,
+      "id_dosen": null,
+      "nim": "231011450500",
+      "post_type": "REPLY",
+      "judul": "RE PENGANTAR JARINGAN KOMPUTER",
+      "konten": "assalammualaikum wr wb\nsaya ijin untuk memberikan kesimpulan terkait materi pengantar jaringan komputer, sebagai berikut:\n\nJaringan komputer adalah sekumpulan komputer yang saling terhubung untuk berbagi informasi dan sumber daya. Manfaatnya meliputi komunikasi (video, pesan instan, email), berbagi perangkat (printer, scanner), berbagi berkas, serta akses informasi yang lebih mudah. Jaringan ini tidak terbatas pada komputer dengan jenis yang sama, tetapi semua perangkat harus menggunakan protokol komunikasi yang sama agar dapat bertukar data dengan baik.",
+      "files": [],
+      "mahasiswa": {
+        "nim": "231011450500",
+        "nama_mahasiswa": "ABDUL MAJID",
+        "alamat_email": "a*****************1@g***.com",
+        "no_hp_mahasiswa": ""
+      },
+      "createdAt": "2025-03-03T18:36:46.032Z"
+    },
+    {
+      "id": "bda001b5-5f59-4fca-96ff-c842e5fda2c3",
+      "id_trx_course_sub_section": "dbecfdf7-8830-449c-82f8-fdfb9e3be462",
+      "id_parent": "3eb4e2a1-7094-4a67-bddc-65a49b43e081",
+      "reply_level": 1,
+      "id_dosen": null,
+      "nim": "231011450500",
+      "post_type": "REPLY",
+      "judul": "RE PENGANTAR JARINGAN KOMPUTER",
+      "konten": "selain pengertian dari jaringan komputer, saya akan menjelaskan mengenai jenis - jenis jaringan komputer, sebagai berikut:\n- LAN (Local Area Network) -> jaringan dalam area terbatas seperti rumah, kantor, atau sekolah.\n- MAN (Metropolitan Area Network) -> jaringan yang mencakup wilayah kota atau daerah tertentu.\n- WAN (Wide Area Network) -> jaringan yang mencakup area yang sangat luas, seperti internet.\n- PAN (Personal Area Network) -> jaringan yang menghubungkan perangkat pribadi seperti smartphone dan laptop.",
+      "files": [],
+      "mahasiswa": {
+        "nim": "231011450500",
+        "nama_mahasiswa": "ABDUL MAJID",
+        "alamat_email": "a*****************1@g***.com",
+        "no_hp_mahasiswa": ""
+      },
+      "createdAt": "2025-03-03T18:42:51.697Z"
+    },
+    {
+      "id": "504ad45e-3898-4b7a-98f4-d9eb2bcbbfbe",
+      "id_trx_course_sub_section": "dbecfdf7-8830-449c-82f8-fdfb9e3be462",
+      "id_parent": "3eb4e2a1-7094-4a67-bddc-65a49b43e081",
+      "reply_level": 1,
+      "id_dosen": null,
+      "nim": "231011450686",
+      "post_type": "REPLY",
+      "judul": "RE PENGANTAR JARINGAN KOMPUTER",
+      "konten": "Jaringan komputer pertama kali dikembangkan pada tahun 1960-an oleh Departemen Pertahanan Amerika Serikat. Jaringan ini disebut ARPANET (Advanced Research Projects Agency Network).\n\nARPANET diluncurkan pada tahun 1969 dan merupakan jaringan komputer pertama yang menghubungkan beberapa komputer di berbagai lokasi. Jaringan ini digunakan untuk keperluan militer dan penelitian.\n\nPada tahun 1980-an, jaringan komputer mulai digunakan secara luas di berbagai bidang, termasuk pendidikan, bisnis, dan pemerintahan.\n\nInternet, yang merupakan jaringan komputer global, mulai dikembangkan pada tahun 1980-an dan menjadi populer pada tahun 1990-an. Saat ini, internet digunakan oleh miliaran orang di seluruh dunia.\n\nBerikut adalah timeline perkembangan jaringan komputer:\n\n- 1960-an: ARPANET dikembangkan oleh Departemen Pertahanan Amerika Serikat.\n- 1969: ARPANET diluncurkan.\n- 1980-an: Jaringan komputer mulai digunakan secara luas di berbagai bidang.\n- 1980-an: Internet mulai dikembangkan.\n- 1990-an: Internet menjadi populer dan digunakan oleh miliaran orang di seluruh dunia.",
+      "files": [],
+      "mahasiswa": {
+        "nim": "231011450686",
+        "nama_mahasiswa": "ILAN ALFIAN FAZA",
+        "alamat_email": "a*********6@g****.com",
+        "no_hp_mahasiswa": ""
+      },
+      "createdAt": "2025-03-03T22:34:19.373Z"
+    },
+    {
+      "id": "d5bc19d8-4e8d-4470-b8c8-7e3a9e911236",
+      "id_trx_course_sub_section": "dbecfdf7-8830-449c-82f8-fdfb9e3be462",
+      "id_parent": "3eb4e2a1-7094-4a67-bddc-65a49b43e081",
+      "reply_level": 1,
+      "id_dosen": null,
+      "nim": "231011450686",
+      "post_type": "REPLY",
+      "judul": "RE PENGANTAR JARINGAN KOMPUTER",
+      "konten": "Pengaruh jaringan komputer pada zaman sekarang:\n\n1. Mengubah cara kerja menjadi lebih efisien.\n2. Memungkinkan perkembangan e-commerce dan pendidikan online.\n3. Mengubah cara berkomunikasi dan mengakses informasi.\n4. Memungkinkan perkembangan industri kreatif dan IoT.\n5. Mengubah cara mengelola data dan melindungi keamanan siber.\n\nDalam keseluruhan, jaringan komputer telah memiliki pengaruh yang sangat signifikan pada berbagai aspek kehidupan.",
+      "files": [],
+      "mahasiswa": {
+        "nim": "231011450686",
+        "nama_mahasiswa": "ILAN ALFIAN FAZA",
+        "alamat_email": "a*********6@g****.com",
+        "no_hp_mahasiswa": ""
+      },
+      "createdAt": "2025-03-03T22:34:53.020Z"
+    },
+    {
+      "id": "f74c9361-fc48-4a10-a4f5-0e8c3ab29dce",
+      "id_trx_course_sub_section": "dbecfdf7-8830-449c-82f8-fdfb9e3be462",
+      "id_parent": "3eb4e2a1-7094-4a67-bddc-65a49b43e081",
+      "reply_level": 1,
+      "id_dosen": null,
+      "nim": "231011450686",
+      "post_type": "REPLY",
+      "judul": "RE PENGANTAR JARINGAN KOMPUTER",
+      "konten": "Beberapa masalah yang umum ditemukan dalam jaringan komputer:\n\n1. Kegagalan koneksi\n2. Keamanan jaringan yang lemah\n3. Kinerja jaringan yang lambat\n4. Kesalahan konfigurasi\n5. Kerusakan perangkat keras\n6. Serangan DDoS\n7. Masalah jaringan Wi-Fi\n8. Masalah keamanan data\n9. Masalah kinerja server\n10. Masalah kompatibilitas\n\n",
+      "files": [],
+      "mahasiswa": {
+        "nim": "231011450686",
+        "nama_mahasiswa": "ILAN ALFIAN FAZA",
+        "alamat_email": "a*********6@g****.com",
+        "no_hp_mahasiswa": ""
+      },
+      "createdAt": "2025-03-03T22:36:32.508Z"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Absensi Unpam",
+  "version": "2.0.0",
+  "description": "Buat Ambil Absensi Unpam model baru (scraping)",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "tabs",
+    "webRequest",
+    "webRequestBlocking",
+    "<all_urls>"
+  ],
+  "icons": {
+    "16": "icon2.png",
+    "48": "icon2.png",
+    "128": "icon2.png"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Open the popup"
+  },
+  "host_permissions": ["*://*/"],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

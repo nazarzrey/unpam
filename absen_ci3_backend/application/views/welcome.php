@@ -25,7 +25,7 @@
 	<div style="margin-top:20px;">
 		<div class="container">
 		    <a href="/login"><img src="<?= base_url("assets/images/logo-unpam.svg") ?>" class="logo-unpam" /></a>
-			<h1>Absensi TPLE004</h1>
+			<h1>Absensi 03TPLE004</h1>
 	    </div>
 	</div>
 </body >
