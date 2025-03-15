@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hapus Enter Kosong dan Format Teks</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+      textarea {
+        width: 500px;
+        height: 200px;
+        margin: 10px;
+      }
+      .button-container {
+        /* display: flex; */
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin: 10px;
+      }
+      button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 200px;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      .floating-notif {
+        background-color: tomato;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-top: 10px;
+        width: 160px !important;
+        text-align: center;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="inputArea" placeholder="Masukkan teks di sini"></textarea>
+    <textarea
+      id="outputArea"
+      placeholder="Hasil akan muncul di sini"
+    ></textarea>
+    <div class="button-container">
+      <button id="copyButton">Copy Output & Bersihkan</button>
+      <div id="notifContainer"></div>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        $("#inputArea").on("paste", function () {
+          setTimeout(function () {
+            let inputText = $("#inputArea").val();
+            let outputText = inputText
+              .replace(/\n{2,}/g, "\n")
+              .replace(/^\n|\n$/g, "");
+            outputText = outputText.replace(/([A-Z])\.(\n)/g, "$1. ");
+            $("#outputArea").val(outputText);
+          }, 0);
+        });
+
+        $("#copyButton").click(function () {
+          let outputText = $("#outputArea").val();
+          if (outputText) {
+            navigator.clipboard
+              .writeText(outputText)
+              .then(function () {
+                showFloatingNotif("Teks berhasil disalin!");
+                setTimeout(function () {
+                  $("#inputArea").val("");
+                  $("#outputArea").val("");
+                  $("#inputArea").focus();
+                }, 5000);
+              })
+              .catch(function (err) {
+                showFloatingNotif("Gagal menyalin teks: " + err);
+              });
+          }
+        });
+
+        function showFloatingNotif(message) {
+          let notif = $('<div class="floating-notif">' + message + "</div>");
+          $("#notifContainer").html(notif);
+          setTimeout(function () {
+            notif.fadeOut(500, function () {
+              $(this).remove();
+            });
+          }, 1000);
+        }
+      });
+    </script>
+  </body>
+</html>

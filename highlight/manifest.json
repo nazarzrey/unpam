@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Highlight Matkul",
+  "version": "1.0",
+  "description": "Menandai mata kuliah offline berdasarkan jumlah SKS",
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["*://mentari.unpam.ac.id/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Open the popup"
+  }
+}

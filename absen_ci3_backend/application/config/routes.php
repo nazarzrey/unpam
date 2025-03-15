@@ -52,9 +52,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 */
 $route['default_controller']     = 'welcome';
 $route['api']      = 'api';
-$route['api/forum/reply/(:any)']      = 'api/forum';
-$route['u-courses/20242-03TPLE004-22TIF0152/forum/3b4ec307-c024-4d18-a8ce-84cbeb4da964/topics/02cc2b46-839a-4828-9fd0-18c01006f917']      = 'api/courses';
-$route['u-courses/20242-03TPLE004-22TIF0152/forum/3b4ec307-c024-4d18-a8ce-84cbeb4da964/topics/02cc2b46-839a-4828-9fd0-18c01006f917/(:any)']      = 'api/courses';
+$route['mentari.unpam.ac.id/api/forum/reply/(:any)']      = 'api/forum';
+$route['mentari.unpam.ac.id/u-courses/20242-03TPLE004-22TIF0152/forum/3b4ec307-c024-4d18-a8ce-84cbeb4da964/topics/02cc2b46-839a-4828-9fd0-18c01006f917']      = 'api/courses';
+$route['mentari.unpam.ac.id/u-courses/20242-03TPLE004-22TIF0152/forum/3b4ec307-c024-4d18-a8ce-84cbeb4da964/topics/02cc2b46-839a-4828-9fd0-18c01006f917/(:any)']      = 'api/courses';
 //u-courses/20242-03TPLE004-22TIF0152/forum/3b4ec307-c024-4d18-a8ce-84cbeb4da964/topics/02cc2b46-839a-4828-9fd0-18c01006f917
 
 $route['api_link']         = 'xhr/get/link';
