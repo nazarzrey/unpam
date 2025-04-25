@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Z Element Modifier",
+  "version": "1.0",
+  "description": "Extension untuk modifikasi id_here2 dan plagiarized_final",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": ["activeTab", "scripting"]
+}

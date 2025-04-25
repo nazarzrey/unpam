@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Element Modifier",
+  "version": "1.0",
+  "description": "Extension untuk memodifikasi elemen tertentu di halaman web",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "rem1.png",
+      "48": "rem2.png",
+      "128": "rem3.png"
+    }
+  },
+  "permissions": ["activeTab", "scripting"],
+  "icons": {
+    "16": "rem1.png",
+    "48": "rem2.png",
+    "128": "rem3.png"
+  }
+}
